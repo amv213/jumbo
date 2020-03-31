@@ -1,0 +1,715 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jumbo package &mdash; jumbo 0.0.2b documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="jumbo" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> jumbo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">jumbo</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">jumbo package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jumbo.config">jumbo.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jumbo.database">jumbo.database module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jumbo.handlers">jumbo.handlers module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jumbo.utils">jumbo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-jumbo">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">jumbo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">jumbo</a> &raquo;</li>
+        
+      <li>jumbo package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/jumbo.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="jumbo-package">
+<h1>jumbo package<a class="headerlink" href="#jumbo-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-jumbo.config">
+<span id="jumbo-config-module"></span><h2>jumbo.config module<a class="headerlink" href="#module-jumbo.config" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jumbo.config.Config">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.config.</code><code class="sig-name descname">Config</code><span class="sig-paren">(</span><em class="sig-param">env_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/config.html#Config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration class setting global environment variables to connect to a PostgreSQL database via Jumbo.</p>
+<p>Variables are extracted from an existing .env file defining the following variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="n">the</span> <span class="n">PostgreSQL</span> <span class="n">server</span> <span class="n">host</span> <span class="n">address</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="n">the</span> <span class="n">PostgreSQL</span> <span class="n">username</span> <span class="n">of</span> <span class="n">the</span> <span class="n">user</span> <span class="n">connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="n">the</span> <span class="n">PostgreSQL</span> <span class="n">password</span> <span class="n">of</span> <span class="n">the</span> <span class="n">user</span> <span class="n">connecting</span> <span class="n">to</span> <span class="n">the</span> <span class="n">database</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="n">the</span> <span class="n">port</span> <span class="n">on</span> <span class="n">which</span> <span class="n">the</span> <span class="n">PostgreSQL</span> <span class="n">server</span> <span class="ow">is</span> <span class="n">running</span> <span class="p">(</span><span class="n">usually</span> <span class="mi">5432</span><span class="p">)</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">database</span> <span class="n">to</span> <span class="n">which</span> <span class="n">to</span> <span class="n">connect</span>
+</pre></div>
+</div>
+<p>By default, the .env file should be located in the root working directory of the script invoking the constructor.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jumbo.database">
+<span id="jumbo-database-module"></span><h2>jumbo.database module<a class="headerlink" href="#module-jumbo.database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jumbo.database.Database">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.database.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param">config=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Jumbo’s abstract PostgreSQL client manager.</p>
+<p>Allows to manage multiple independent connections to a PostgreSQL database and to handle arbitrary transactions
+between clients and database.</p>
+<p>Usage:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize abstract database manager</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Open a connection pool to the PostgreSQL database:</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Use a connection from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="c1"># Execute SQL query on the database</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_query</span><span class="p">)</span>
+
+<span class="c1"># context managers ensure connections are properly returned to the pool, and that the pool is properly closed.</span>
+</pre></div>
+</div>
+</div></blockquote>
+<dl class="method">
+<dt id="jumbo.database.Database.close_pool">
+<code class="sig-name descname">close_pool</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.close_pool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.close_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes all connections in the pool, making it unusable by clients.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.connect">
+<code class="sig-name descname">connect</code><span class="sig-paren">(</span><em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager opening a connection to the PostgreSQL database using a connection [key] from the pool.
+The connection is automatically closed on exit and all transactions are properly handled.</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># check-out connection from the pool</span>
+<span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+
+    <span class="c1"># do something with the connection e.g.</span>
+    <span class="c1"># self.send(sql_query, key)</span>
+
+<span class="c1"># connection is automatically closed here</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>int</em>) – key to identify the connection being opened. Required for proper book keeping.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.connection_info">
+<code class="sig-name descname">connection_info</code><span class="sig-paren">(</span><em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.connection_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.connection_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches PostgreSQL database version.</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Command executed:</span>
+<span class="k">SELECT</span> <span class="k">version</span><span class="p">();</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>query result. Contains PostgreSQL database version information.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>psycopg2.extras.DictRow</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.copy_df">
+<code class="sig-name descname">copy_df</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">db_table</em>, <em class="sig-param">replace=True</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.copy_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility wrapper to efficiently copy a pandas.DataFrame to a PostgreSQL database table.</p>
+<p>This method is faster than panda’s native <em>.to_sql()</em> method and exploits PostgreSQL COPY TO command. Provides a
+useful mean of saving results from a pandas-centred data analysis pipeline directly to the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>pandas.DataFrame</em>) – dataframe to be copied.</p></li>
+<li><p><strong>db_table</strong> (<em>string</em>) – the name (optionally schema-qualified) of the table to write to.</p></li>
+<li><p><strong>replace</strong> (<em>bool</em><em>, </em><em>optional</em>) – replaces table contents if True. Appends data to table contents otherwise.</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.copy_to_table">
+<code class="sig-name descname">copy_to_table</code><span class="sig-paren">(</span><em class="sig-param">query</em>, <em class="sig-param">file</em>, <em class="sig-param">db_table</em>, <em class="sig-param">replace=True</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.copy_to_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_to_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility wrapper to send a SQL query to copy data to database table. Allows to replace table if it already
+exists in the database.</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Command type expected:</span>
+<span class="k">COPY</span> <span class="n">table_name</span> <span class="p">[</span> <span class="p">(</span> <span class="n">column_name</span> <span class="p">[,</span> <span class="mf">...</span><span class="p">]</span> <span class="p">)</span> <span class="p">]</span>
+    <span class="k">FROM</span> <span class="k">STDIN</span>
+    <span class="p">[</span> <span class="p">[</span> <span class="k">WITH</span> <span class="p">]</span> <span class="p">(</span> <span class="k">option</span> <span class="p">[,</span> <span class="mf">...</span><span class="p">]</span> <span class="p">)</span> <span class="p">]</span>
+
+<span class="c1">-- Ancillary command pre-executed:</span>
+<span class="k">TRUNCATE</span> <span class="n">table_name</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Copy csv data from file to a table in the database</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;COPY table_name FROM STDIN WITH CSV DELIMITER &#39;</span><span class="se">\t</span><span class="s2">&#39;&quot;</span>
+<span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_to_table</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s2">&quot;C:\data.csv&quot;</span><span class="p">,</span> <span class="n">db_table</span><span class="o">=</span><span class="s1">&#39;table_name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>string</em>) – PostgreSQL COPY command string, as expected above.</p></li>
+<li><p><strong>file</strong> (<em>file</em>) – absolute path to file-like object to read data from.</p></li>
+<li><p><strong>db_table</strong> (<em>string</em>) – the name (optionally schema-qualified) of an existing database table.</p></li>
+<li><p><strong>replace</strong> (<em>bool</em><em>, </em><em>optional</em>) – replaces table contents if True. Appends data to table contents otherwise.</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.get_connection">
+<code class="sig-name descname">get_connection</code><span class="sig-paren">(</span><em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.get_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.get_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to a Postgres database using an available connection from pool. The connection is assigned to ‘key’
+on checkout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>int</em>) – key to assign to the connection being opened. Required for proper book keeping.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.listen_on_channel">
+<code class="sig-name descname">listen_on_channel</code><span class="sig-paren">(</span><em class="sig-param">channel_name</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.listen_on_channel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.listen_on_channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subscribes to a PostgreSQL notification channel by listening for NOTIFYs.</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Command executed:</span>
+<span class="k">LISTEN</span> <span class="n">channel_name</span><span class="p">;</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>channel_name</strong> (<em>string</em>) – channel on which to LISTEN. PostgreSQL database should be configured to send NOTIFYs
+on this channel.</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.on_connection">
+<code class="sig-name descname">on_connection</code><span class="sig-paren">(</span><em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.on_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.on_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Client-database handshaking script to perform on retrieval of a PostgreSQL connection from the pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>int</em><em>, </em><em>optional</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.open">
+<code class="sig-name descname">open</code><span class="sig-paren">(</span><em class="sig-param">minconns=1</em>, <em class="sig-param">maxconns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context manager opening a connection pool to the PostgreSQL database. The pool is
+automatically closed on exit and all connections are properly handled.</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># do something with the pool</span>
+
+<span class="c1"># pool is automatically closed here</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minconns</strong> (<em>int</em>) – minimum amount of available connections in the pool, created on startup.</p></li>
+<li><p><strong>maxconns</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum amount of available connections supported by the pool.
+Defaults to minconns.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.open_pool">
+<code class="sig-name descname">open_pool</code><span class="sig-paren">(</span><em class="sig-param">minconns=1</em>, <em class="sig-param">maxconns=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.open_pool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.open_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes and opens a connection pool to the PostgreSQL database (psycopg2.pool.ThreadedConnectionPool).</p>
+<p>‘minconn’ new connections are created  immediately. The connection pool will support a maximum of about
+‘maxconn’ connections.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>minconns</strong> (<em>int</em>) – minimum amount of available connections in the pool, created on startup.</p></li>
+<li><p><strong>maxonns</strong> (<em>int</em><em>, </em><em>optional</em>) – maximum amount of available connections supported by the pool.
+Defaults to minconns.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.put_back_connection">
+<code class="sig-name descname">put_back_connection</code><span class="sig-paren">(</span><em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.put_back_connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.put_back_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Puts back a connection in the connection pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>key</strong> (<em>int</em><em>, </em><em>optional</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.database.Database.send">
+<code class="sig-name descname">send</code><span class="sig-paren">(</span><em class="sig-param">query</em>, <em class="sig-param">subs=None</em>, <em class="sig-param">cur_method=0</em>, <em class="sig-param">file=None</em>, <em class="sig-param">fetch_method=2</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends an arbitrary PostgreSQL query to the PostgreSQL database. Transactions are auto-commited on execution.</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># A simple query with no substitutions</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM table_name;&#39;</span>
+<span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+<span class="c1"># A more complex query with dynamic substitutions</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO table_name (column_name, another_column_name) VALUES (</span><span class="si">%s</span><span class="s1">, $s);&#39;</span>
+<span class="n">subs</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">another_value</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">subs</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query</strong> (<em>string</em><em> or </em><em>Composed</em>) – PostgreSQL command string (can be template with psycopg2 %s fields).</p></li>
+<li><p><strong>subs</strong> (<em>tuple</em><em> or </em><em>None</em>) – tuple of values to substitute in SQL query template (cf. psycopg2 %s formatting)</p></li>
+<li><p><strong>cur_method</strong> (<em>int</em>) – code to select which psycopg2 cursor execution method to use for the SQL query:
+0:  cursor.execute()
+1:  cursor.copy_expert()</p></li>
+<li><p><strong>file</strong> (<em>file</em>) – file-like object to read or write to (only relevant if cur_method:1).</p></li>
+<li><p><strong>fetch_method</strong> (<em>int</em>) – code to select which psycopg2 result retrieval method to use (fetch*()):
+0: cur.fetchone()
+2: cur.fetchall()</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the transaction. Defaults to [1].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of query results (if any). Can be accessed as dictionaries.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>psycopg2.extras.DictRow</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-jumbo.handlers">
+<span id="jumbo-handlers-module"></span><h2>jumbo.handlers module<a class="headerlink" href="#module-jumbo.handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="jumbo.handlers.FileWatcher">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">FileWatcher</code><span class="sig-paren">(</span><em class="sig-param">database</em>, <em class="sig-param">query</em>, <em class="sig-param">src_path</em>, <em class="sig-param">recursive=True</em>, <em class="sig-param">timeout=1.0</em>, <em class="sig-param">patterns=None</em>, <em class="sig-param">ignore_directories=False</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#FileWatcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.FileWatcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Watchdog periodically polling a directory for file changes and streaming updates to PostgreSQL database.</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Template SQL command to execute on trigger</span>
+<span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO table_name (column_name, another_column_name) VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)&quot;</span>
+
+<span class="c1"># Create watchdog</span>
+<span class="n">fido</span> <span class="o">=</span> <span class="n">FileWatcher</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">,</span> <span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="s1">&#39;data/&#39;</span><span class="p">,</span> <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*.txt&quot;</span><span class="p">],</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Deploy watchdog</span>
+<span class="n">fido</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="jumbo.handlers.FileWatcher.bark">
+<code class="sig-name descname">bark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#FileWatcher.bark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.FileWatcher.bark" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedules and starts the watchdog.</p>
+<p>The script’s main thread is kept alive in an infinite while loop, while the watchdog starts periodically polling
+the filesystem for changes on a separate thread. A third concurrent thread is released from lock and executes
+every time a change has been detected.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.handlers.FileWatcher.start">
+<code class="sig-name descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#FileWatcher.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.FileWatcher.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Schedule and starts concurrent watchdog observer threads.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.handlers.FileWatcher.stop">
+<code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#FileWatcher.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.FileWatcher.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops watchdog threads.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jumbo.handlers.InsertToSQL">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">InsertToSQL</code><span class="sig-paren">(</span><em class="sig-param">database</em>, <em class="sig-param">query</em>, <em class="sig-param">patterns=None</em>, <em class="sig-param">ignore_patterns=None</em>, <em class="sig-param">ignore_directories=True</em>, <em class="sig-param">case_sensitive=True</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#InsertToSQL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.InsertToSQL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">watchdog.events.PatternMatchingEventHandler</span></code></p>
+<p>Event handler firing whenever a filesystem modification is detected. Executes arbitrary SQL query on trigger.</p>
+<dl class="method">
+<dt id="jumbo.handlers.InsertToSQL.on_modified">
+<code class="sig-name descname">on_modified</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#InsertToSQL.on_modified"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.InsertToSQL.on_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrites default on_modified event trigger fired when filesystem modification detected.</p>
+<p>Here we want to ignore taking action if a filesystem directory has been modified (only want to act on files).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>watchdog.events.FileSystemEvent</em>) – watchdog event</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.handlers.InsertToSQL.process_event">
+<code class="sig-name descname">process_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#InsertToSQL.process_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.InsertToSQL.process_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function handling what happens to an event raised by the watchdog: here we write any file changes as new
+entries in a database table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>event</strong> (<em>watchdog.events.FileSystemEvent</em>) – watchdog event</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jumbo.handlers.LastEntryFetcher">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">LastEntryFetcher</code><span class="sig-paren">(</span><em class="sig-param">database</em>, <em class="sig-param">audit_table</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#LastEntryFetcher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.LastEntryFetcher" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#jumbo.handlers.NotifyHandler" title="jumbo.handlers.NotifyHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">jumbo.handlers.NotifyHandler</span></code></a></p>
+<p>Custom handler which fetches las entry in a PostgreSQL audit table on trigger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> (<a class="reference internal" href="#jumbo.database.Database" title="jumbo.database.Database"><em>jumbo.database.Database</em></a>) – jumbo’s PostgreSQL database connection manager. Needs an open connection
+pool with at least an active connection.</p></li>
+<li><p><strong>audit_table</strong> (<em>string</em>) – name of PostgreSQL database ‘audit’ table. Should have been configured
+to always contain a single row corresponding to the latest row added to
+the table it is auditing (e.g. configuring a TRIGGER on that table).</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used to fetch last database entry.
+Defaults to [1].</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="jumbo.handlers.LastEntryFetcher.on_notify">
+<code class="sig-name descname">on_notify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#LastEntryFetcher.on_notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.LastEntryFetcher.on_notify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch entry that triggered the notify</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.handlers.LastEntryFetcher.process">
+<code class="sig-name descname">process</code><span class="sig-paren">(</span><em class="sig-param">iter_results</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#LastEntryFetcher.process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.LastEntryFetcher.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs results to console.</p>
+<p>Overwrite if need more complex data analysis on last entry in audit table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>iter_results</strong> (<em>psycopg2.extras.DictRow</em>) – last entry in table. Can be accessed as dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jumbo.handlers.Listener">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">Listener</code><span class="sig-paren">(</span><em class="sig-param">database</em>, <em class="sig-param">channel</em>, <em class="sig-param">handler</em>, <em class="sig-param">key=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#Listener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.Listener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A concurrent thread manager listening for PostgreSQL database NOTIFYs on a given channel. On receipt of a notify
+a custom event handler takes action.</p>
+<p class="rubric">Example</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Choose handler: must have a .on_notify(self) method implemented.</span>
+<span class="n">handler</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">LastEntryFetcher</span><span class="p">(</span><span class="n">jumbo_Database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">)</span>
+<span class="c1"># Create listener triggering handler&#39;s .on_notify(self) on NOTIFY</span>
+<span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">jumbo_Database</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;table_changed&#39;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">)</span>
+<span class="c1"># Run threads</span>
+<span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> (<a class="reference internal" href="#jumbo.database.Database" title="jumbo.database.Database"><em>jumbo.database.Database</em></a>) – jumbo’s PostgreSQL database connection manager. Needs an open
+connection pool with at least an active connection.</p></li>
+<li><p><strong>channel</strong> (<em>string</em>) – name of the channel on which PostgreSQL is sending NOTIFYs</p></li>
+<li><p><strong>handler</strong> (<a class="reference internal" href="#jumbo.handlers.NotifyHandler" title="jumbo.handlers.NotifyHandler"><em>jumbo.handlers.NotifyHandler</em></a>) – handler fired on receipt of ech notify. Should have a .on_notify(self)
+method defined.</p></li>
+<li><p><strong>key</strong> (<em>int</em>) – key of the pool connection being used in the subscription transaction.
+Defaults to [1].</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="jumbo.handlers.Listener.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#Listener.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.Listener.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spawns a greenthread subscribing to PostgreSQL database notification channel and waits for NOTIFYs. On
+receipt the thread is blocked and the Listener.handler() is fired. Once the handler has finished processing the
+thread is finally unblocked and waits for the next NOTIFY.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jumbo.handlers.Listener.subscribe">
+<code class="sig-name descname">subscribe</code><span class="sig-paren">(</span><em class="sig-param">q</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#Listener.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.Listener.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Green thread process waiting for NOTIFYs on the channel and feeding them to the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> (<em>eventlet.Queue</em>) – event queue through which to pipe NOTIFY events to the main thread.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="jumbo.handlers.NotifyHandler">
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">NotifyHandler</code><a class="reference internal" href="_modules/jumbo/handlers.html#NotifyHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.NotifyHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract Handler managing actions performed on reception of a NOTIFY from the database</p>
+<dl class="method">
+<dt id="jumbo.handlers.NotifyHandler.on_notify">
+<code class="sig-name descname">on_notify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#NotifyHandler.on_notify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.NotifyHandler.on_notify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Procedure to execute once a NOTIFY is received.</p>
+<p>Overwrite as needed</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="jumbo.handlers.mod_on_thread_start">
+<code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">mod_on_thread_start</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#mod_on_thread_start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.mod_on_thread_start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method instead of <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code>. <code class="xref py py-meth docutils literal notranslate"><span class="pre">start()</span></code> calls this method.</p>
+<p>This method is called right before this thread is started and this object’s run() method is invoked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>self</strong> (<em>BaseThread</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="jumbo.handlers.mod_on_thread_stop">
+<code class="sig-prename descclassname">jumbo.handlers.</code><code class="sig-name descname">mod_on_thread_stop</code><span class="sig-paren">(</span><em class="sig-param">self</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/handlers.html#mod_on_thread_stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.handlers.mod_on_thread_stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method instead of <code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code>. <code class="xref py py-meth docutils literal notranslate"><span class="pre">stop()</span></code> calls this method.</p>
+<p>This method is called immediately after the thread is signaled to stop.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jumbo.utils">
+<span id="jumbo-utils-module"></span><h2>jumbo.utils module<a class="headerlink" href="#module-jumbo.utils" title="Permalink to this headline">¶</a></h2>
+<p>Utility functions for jumbo SQL library.</p>
+<dl class="function">
+<dt id="jumbo.utils.convert_to_df">
+<code class="sig-prename descclassname">jumbo.utils.</code><code class="sig-name descname">convert_to_df</code><span class="sig-paren">(</span><em class="sig-param">results</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/utils.html#convert_to_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.utils.convert_to_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts SQL query results to a pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>results</strong> (<em>psycopg2.extras.DictRow</em>) – results fetched from the PostgreSQL database following a SQL query.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>pandas DataFrame with query results.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-jumbo">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-jumbo" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="jumbo" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alvise Vianello
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+eventlet
+loguru
+numpy
+sqlalchemy
+pandas
+psycopg2
+pygtail
+python-dotenv
+watchdog

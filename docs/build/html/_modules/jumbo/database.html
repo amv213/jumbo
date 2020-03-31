@@ -1,0 +1,618 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jumbo.database &mdash; jumbo 0.0.2b documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> jumbo
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">jumbo</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">jumbo</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>jumbo.database</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for jumbo.database</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">from</span> <span class="nn">psycopg2</span> <span class="kn">import</span> <span class="n">sql</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">OperationalError</span><span class="p">,</span> <span class="n">ProgrammingError</span><span class="p">,</span> <span class="n">DatabaseError</span>
+<span class="kn">from</span> <span class="nn">psycopg2.extras</span> <span class="kn">import</span> <span class="n">DictCursor</span>
+<span class="kn">from</span> <span class="nn">psycopg2.pool</span> <span class="kn">import</span> <span class="n">AbstractConnectionPool</span><span class="p">,</span> <span class="n">ThreadedConnectionPool</span><span class="p">,</span> <span class="n">PoolError</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy</span> <span class="kn">import</span> <span class="n">create_engine</span>
+<span class="kn">from</span> <span class="nn">sqlalchemy.pool</span> <span class="kn">import</span> <span class="n">NullPool</span>
+
+<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">Config</span>
+
+
+<span class="c1"># Add a human-friendly pretty-print representation of psycopg2 &#39;Pool&#39; objects.</span>
+<span class="n">AbstractConnectionPool</span><span class="o">.</span><span class="fm">__str__</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">pool</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;POOL SETTINGS:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                               <span class="s2">&quot;CLOSED:</span><span class="se">\t</span><span class="si">{closed}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                               <span class="s2">&quot;MIN_CONNS:</span><span class="se">\t</span><span class="si">{minconn}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                               <span class="s2">&quot;MAX_CONNS:</span><span class="se">\t</span><span class="si">{maxconn}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                               <span class="s2">&quot;IN_USE:</span><span class="se">\t</span><span class="si">{_rused}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                                               <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">pool</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Jumbo&#39;s abstract PostgreSQL client manager.</span>
+
+<span class="sd">    Allows to manage multiple independent connections to a PostgreSQL database and to handle arbitrary transactions</span>
+<span class="sd">    between clients and database.</span>
+
+<span class="sd">    Usage:</span>
+
+<span class="sd">        .. code-block:: python</span>
+
+<span class="sd">            # Initialize abstract database manager</span>
+<span class="sd">            database = jumbo.database.Database()</span>
+
+<span class="sd">            # Open a connection pool to the PostgreSQL database:</span>
+<span class="sd">            with database.open() as pool:</span>
+
+<span class="sd">                # Use a connection from the pool</span>
+<span class="sd">                with pool.connect():</span>
+
+<span class="sd">                    # Execute SQL query on the database</span>
+<span class="sd">                    pool.send(SQL_query)</span>
+
+<span class="sd">            # context managers ensure connections are properly returned to the pool, and that the pool is properly closed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes manager to handle connections to a given PostgreSQL database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config (jumbo.config.Config, optional): jumbo&#39;s database configuration settings. Defaults to using settings</span>
+<span class="sd">                                                    from the .env file located in the working directory of the script</span>
+<span class="sd">                                                    invoking this constructor.</span>
+
+<span class="sd">        Attributes:</span>
+<span class="sd">            config (jumbo.config.Config):   jumbo&#39;s database configuration settings.</span>
+<span class="sd">            pool (psycopg2.pool):           connection pool to the PostgreSQL database. Initially closed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Config</span><span class="p">()</span>  <span class="c1"># database connection settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadedConnectionPool</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># initialize a placeholder connection pool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">closed</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># keep it closed on construction</span>
+
+        <span class="c1"># Log configuration settings</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jumbo Connection Manager created:</span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Database.open"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.open">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minconns</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxconns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Context manager opening a connection pool to the PostgreSQL database. The pool is</span>
+<span class="sd">        automatically closed on exit and all connections are properly handled.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                with self.open() as pool:</span>
+
+<span class="sd">                    # do something with the pool</span>
+
+<span class="sd">                # pool is automatically closed here</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            minconns (int):             minimum amount of available connections in the pool, created on startup.</span>
+<span class="sd">            maxconns (int, optional):    maximum amount of available connections supported by the pool.</span>
+<span class="sd">                                        Defaults to minconns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="c1"># Create connection pool</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">open_pool</span><span class="p">(</span><span class="n">minconns</span><span class="p">,</span> <span class="n">maxconns</span><span class="p">)</span>
+
+            <span class="k">yield</span> <span class="bp">self</span>
+
+        <span class="k">except</span> <span class="n">OperationalError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error while opening connection pool: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># Close all connections in the pool</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">close_pool</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Database.open_pool"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.open_pool">[docs]</a>    <span class="k">def</span> <span class="nf">open_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minconns</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">maxconns</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes and opens a connection pool to the PostgreSQL database (psycopg2.pool.ThreadedConnectionPool).</span>
+
+<span class="sd">        &#39;minconn&#39; new connections are created  immediately. The connection pool will support a maximum of about</span>
+<span class="sd">        &#39;maxconn&#39; connections.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            minconns (int):             minimum amount of available connections in the pool, created on startup.</span>
+<span class="sd">            maxonns (int, optional):    maximum amount of available connections supported by the pool.</span>
+<span class="sd">                                        Defaults to minconns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If the pool hasn&#39;t been opened yet</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+
+            <span class="n">maxconns</span> <span class="o">=</span> <span class="n">maxconns</span> <span class="k">if</span> <span class="n">maxconns</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">minconns</span>  <span class="c1"># initialize max number of supported connections</span>
+
+            <span class="c1"># create a connection pool based on jumbo&#39;s configuration settings</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">ThreadedConnectionPool</span><span class="p">(</span><span class="n">minconns</span><span class="p">,</span> <span class="n">maxconns</span><span class="p">,</span>
+                                               <span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DATABASE_HOST</span><span class="p">,</span>
+                                               <span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DATABASE_USERNAME</span><span class="p">,</span>
+                                               <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DATABASE_PASSWORD</span><span class="p">,</span>
+                                               <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DATABASE_PORT</span><span class="p">,</span>
+                                               <span class="n">dbname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DATABASE_NAME</span><span class="p">,</span>
+                                               <span class="n">sslmode</span><span class="o">=</span><span class="s1">&#39;disable&#39;</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection pool created to PostgreSQL database: </span><span class="si">{</span><span class="n">maxconns</span><span class="si">}</span><span class="s2"> connections available.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.close_pool"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.close_pool">[docs]</a>    <span class="k">def</span> <span class="nf">close_pool</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Closes all connections in the pool, making it unusable by clients.&quot;&quot;&quot;</span>
+
+        <span class="c1"># If the pool hasn&#39;t been closed yet</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">closeall</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&quot;All connections in the pool have been closed successfully.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.connect"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.connect">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Context manager opening a connection to the PostgreSQL database using a connection [key] from the pool.</span>
+<span class="sd">        The connection is automatically closed on exit and all transactions are properly handled.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                # check-out connection from the pool</span>
+<span class="sd">                with self.connect(key):</span>
+
+<span class="sd">                    # do something with the connection e.g.</span>
+<span class="sd">                    # self.send(sql_query, key)</span>
+
+<span class="sd">                # connection is automatically closed here</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (int):  key to identify the connection being opened. Required for proper book keeping.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># check-out an available connection from the pool</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">get_connection</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">yield</span> <span class="bp">self</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error raised during connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] transactions: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># return the connection to the pool</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">put_back_connection</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.get_connection"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.get_connection">[docs]</a>    <span class="k">def</span> <span class="nf">get_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to a Postgres database using an available connection from pool. The connection is assigned to &#39;key&#39;</span>
+<span class="sd">        on checkout.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (int):  key to assign to the connection being opened. Required for proper book keeping.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If a pool has been opened</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+
+            <span class="k">try</span><span class="p">:</span>
+
+                <span class="c1"># If the specific connection hasn&#39;t been already opened</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">:</span>
+
+                    <span class="c1"># Connect to PostgreSQL database</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">getconn</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection retrieved successfully: pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] now in use.&quot;</span><span class="p">)</span>
+
+                    <span class="c1"># perform handshake</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">on_connection</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] is already in use by another client. Try a different key.&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="n">PoolError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error while retrieving connection from pool:</span><span class="se">\t</span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No pool to the PostgreSQL database: cannot retrieve a connection. Try to .open() a pool.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.on_connection"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.on_connection">[docs]</a>    <span class="k">def</span> <span class="nf">on_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Client-database handshaking script to perform on retrieval of a PostgreSQL connection from the pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (int, optional):  key of the pool connection being used in the transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># return database information</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection_info</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;You are connected to - </span><span class="si">{</span><span class="n">info</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.put_back_connection"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.put_back_connection">[docs]</a>    <span class="k">def</span> <span class="nf">put_back_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Puts back a connection in the connection pool.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (int, optional):  key of the pool connection being used in the transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If this specific connection is under use</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">:</span>
+
+            <span class="c1"># Reset connection to neutral state</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="c1"># Put back connection in the pool</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">putconn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connection returned successfully: pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] now available again.&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] has never been opened: cannot put it back in the pool.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.send"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cur_method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fetch_method</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sends an arbitrary PostgreSQL query to the PostgreSQL database. Transactions are auto-commited on execution.</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                # A simple query with no substitutions</span>
+<span class="sd">                query = &#39;SELECT * FROM table_name;&#39;</span>
+<span class="sd">                results = self.send(query)</span>
+
+<span class="sd">                # A more complex query with dynamic substitutions</span>
+<span class="sd">                query = &#39;INSERT INTO table_name (column_name, another_column_name) VALUES (%s, $s);&#39;</span>
+<span class="sd">                subs = (value, another_value)</span>
+<span class="sd">                results = self.send(query, subs)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            query (string or Composed): PostgreSQL command string (can be template with psycopg2 %s fields).</span>
+<span class="sd">            subs (tuple or None):       tuple of values to substitute in SQL query template (cf. psycopg2 %s formatting)</span>
+<span class="sd">            cur_method (int):           code to select which psycopg2 cursor execution method to use for the SQL query:</span>
+<span class="sd">                                        0:  cursor.execute()</span>
+<span class="sd">                                        1:  cursor.copy_expert()</span>
+<span class="sd">            file (file):                file-like object to read or write to (only relevant if cur_method:1).</span>
+<span class="sd">            fetch_method (int):         code to select which psycopg2 result retrieval method to use (fetch*()):</span>
+<span class="sd">                                        0: cur.fetchone()</span>
+<span class="sd">                                        2: cur.fetchall()</span>
+<span class="sd">            key (int):                  key of the pool connection being used in the transaction. Defaults to [1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            psycopg2.extras.DictRow: list of query results (if any). Can be accessed as dictionaries.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If this specific connection has already been opened</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">:</span>
+
+            <span class="k">try</span><span class="p">:</span>  <span class="c1"># try running a transaction</span>
+
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">cursor</span><span class="p">(</span><span class="n">cursor_factory</span><span class="o">=</span><span class="n">DictCursor</span><span class="p">)</span> <span class="k">as</span> <span class="n">cur</span><span class="p">:</span>
+                    <span class="n">query</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">subs</span><span class="p">)</span> <span class="k">if</span> <span class="n">subs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">cur</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+                    <span class="c1"># Execute query</span>
+                    <span class="k">if</span> <span class="n">cur_method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">cur_method</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">cur</span><span class="o">.</span><span class="n">copy_expert</span><span class="p">(</span><span class="n">sql</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">)</span>
+
+                    <span class="c1"># Fetch query results</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">fetch_method</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">records</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+                        <span class="k">elif</span> <span class="n">fetch_method</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                            <span class="n">records</span> <span class="o">=</span> <span class="n">cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+                    <span class="c1"># Handle SQL queries that don&#39;t return any results (INSERT, UPDATE, etc...)</span>
+                    <span class="k">except</span> <span class="n">ProgrammingError</span><span class="p">:</span>
+                        <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+                        <span class="k">pass</span>
+
+                    <span class="c1"># Commit transaction</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+                    <span class="c1"># Display success message</span>
+                    <span class="n">s_query</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">query</span><span class="p">[:</span><span class="mi">75</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">query</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">78</span> <span class="k">else</span> <span class="n">query</span>  <span class="c1"># shorten query if too long</span>
+                    <span class="n">success_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Successfully sent: </span><span class="si">{</span><span class="n">s_query</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="k">if</span> <span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">success_msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;: </span><span class="si">{</span><span class="n">cur</span><span class="o">.</span><span class="n">rowcount</span><span class="si">}</span><span class="s2"> rows affected.&quot;</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">success_msg</span><span class="p">)</span>
+
+                    <span class="k">return</span> <span class="n">records</span>  <span class="c1"># dictionaries</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">Error</span><span class="p">,</span> <span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">rollback</span><span class="p">()</span>  <span class="c1"># Rollback transaction if any problem</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error while sending query </span><span class="si">{</span><span class="n">query</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Transaction rolled-back.&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] has never been opened: not available for transactions.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.listen_on_channel"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.listen_on_channel">[docs]</a>    <span class="k">def</span> <span class="nf">listen_on_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel_name</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Subscribes to a PostgreSQL notification channel by listening for NOTIFYs.</span>
+
+<span class="sd">        .. code-block:: postgresql</span>
+
+<span class="sd">            -- Command executed:</span>
+<span class="sd">            LISTEN channel_name;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            channel_name (string):  channel on which to LISTEN. PostgreSQL database should be configured to send NOTIFYs</span>
+<span class="sd">                                    on this channel.</span>
+<span class="sd">            key (int):              key of the pool connection being used in the transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;LISTEN &quot;</span> <span class="o">+</span> <span class="n">channel_name</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Database.connection_info"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.connection_info">[docs]</a>    <span class="k">def</span> <span class="nf">connection_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches PostgreSQL database version.</span>
+
+<span class="sd">        .. code-block:: postgresql</span>
+
+<span class="sd">            -- Command executed:</span>
+<span class="sd">            SELECT version();</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (int):              key of the pool connection being used in the transaction. Defaults to [1].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            psycopg2.extras.DictRow: query result. Contains PostgreSQL database version information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;SELECT version();&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">fetch_method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># fetchone()</span>
+        <span class="k">return</span> <span class="n">info</span></div>
+
+<div class="viewcode-block" id="Database.copy_to_table"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.copy_to_table">[docs]</a>    <span class="k">def</span> <span class="nf">copy_to_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">db_table</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Utility wrapper to send a SQL query to copy data to database table. Allows to replace table if it already</span>
+<span class="sd">        exists in the database.</span>
+
+<span class="sd">        .. code-block:: postgresql</span>
+
+<span class="sd">            -- Command type expected:</span>
+<span class="sd">            COPY table_name [ ( column_name [, ...] ) ]</span>
+<span class="sd">                FROM STDIN</span>
+<span class="sd">                [ [ WITH ] ( option [, ...] ) ]</span>
+
+<span class="sd">            -- Ancillary command pre-executed:</span>
+<span class="sd">            TRUNCATE table_name;</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            .. code-block:: python</span>
+
+<span class="sd">                # Copy csv data from file to a table in the database</span>
+<span class="sd">                query = &quot;COPY table_name FROM STDIN WITH CSV DELIMITER &#39;\\t&#39;&quot;</span>
+<span class="sd">                results = self.copy_to_table(query, file=&quot;C:\\data.csv&quot;, db_table=&#39;table_name&#39;)</span>
+
+
+<span class="sd">        Args:</span>
+<span class="sd">            query (string):             PostgreSQL COPY command string, as expected above.</span>
+<span class="sd">            file (file):                absolute path to file-like object to read data from.</span>
+<span class="sd">            db_table (string):          the name (optionally schema-qualified) of an existing database table.</span>
+<span class="sd">            replace (bool, optional):   replaces table contents if True. Appends data to table contents otherwise.</span>
+<span class="sd">            key (int):              key of the pool connection being used in the transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Replace the table already existing in the database</span>
+        <span class="k">if</span> <span class="n">replace</span><span class="p">:</span>
+            <span class="n">query_tmp</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">SQL</span><span class="p">(</span><span class="s2">&quot;TRUNCATE </span><span class="si">{}</span><span class="s2">;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="n">db_table</span><span class="p">))</span>  <span class="c1"># pass dynamic table name to query</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query_tmp</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># Copy the table from file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">cur_method</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># cur_method:1 = cur.copy_expert</span></div>
+
+<div class="viewcode-block" id="Database.copy_df"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.copy_df">[docs]</a>    <span class="k">def</span> <span class="nf">copy_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">db_table</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Utility wrapper to efficiently copy a pandas.DataFrame to a PostgreSQL database table.</span>
+
+<span class="sd">        This method is faster than panda&#39;s native *.to_sql()* method and exploits PostgreSQL COPY TO command. Provides a</span>
+<span class="sd">        useful mean of saving results from a pandas-centred data analysis pipeline directly to the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            df (pandas.DataFrame):      dataframe to be copied.</span>
+<span class="sd">            db_table (string):          the name (optionally schema-qualified) of the table to write to.</span>
+<span class="sd">            replace (bool, optional):   replaces table contents if True. Appends data to table contents otherwise.</span>
+<span class="sd">            key (int):                  key of the pool connection being used in the transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">:</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Create headless csv from pandas dataframe</span>
+                <span class="n">io_file</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">io_file</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">io_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+                <span class="c1"># Quickly create a table with correct number of columns / data types</span>
+                <span class="c1"># We will need to quickly build a sqlalchemy engine for this hack to work</span>
+                <span class="n">replacement_method</span> <span class="o">=</span> <span class="s1">&#39;replace&#39;</span> <span class="k">if</span> <span class="n">replace</span> <span class="k">else</span> <span class="s1">&#39;append&#39;</span>
+                <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;postgresql+psycopg2://&#39;</span><span class="p">,</span> <span class="n">creator</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
+                                       <span class="n">poolclass</span><span class="o">=</span><span class="n">NullPool</span><span class="p">)</span>  <span class="c1"># NullPool so that we don&#39;t interfere with our own pool</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">db_table</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span> <span class="n">if_exists</span><span class="o">=</span><span class="n">replacement_method</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="c1"># But then exploit postgreSQL COPY command instead of slow pandas .to_sql()</span>
+                <span class="c1"># Not that replace is set to false in copy_table as we want to preserve the header table created above</span>
+                <span class="n">sql_copy_expert</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">SQL</span><span class="p">(</span><span class="s2">&quot;COPY </span><span class="si">{}</span><span class="s2"> FROM STDIN WITH CSV DELIMITER &#39;</span><span class="se">\t</span><span class="s2">&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="n">db_table</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">copy_to_table</span><span class="p">(</span><span class="n">sql_copy_expert</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">io_file</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;DataFrame copied successfully to PostgreSQL table.&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="n">DatabaseError</span><span class="p">)</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error while copying DataFrame to PostgreSQL table: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pool connection [</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">] has never been opened: cannot use it to copy Dataframe to &quot;</span>
+                           <span class="sa">f</span><span class="s2">&quot;database.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Alvise Vianello
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

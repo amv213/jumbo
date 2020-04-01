@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>First steps &#8212; jumbo 0.0.2c documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="jumbo" href="modules.html" />
+    <link rel="prev" title="Welcome to jumbo’s documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jumbo"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to jumbo’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jumbo 0.0.2c documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="first-steps">
+<span id="tutorial"></span><h1>First steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to jumbo! The PostgreSQL library for scientist.</p>
+<p>Jumbo is a wrapper of psycopg2 - the most popular PostgreSQL database adapter for the Python programming language. Jumbo
+has been designed specifically for adoption in scientific research environments, where thorough widespread knowledge of
+SQL protocols might be lacking and a streamlined approach to database interactions might be needed. Jumbo offers an
+intuitive and quickly deployable interface to successfully implement a database-centred data analysis pipeline at all
+levels of the organisation. Jumbo is intuitive yet customizable - first-time users can easily interact with the database
+without worrying about handling transactions under the hood, while experienced PostgreSQL architects can unleash the
+full power of jumbo to exploit advanced PostgreSQL functionalities.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>You can install jumbo like any other Python package, using pip to download it from PyPI:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">jumbo</span><span class="o">==</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">2</span><span class="n">b</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>or using setup.py if you have downloaded the source package locally:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span>
+<span class="n">sudo</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can also install the latest development of jumbo from testPyPI:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="n">jumbo</span><span class="o">==</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">2</span><span class="n">b0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="configuring-your-database">
+<h2>Configuring your database<a class="headerlink" href="#configuring-your-database" title="Permalink to this headline">¶</a></h2>
+<p>To start using jumbo you need to have a PostgreSQL database to connect to. This can be running on your local machine or
+anywhere on your network. You also need to have setup a PostgreSQL user account with appropriate privileges to access
+that database. If you are unsure about what any of the previous sentence actually means get in touch with your
+PostgreSQL system administrator. If you don’t have a system administrator or if you want to become your own system
+administrator follow the instructions below.</p>
+<div class="section" id="installing-a-postgresql-server">
+<h3>Installing a PostgreSQL server<a class="headerlink" href="#installing-a-postgresql-server" title="Permalink to this headline">¶</a></h3>
+<p>If you don’t already have a PostgreSQL server running on your local machine (or accessible over the network) follow
+these instructions.</p>
+<p>Go to the computer you want to install the server on. Ideally this would be a dedicated machine able to handle a
+considerable amount of network traffic. For testing purposes or for small-scale deployment infrastructures a normal
+computer should be able to do the job.</p>
+<p>Download and install the PostgreSQL installer following the instructions here: <a class="reference external" href="https://www.postgresql.org/download/">https://www.postgresql.org/download/</a>
+(Jumbo has been tested on PostgreSQL 10.* for Windowsx86-64)</p>
+<p>During the installation process you might get asked to set a password for the database superuser: all PostgreSQL databases have a default superuser called ‘postgres’, with admin rights. Set a password of your choice (e.g. ‘postgres’) and remember it. In the rest of the tutorials any reference to the ‘PostgreSQL system administrator’ just means whoever has access to this ‘postgres’ account.</p>
+<p>Now lets check that everything is working properly:</p>
+<ul class="simple">
+<li><p>you now have a PostgreSQL server running on your local machine</p></li>
+<li><p>you now have a (super)user called postgres allowed to access the server</p></li>
+</ul>
+<p>You can now connect to the server by running the following in a terminal:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>or more generally:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">DATABASE_USERNAME</span> <span class="o">-</span><span class="n">h</span> <span class="n">DATABASE_HOST</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="creating-a-database-on-your-postgresql-server">
+<h3>Creating a database on your PostgreSQL server<a class="headerlink" href="#creating-a-database-on-your-postgresql-server" title="Permalink to this headline">¶</a></h3>
+<p>Once you have made a server you need to create databases, on which to save data. (Server &gt; Databases &gt; Tables)</p>
+<p>By default, a PostgreSQL server comes with an empty database already initialized called ‘postgres’ (very imaginative
+with the names …). Let’s ignore it for the moment and create our own database on the server. To do this, run the
+following command after having connected to the server with your user account:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Create the database, let&#39;s call it &#39;jumbo_tutorial&#39;</span>
+<span class="k">CREATE</span> <span class="k">database</span> <span class="n">jumbo_tutorial</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Then list all available databases on the server to check it all worked:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">l</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In the future, you can now connect directly to your database running the following in a terminal:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="n">localhost</span> <span class="o">-</span><span class="n">d</span> <span class="n">jumbo_tutorial</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>or more generally:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">DATABASE_USERNAME</span> <span class="o">-</span><span class="n">h</span> <span class="n">DATABASE_HOST</span> <span class="o">-</span><span class="n">d</span> <span class="n">DATABASE_NAME</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="creating-a-custom-database-user">
+<h3>Creating a custom database user<a class="headerlink" href="#creating-a-custom-database-user" title="Permalink to this headline">¶</a></h3>
+<p>All good up to now, but we have been doing everything using the superuser called ‘postgres’. If other people want to
+connect to the database to pull/upload data they should obviously not be using the ‘postgres’ superuser account but have
+their own. Let’s see how to do that.</p>
+<p>Let’s say we have a person called lienz who read this tutorial and when asked to contact the PostgreSQL system
+administrator came to you - as they should! Here is what to do:</p>
+<p>Connect to the server as admin from terminal:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="n">psql</span> <span class="o">-</span><span class="n">U</span> <span class="n">postgres</span> <span class="o">-</span><span class="n">h</span> <span class="n">DATABASE_HOST</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now create him a user account (e.g. lienz) and assign him a password (e.g. lienz) by running:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">lienz</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;lienz&#39;</span> <span class="n">LOGIN</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>He can now log in the server but he wouldn’t be able to access databases (and tables within databases). So run the
+following to set him up:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="k">DATABASE</span> <span class="n">jumbo_tutorial</span> <span class="k">TO</span> <span class="n">lienz</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">TABLES</span> <span class="k">IN</span> <span class="k">SCHEMA</span> <span class="n">public</span> <span class="k">TO</span> <span class="n">lienz</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here we grant the user all possible kind of privileges because we trust him - but you might want to be more restrictive.</p>
+<div class="section" id="note">
+<h4>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h4>
+<p>It’s more than likely that the user is not connecting to the database from the same computer that is running the server
+so DATABASE_HOST will not be localhost but the network address of the server. In that case he might still have trouble
+connecting to the server: ask him to tell you his ip address (IPv4 and IPv6) and add them to the server’s pg_hba.conf
+file (on the machine running the server). The file should be in the PostgreSQL installation folder, in the data
+subfolder e.g. C:\PostgreSQL\10\data. Modify the file as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">Go</span> <span class="n">to</span> <span class="n">this</span> <span class="n">section</span> <span class="n">of</span> <span class="n">pg_hba</span><span class="o">.</span><span class="n">conf</span> <span class="ow">and</span> <span class="n">add</span> <span class="n">the</span> <span class="n">relevant</span> <span class="n">lines</span>
+</pre></div>
+</div>
+<p># TYPE DATABASE USER ADDRESS METHOD</p>
+<blockquote>
+<div><p># IPv4 local connections:
+…
+host   all   all   xxx.xxx.xx.xxx/32   md5
+…</p>
+<p># IPv6 local connections:
+…
+host   all  all   yyyy:yyyy:yyyy::yyyy:yyyy/128   md5
+…</p>
+</div></blockquote>
+<p>Again here we are being very loose with permissions - allowing connections from all users using those IP adresses, and
+allowing them to connect to all databases. You might want to be more restrictive.</p>
+</div>
+</div>
+<div class="section" id="the-env-configuration-file">
+<h3>The .env configuration file<a class="headerlink" href="#the-env-configuration-file" title="Permalink to this headline">¶</a></h3>
+<p>Jumbo automatically extracts our database connection settings from a .env file with the following structure:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This allows to deploy jumbo on different devices while maintaining sensitive information local.</p>
+<p>By default jumbo looks for this file in the working directory of the script being run. It is therefore good practice to
+always include such a file in the root project directory of any jumbo script you create.</p>
+<p>As an example, the .env file that the user from the tutorial above should be creating should look like this:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">server_network_address</span> <span class="ow">or</span> <span class="n">localhost</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="n">lienz</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="n">lienz</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="mi">5432</span> <span class="p">(</span><span class="n">this</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">default</span> <span class="n">PostgreSQL</span> <span class="n">server</span> <span class="n">port</span><span class="p">)</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="n">jumbo_tutorial</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">First steps</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#configuring-your-database">Configuring your database</a><ul>
+<li><a class="reference internal" href="#installing-a-postgresql-server">Installing a PostgreSQL server</a></li>
+<li><a class="reference internal" href="#creating-a-database-on-your-postgresql-server">Creating a database on your PostgreSQL server</a></li>
+<li><a class="reference internal" href="#creating-a-custom-database-user">Creating a custom database user</a><ul>
+<li><a class="reference internal" href="#note">Note</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-env-configuration-file">The .env configuration file</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to jumbo’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">jumbo</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jumbo"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to jumbo’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jumbo 0.0.2c documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Alvise Vianello.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

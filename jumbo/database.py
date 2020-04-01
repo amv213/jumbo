@@ -43,7 +43,8 @@ class Database:
                     # Execute SQL query on the database
                     pool.send(SQL_query)
 
-            # context managers ensure connections are properly returned to the pool, and that the pool is properly closed.
+            # context managers ensure connections are properly returned to the pool, and that the pool is properly
+            # closed.
     """
 
     def __init__(self, config=None):

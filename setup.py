@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="jumbo",  # Replace with your own username
-    version="0.0.2b",
+    version="0.0.2c",
     author="Alvise Vianello",
     author_email="alvise.vianello13@gmail.com",
     description="A psycopg2 PostgreSQL wrapper for scientists",
@@ -25,7 +25,7 @@ setuptools.setup(
         'watchdog',
     ],
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: OS Independent",

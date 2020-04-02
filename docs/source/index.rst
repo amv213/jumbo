@@ -24,11 +24,17 @@ levels of the organisation. Jumbo is intuitive yet customizable - first-time use
 without worrying about handling transactions under the hood, while experienced PostgreSQL architects can unleash the
 full power of jumbo to exploit advanced PostgreSQL functionalities.
 
-Minimal Example
+If it's your first time using jumbo head over to *First Steps* to setup your installation environment. If you are
+already familiar with jumbo simply follow the *Quick Start* guide below.
+
+Quick Start
 =================================
 
-To setup jumbo for the first time start by following the instructions in 'First Steps'.
-To test your jumbo installation follow the instructions below.
+Install jumbo like any other Python package, using pip to download it from PyPI:
+
+    .. code-block:: python
+
+        pip install jumbo==0.0.2b
 
 Make sure you have created a .env file in the root directory of your project with the following structure:
 
@@ -39,8 +45,6 @@ Make sure you have created a .env file in the root directory of your project wit
          DATABASE_PASSWORD = <my_database_user_password>
          DATABASE_PORT = <my_database_port>
          DATABASE_NAME = <my_database_name>
-
-This will properly set all of the environment variables to connect to your database when using jumbo.
 
 Now test your installation running the following minimal script:
 

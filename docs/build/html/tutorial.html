@@ -176,19 +176,22 @@ so DATABASE_HOST will not be localhost but the network address of the server. In
 connecting to the server: ask him to tell you his ip address (IPv4 and IPv6) and add them to the server’s pg_hba.conf
 file (on the machine running the server). The file should be in the PostgreSQL installation folder, in the data
 subfolder e.g. C:\PostgreSQL\10\data. Modify the file as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">Go</span> <span class="n">to</span> <span class="n">this</span> <span class="n">section</span> <span class="n">of</span> <span class="n">pg_hba</span><span class="o">.</span><span class="n">conf</span> <span class="ow">and</span> <span class="n">add</span> <span class="n">the</span> <span class="n">relevant</span> <span class="n">lines</span>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">--</span> <span class="n">Go</span> <span class="n">to</span> <span class="n">this</span> <span class="n">section</span> <span class="n">of</span> <span class="n">pg_hba</span><span class="o">.</span><span class="n">conf</span> <span class="ow">and</span> <span class="n">add</span> <span class="n">the</span> <span class="n">relevant</span> <span class="n">lines</span>
+
+<span class="c1"># TYPE DATABASE USER ADDRESS METHOD</span>
+
+<span class="c1"># IPv4 local connections:</span>
+<span class="o">...</span>
+<span class="n">host</span>   <span class="nb">all</span>   <span class="nb">all</span>   <span class="n">xxx</span><span class="o">.</span><span class="n">xxx</span><span class="o">.</span><span class="n">xx</span><span class="o">.</span><span class="n">xxx</span><span class="o">/</span><span class="mi">32</span>   <span class="n">md5</span>
+<span class="o">...</span>
+
+<span class="c1"># IPv6 local connections:</span>
+<span class="o">...</span>
+<span class="n">host</span>   <span class="nb">all</span>  <span class="nb">all</span>   <span class="n">yyyy</span><span class="p">:</span><span class="n">yyyy</span><span class="p">:</span><span class="n">yyyy</span><span class="p">::</span><span class="n">yyyy</span><span class="p">:</span><span class="n">yyyy</span><span class="o">/</span><span class="mi">128</span>   <span class="n">md5</span>
+<span class="o">...</span>
 </pre></div>
 </div>
-<p># TYPE DATABASE USER ADDRESS METHOD</p>
-<blockquote>
-<div><p># IPv4 local connections:
-…
-host   all   all   xxx.xxx.xx.xxx/32   md5
-…</p>
-<p># IPv6 local connections:
-…
-host   all  all   yyyy:yyyy:yyyy::yyyy:yyyy/128   md5
-…</p>
 </div></blockquote>
 <p>Again here we are being very loose with permissions - allowing connections from all users using those IP adresses, and
 allowing them to connect to all databases. You might want to be more restrictive.</p>
@@ -220,6 +223,28 @@ always include such a file in the root project directory of any jumbo script you
 </div>
 </div></blockquote>
 </div>
+<div class="section" id="minimal-example">
+<h3>Minimal Example<a class="headerlink" href="#minimal-example" title="Permalink to this headline">¶</a></h3>
+<p>You should now have everything configured as it should. Remember to create a .env file in the root directory of your
+project and then test your installation running the following minimal script:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Open a connection pool.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+   <span class="c1"># Get an individual connection from the pool.</span>
+   <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+      <span class="k">pass</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If everything went well you are now all set-up to use the JumboSQL library! Enjoy!</p>
+</div>
 </div>
 </div>
 
@@ -241,6 +266,7 @@ always include such a file in the root project directory of any jumbo script you
 </ul>
 </li>
 <li><a class="reference internal" href="#the-env-configuration-file">The .env configuration file</a></li>
+<li><a class="reference internal" href="#minimal-example">Minimal Example</a></li>
 </ul>
 </li>
 </ul>

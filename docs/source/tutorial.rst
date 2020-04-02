@@ -154,21 +154,21 @@ connecting to the server: ask him to tell you his ip address (IPv4 and IPv6) and
 file (on the machine running the server). The file should be in the PostgreSQL installation folder, in the data
 subfolder e.g. C:\\PostgreSQL\\10\\data\\. Modify the file as follows:
 
-.. code-block::
+    .. code-block::
 
-    -- Go to this section of pg_hba.conf and add the relevant lines
+        -- Go to this section of pg_hba.conf and add the relevant lines
 
-# TYPE DATABASE USER ADDRESS METHOD
+        # TYPE DATABASE USER ADDRESS METHOD
 
-    # IPv4 local connections:
-    ...
-    host   all   all   xxx.xxx.xx.xxx/32   md5
-    ...
+        # IPv4 local connections:
+        ...
+        host   all   all   xxx.xxx.xx.xxx/32   md5
+        ...
 
-    # IPv6 local connections:
-    ...
-    host   all  all   yyyy:yyyy:yyyy::yyyy:yyyy/128   md5
-    ...
+        # IPv6 local connections:
+        ...
+        host   all  all   yyyy:yyyy:yyyy::yyyy:yyyy/128   md5
+        ...
 
 Again here we are being very loose with permissions - allowing connections from all users using those IP adresses, and
 allowing them to connect to all databases. You might want to be more restrictive.
@@ -200,3 +200,26 @@ As an example, the .env file that the user from the tutorial above should be cre
         DATABASE_PASSWORD = lienz
         DATABASE_PORT = 5432 (this is the default PostgreSQL server port)
         DATABASE_NAME = jumbo_tutorial
+
+Minimal Example
+---------------------------
+
+You should now have everything configured as it should. Remember to create a .env file in the root directory of your
+project and then test your installation running the following minimal script:
+
+   .. code-block:: python
+
+         import jumbo
+
+         # Initialize database connection
+         database = jumbo.database.Database()
+
+         # Open a connection pool.
+         with database.open() as pool:
+
+            # Get an individual connection from the pool.
+            with pool.connect():
+
+               pass
+
+If everything went well you are now all set-up to use the JumboSQL library! Enjoy!

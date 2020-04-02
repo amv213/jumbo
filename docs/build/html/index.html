@@ -52,11 +52,17 @@ intuitive and quickly deployable interface to successfully implement a database-
 levels of the organisation. Jumbo is intuitive yet customizable - first-time users can easily interact with the database
 without worrying about handling transactions under the hood, while experienced PostgreSQL architects can unleash the
 full power of jumbo to exploit advanced PostgreSQL functionalities.</p>
+<p>If it’s your first time using jumbo head over to <em>First Steps</em> to setup your installation environment. If you are
+already familiar with jumbo simply follow the <em>Quick Start</em> guide below.</p>
 </div>
-<div class="section" id="minimal-example">
-<h1>Minimal Example<a class="headerlink" href="#minimal-example" title="Permalink to this headline">¶</a></h1>
-<p>To setup jumbo for the first time start by following the instructions in ‘First Steps’.
-To test your jumbo installation follow the instructions below.</p>
+<div class="section" id="quick-start">
+<h1>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<p>Install jumbo like any other Python package, using pip to download it from PyPI:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">jumbo</span><span class="o">==</span><span class="mf">0.0</span><span class="o">.</span><span class="mi">2</span><span class="n">b</span>
+</pre></div>
+</div>
+</div></blockquote>
 <p>Make sure you have created a .env file in the root directory of your project with the following structure:</p>
 <blockquote>
 <div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
@@ -67,7 +73,6 @@ To test your jumbo installation follow the instructions below.</p>
 </pre></div>
 </div>
 </div></blockquote>
-<p>This will properly set all of the environment variables to connect to your database when using jumbo.</p>
 <p>Now test your installation running the following minimal script:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
@@ -122,7 +127,7 @@ To test your jumbo installation follow the instructions below.</p>
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Welcome to jumbo’s documentation!</a></li>
-<li><a class="reference internal" href="#minimal-example">Minimal Example</a></li>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
 <li><a class="reference internal" href="#table-of-contents">Table of Contents</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>

@@ -61,7 +61,10 @@ computer should be able to do the job.
 Download and install the PostgreSQL installer following the instructions here: https://www.postgresql.org/download/
 (Jumbo has been tested on PostgreSQL 10.* for Windowsx86-64)
 
-During the installation process you might get asked to set a password for the database superuser: all PostgreSQL databases have a default superuser called 'postgres', with admin rights. Set a password of your choice (e.g. 'postgres') and remember it. In the rest of the tutorials any reference to the 'PostgreSQL system administrator' just means whoever has access to this 'postgres' account.
+During the installation process you might get asked to set a password for the database superuser: all PostgreSQL
+databases have a default superuser called 'postgres', with admin rights. Set a password of your choice (e.g. 'postgres')
+and remember it. In the rest of the tutorials any reference to the 'PostgreSQL system administrator' just means whoever
+has access to this 'postgres' account.
 
 Now lets check that everything is working properly:
 

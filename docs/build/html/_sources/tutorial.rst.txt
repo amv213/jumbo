@@ -1,18 +1,9 @@
 .. _tutorial:
 
-***********
-First steps
-***********
 
-Welcome to jumbo! The PostgreSQL library for scientist.
-
-Jumbo is a wrapper of psycopg2 - the most popular PostgreSQL database adapter for the Python programming language. Jumbo
-has been designed specifically for adoption in scientific research environments, where thorough widespread knowledge of
-SQL protocols might be lacking and a streamlined approach to database interactions might be needed. Jumbo offers an
-intuitive and quickly deployable interface to successfully implement a database-centred data analysis pipeline at all
-levels of the organisation. Jumbo is intuitive yet customizable - first-time users can easily interact with the database
-without worrying about handling transactions under the hood, while experienced PostgreSQL architects can unleash the
-full power of jumbo to exploit advanced PostgreSQL functionalities.
+************
+First Steps
+************
 
 ============
 Installation
@@ -61,7 +52,10 @@ computer should be able to do the job.
 Download and install the PostgreSQL installer following the instructions here: https://www.postgresql.org/download/
 (Jumbo has been tested on PostgreSQL 10.* for Windowsx86-64)
 
-During the installation process you might get asked to set a password for the database superuser: all PostgreSQL databases have a default superuser called 'postgres', with admin rights. Set a password of your choice (e.g. 'postgres') and remember it. In the rest of the tutorials any reference to the 'PostgreSQL system administrator' just means whoever has access to this 'postgres' account.
+During the installation process you might get asked to set a password for the database superuser: all PostgreSQL
+databases have a default superuser called 'postgres', with admin rights. Set a password of your choice (e.g. 'postgres')
+and remember it. In the rest of the tutorials any reference to the 'PostgreSQL system administrator' just means whoever
+has access to this 'postgres' account.
 
 Now lets check that everything is working properly:
 
@@ -145,10 +139,7 @@ following to set him up:
 
 Here we grant the user all possible kind of privileges because we trust him - but you might want to be more restrictive.
 
-Note
-^^^^
-
-It's more than likely that the user is not connecting to the database from the same computer that is running the server
+**Note:** It's more than likely that the user is not connecting to the database from the same computer that is running the server
 so DATABASE_HOST will not be localhost but the network address of the server. In that case he might still have trouble
 connecting to the server: ask him to tell you his ip address (IPv4 and IPv6) and add them to the server's pg_hba.conf
 file (on the machine running the server). The file should be in the PostgreSQL installation folder, in the data
@@ -173,10 +164,11 @@ subfolder e.g. C:\\PostgreSQL\\10\\data\\. Modify the file as follows:
 Again here we are being very loose with permissions - allowing connections from all users using those IP adresses, and
 allowing them to connect to all databases. You might want to be more restrictive.
 
-The .env configuration file
----------------------------
+================================
+The jumbo.env configuration file
+================================
 
-Jumbo automatically extracts our database connection settings from a .env file with the following structure:
+Jumbo automatically extracts our database connection settings from a jumbo.env file with the following structure:
 
    .. code-block::
 
@@ -191,7 +183,7 @@ This allows to deploy jumbo on different devices while maintaining sensitive inf
 By default jumbo looks for this file in the working directory of the script being run. It is therefore good practice to
 always include such a file in the root project directory of any jumbo script you create.
 
-As an example, the .env file that the user from the tutorial above should be creating should look like this:
+As an example, the jumbo.env file that the user from the tutorial above should be creating should look like this:
 
     .. code-block::
 
@@ -201,10 +193,11 @@ As an example, the .env file that the user from the tutorial above should be cre
         DATABASE_PORT = 5432 (this is the default PostgreSQL server port)
         DATABASE_NAME = jumbo_tutorial
 
+===============
 Minimal Example
----------------------------
+===============
 
-You should now have everything configured as it should. Remember to create a .env file in the root directory of your
+You should now have everything configured as it should. Remember to create a jumbo.env file in the root directory of your
 project and then test your installation running the following minimal script:
 
    .. code-block:: python

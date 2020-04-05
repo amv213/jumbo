@@ -25,7 +25,7 @@ class Config:
         """
         # Look for .env in provided path. Else in working directory of script invoking constructor
         env_path = env_path if env_path is not None else getcwd()
-        dotenv_path = path.join(env_path, '.env')
+        dotenv_path = path.join(env_path, 'jumbo.env')
 
         load_dotenv(dotenv_path)
 
@@ -53,7 +53,7 @@ class Config:
             (string): annotated representation of the Config object.
         """
 
-        return ("DATABASE CONFIGURATION SETTINGS [jumbo.config.Config]:\n"
+        return ("\nDATABASE CONFIGURATION SETTINGS:\n"
                 "ENV_PATH:\t{ENV_PATH}\n"
                 "DATABASE_HOST:\t{DATABASE_HOST}\n"
                 "DATABASE_PORT:\t{DATABASE_PORT}\n"

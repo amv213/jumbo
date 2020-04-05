@@ -36,7 +36,7 @@ Install jumbo like any other Python package, using pip to download it from PyPI:
 
         pip install jumbo==0.0.2b
 
-Make sure you have created a .env file in the root directory of your project with the following structure:
+Make sure you have created a jumbo.env file in the root directory of your project with the following structure:
 
    .. code-block::
 
@@ -73,7 +73,9 @@ Table of Contents
    :caption: Contents:
 
    First Steps <tutorial>
+   Demos <demos>
    Documentation <modules>
+
 
 Indices and tables
 ==================

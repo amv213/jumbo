@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Demos &#8212; jumbo 0.0.2c documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="jumbo" href="modules.html" />
+    <link rel="prev" title="First Steps" href="tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jumbo"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="First Steps"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jumbo 0.0.2c documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="demos">
+<span id="id1"></span><h1>Demos<a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h1>
+<p>You will find here a collection of detailed code examples guiding you through core jumbo features. If it’s your first
+time using jumbo, you are strongly suggested to follow the tutorials in order. If you are an experienced jumbo user feel
+free to skip to the section you need a refresher on. These tutorials are an excellent introduction to the library and
+will help build familiarity with its syntax and usage protocols.</p>
+<div class="section" id="hello-world">
+<h2>Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you will learn how to write jumbo’s Hello World!</p>
+<p>First things first:</p>
+<ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
+</ul>
+<p>At this point we can start using the library:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="jumbo-s-database-object">
+<h3>Jumbo’s Database Object<a class="headerlink" href="#jumbo-s-database-object" title="Permalink to this headline">¶</a></h3>
+<p>Jumbo automatically populates our database connection parameters in a Config object. Let’s have a look:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">config</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now that we have checked that everything is initialized correctly we can create one of the most important objects in the
+jumbo library: the Database object (database.Database). The database object is jumbo’s representation of the database we
+want to connect to. This object will allow us to create connections to the real PostgreSQL server and will automatically
+manage all transactions with it. Creating a Database is extremely simple:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>A one-liner we could put at the beginning of any jumbo script is thus:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can also choose to have your .env file in a single private location, instead of always placing a copy in your
+current working directory. In that case pass the path to the directory containing your .env file on construction of the
+Config object:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">my_env_path</span> <span class="o">=</span> <span class="s2">&quot;D:</span><span class="se">\\</span><span class="s2">dumbo</span><span class="se">\\</span><span class="s2">secret&quot;</span>  <span class="c1"># jumbo.env is in &#39;secret&#39; directory</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">my_env_path</span><span class="p">)</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="connection-pools">
+<h3>Connection Pools<a class="headerlink" href="#connection-pools" title="Permalink to this headline">¶</a></h3>
+<p>At this point we would like to connect to the database. In general, opening and closing multiple connections to a database creates a bit of overhead - it’s more efficient to first initialize a so called connection-pool of <em>x</em> connections from which clients can take and put back individual connections as they need them. In jumbo we do this in this way:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Opened a connection pool.&quot;</span><span class="p">)</span>
+
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The context-manager structure ensures behind the scenes that the connection pool is opened correctly and closed successfully at the end of the script.</p>
+<p>Note that in the above example we opened a connection pool containing a single connection, but we can open pools with a minimum and maximum number of available connections using the <em>minconns</em> and <em>maxconns</em> arguments. The pool will intialize with a minimum amount of connections and open new connections if needed by clients.</p>
+<p>Let’s try again and notice how our Database object is transformed as we open a pool:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a connection pool with two connections.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">minconns</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxconns</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After opening the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After closing the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="connecting-to-the-database">
+<h3>Connecting to the Database<a class="headerlink" href="#connecting-to-the-database" title="Permalink to this headline">¶</a></h3>
+<p>We are now all set to use a connection from the pool to send queries to the PostgreSQL database. We do this in jumbo via the Database.connect() method, which also supports a context-manager syntax to make sure that connections are properly taken from the pool and correctly put back in the pool at the end of a client’s transactions:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. Context manager ensures connection is returned to the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="k">pass</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here we have create out Database object, opened a connection pool offering a single connection, and finally connected to the database with that connnection. By default our client sends a ‘SELECT version()’ SQL command to the database, hence why we receive a response back from the server.</p>
+<p>The double context-manager construct used in jumbo may seem a bit cumbersome at first, but it is one of the key strengths of jumbo as it allows to automatically take care of all SQL connection protocols behind the scenes, and ensures proper garbage collection of transactions and connections for all clients.</p>
+<p>Once more the following example will let you have a look at how our Database object is transformed as we open pools and actuate connections:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a connection pool with two connections. Context manager ensures pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After opening the pool: </span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After connecting:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">pass</span>
+
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After disconnecting:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After closing the pool:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Note:</strong> As a very last point, you should be assigning keys to identify connections taken from the pool. In this way it is easy to keep track of which connection is being used to send queries to the database. In the cells before we took advantage of the implicit key=1 keyword argument used by Database.connect().</p>
+<p>To summarize, a proper jumbo hello-world script looks like the following:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c1"># Initialize database object</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+    <span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">minconns</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+        <span class="c1"># Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.</span>
+        <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+            <span class="k">pass</span>  <span class="c1"># do wahtever you want here!</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>It’s your turn now! Experiment with what you have lernt so far.</p>
+<p>E.g. try firing several connections, then try firing more connections that your pool can handle!</p>
+</div>
+</div>
+<div class="section" id="database-interactions">
+<h2>Database Interactions<a class="headerlink" href="#database-interactions" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you will learn how to send SQL queries with jumbo.</p>
+<p>First things first:</p>
+<ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
+</ul>
+<p>At this point we can start using the library:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>And start with our minimal example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="k">pass</span>  <span class="c1"># do whatever you want here!</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Except for the implicit handshake between our client and the database happening behind the scene and retrieving the databases version, we still haven’t done anything with the connection we have fished out from the pool… Let’s now see how to send our own SQL queries to the database.</p>
+<p>You will need some minimal SQL knowledge to follow the following tutorial, but you can easily recycle code and get help online.</p>
+<div class="section" id="creating-a-table">
+<h3>Creating a table<a class="headerlink" href="#creating-a-table" title="Permalink to this headline">¶</a></h3>
+<p>You are now connected to a database but there might not be any tables there to hold data. Let’s now create a table called <em>data_container</em> with the columns of our choice. Here we decide on four columns called <em>unix_timestamp</em>, <em>iso_timestamp</em>, <em>device</em>, and <em>reading</em>. The SQL query to create such a table is the following:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">data_container</span>
+<span class="p">(</span><span class="n">unix_timestamp</span> <span class="k">FLOAT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">iso_timestamp</span> <span class="nb">TIMESTAMP</span><span class="p">,</span>
+<span class="n">device</span> <span class="nb">varchar</span><span class="p">(</span><span class="mf">255</span><span class="p">),</span>
+<span class="n">reading</span> <span class="nb">INT</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that we need to specify the (PostgreSQL) type of values that we will populate the columns with, and optionally which column to use as the PRIMARY KEY. This column should only contain unique and non-null values.</p>
+<p>To create such a table in jumbo we would do it this way:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS data_container </span><span class="se">\</span>
+<span class="s1">                    (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                    <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                    <span class="s1">&#39;device varchar(255),&#39;</span> \
+                    <span class="s1">&#39;value INT);&#39;</span>
+
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># send a &#39;CREATE TABLE&#39; SQL query using connection [1] from the pool</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If everything went well you should see a ‘Table created successfully’ log. You have just successfully executed your first SQL query with jumbo!</p>
+</div>
+<div class="section" id="inserting-data-in-a-table">
+<h3>Inserting Data in a table<a class="headerlink" href="#inserting-data-in-a-table" title="Permalink to this headline">¶</a></h3>
+<p>Now that we have a table, it’s time to upload some data. The SQL query to insert a data row in our table is the following:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">data_container</span> <span class="p">(</span><span class="n">unix_timestamp</span><span class="p">,</span> <span class="n">iso_timestamp</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="k">value</span><span class="p">)</span>
+<span class="k">VALUES</span> <span class="p">(</span><span class="mf">1000.1</span><span class="p">,</span> <span class="s s-Name">&quot;2020-03-26 10:26:08.450800&quot;</span><span class="p">,</span> <span class="s s-Name">&quot;DataLogger X1&quot;</span><span class="p">,</span> <span class="mf">23</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>where we have just listed again the table name, and column names of the table we want to write into, and then passed compatible values for each field.</p>
+<p>To execute this command in jumbo we naturally do it as follows:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS data_container </span><span class="se">\</span>
+<span class="s1">                    (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                    <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                    <span class="s1">&#39;device varchar(255),&#39;</span> \
+                    <span class="s1">&#39;value INT);&#39;</span>
+
+<span class="c1"># Create a Template SQL command to inject table with entries; %s will be replaced with values later</span>
+<span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO data_container &#39;</span> \
+                      <span class="s1">&#39;(unix_timestamp, iso_timestamp, device, value) &#39;</span> \
+                      <span class="s1">&#39;VALUES (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">);&#39;</span>
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># create table to hold the data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Now let&#39;s imagine we now suddenly get values to insert in the table</span>
+        <span class="n">timestamp_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">timestamp_now_iso</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp_now</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">23</span>
+
+        <span class="c1"># Collect in a tuple</span>
+        <span class="n">substitutions</span> <span class="o">=</span> <span class="p">(</span><span class="n">timestamp_now</span><span class="p">,</span> <span class="n">timestamp_now_iso</span><span class="p">,</span> <span class="s2">&quot;DataLogger X1&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="c1"># Insert data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If everything went smoothly you should see a ‘Record inserted successfully’ log. Note that here we have exploited the ability of defining a generic INSERT query, with specific values only substituted in dynamically later on. In this way we can create a single INSERT query for a given table and use it for any kind of data we might be generating later.</p>
+<p><strong>Important:</strong> your ‘substitutions’ should always be a tuple. Hence if your had a template like this:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">table_name</span> <span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
+<span class="k">VALUES</span> <span class="p">(</span><span class="o">%</span><span class="n">s</span><span class="p">);</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You should then be passing ‘substitutions’ looking like this:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">substitutions</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>Also Important:</strong> this %s formatting is a completely independent thing of python’s %-formatting string substitutions. So don’t confuse the two. This %s construct is proper to psycopg2, the PostgreSQL library on which jumbo is based. For more informmation feel free to visit <a class="reference external" href="https://www.psycopg.org/docs/usage.html">https://www.psycopg.org/docs/usage.html</a></p>
+<p>Also, as said by psycopg2: never, never, NEVER use Python string concatenation (+) or string parameters interpolation (%) to pass variables to a SQL query string. Not even at gunpoint.</p>
+<p>Just use the jumbo interface, as explained above and everything is taken care of automatically!</p>
+</div>
+<div class="section" id="pulling-data-from-the-database">
+<h3>Pulling Data from the Database<a class="headerlink" href="#pulling-data-from-the-database" title="Permalink to this headline">¶</a></h3>
+<p>We now have a table populated with some data. It’s time to see how to fetch that data back from the database.</p>
+<p>The SQL query to select all data from a table is as follows:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="n">table_name</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Hence in jumbo we would do this:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS data_container </span><span class="se">\</span>
+<span class="s1">                    (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                    <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                    <span class="s1">&#39;device varchar(255),&#39;</span> \
+                    <span class="s1">&#39;value INT);&#39;</span>
+
+<span class="c1"># Create a Template SQL command to inject table with entries; %s will be replaced with values later</span>
+<span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO data_container &#39;</span> \
+                      <span class="s1">&#39;(unix_timestamp, iso_timestamp, device, value) &#39;</span> \
+                      <span class="s1">&#39;VALUES (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">);&#39;</span>
+
+<span class="c1"># SQL query to pull all data from the table</span>
+<span class="n">SQL_SELECT</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM data_container&#39;</span>
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># create table to hold the data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Now let&#39;s imagine we suddenly get values to insert in the table</span>
+        <span class="n">timestamp_now</span> <span class="o">=</span> <span class="n">ddatetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">timestamp_now_iso</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp_now</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">23</span>
+
+        <span class="c1"># Collect in a tuple</span>
+        <span class="n">substitutions</span> <span class="o">=</span> <span class="p">(</span><span class="n">timestamp_now</span><span class="p">,</span> <span class="n">timestamp_now_iso</span><span class="p">,</span> <span class="s2">&quot;DataLogger X1&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="c1"># Insert data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Let&#39;s wait a few seconds ...</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Now we want to get back data from our table</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_SELECT</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Results will hold a list of all rows returned by our query</span>
+        <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="c1"># These are dictionary-like object whose values can be accessed by column name</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;unix_timestamp&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Perfect we have finished our little tour of basic SQL interactions from the database! You should now know how to create tables, upload, and retrieve data!</p>
+<p>As you have seen, jumbo allows to send arbitrary SQL queries through the Database.send() method. Don’t hesitate to browse the documentation to checkout all keyword parameters that can be used with Database.send()!</p>
+<p>Let’s see one last example in action. In the following example we clean up our database by removing the table we have created above:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Our generic SQL query</span>
+        <span class="n">SQL_DROP</span> <span class="o">=</span> <span class="s1">&#39;DROP TABLE IF EXISTS data_container&#39;</span>
+
+        <span class="c1"># Execute query</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_DROP</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="more-user-friendly-queries">
+<h3>More user friendly queries<a class="headerlink" href="#more-user-friendly-queries" title="Permalink to this headline">¶</a></h3>
+<p>If you are not an SQL expert it might be a little daunting to handle data through raw SQL queries - don’t worry! Jumbo is here to the rescue with plenty of functionalities to make data processing easier!</p>
+<p>For example jumbo offers functions such as</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jumbo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">convert_to_df</span><span class="p">(</span><span class="n">query_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>which allows to convert SQL query results directly to a pandas.DataFrame - which you might be much more familiar with to parse/filter/group_by etc…</p>
+<p>In this way you can issue a generic and easy to remember</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">Database</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM table_name&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>and then convert immediately the query results into a dataframe, on which to perform all the data anlysis that you like!</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">convert_to_df</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Let’s now say you would like to upload the results of your data analysis back in a table on the database. If you followed the notebook above you might be a bit scared of having to write a CREATE TABLE query with correct column names / column types and then having to perform INSERT statements with %s substitutions all over the place…</p>
+<p>Luckily with jumbo you can just do everything in one line:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Database</span><span class="o">.</span><span class="n">copy_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">new_table_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>What a treat!</p>
+<p>Don’t hesitate to look at the other notebooks for more inspiration on how to implement all of this in practice!</p>
+</div>
+</div>
+<div class="section" id="filesystem-watchdogs">
+<h2>Filesystem Watchdogs<a class="headerlink" href="#filesystem-watchdogs" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you will learn how to use jumbo’s watchdog functionalities. By the end you will have created a simple watchdog looking for any new data being written in a directory and uploading it automatically to a database table.</p>
+<p>First things first:</p>
+<ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
+</ul>
+<p>If you are deploying jumbo in practical applications, you might be interested in deploying a watchdog to automatically stream new data to a table in your database. Ideally you would interface directly with the data generator and INSERT each new data entry to the table, but this is not always possible. Data acquisition from the data generator might be blocked by proprietary software, or for legacy reasons you cannot interfere directly with the data collection protocol already in place. In this cases the only thing left to do might be to monitor the output files where data is being saved to and upload any change to the database.</p>
+<div class="section" id="watchdogs">
+<h3>Watchdogs<a class="headerlink" href="#watchdogs" title="Permalink to this headline">¶</a></h3>
+<p>Let’s setup everything to simulate our working environment. We need two things:</p>
+<ul class="simple">
+<li><p>A bot script writing data to files, to simulate a real data generator</p></li>
+<li><p>Our watchdog deployed to monitor those files</p></li>
+</ul>
+<p>Let’s start by setting-up a very simple monkey-writer. The following code does nothing special, it will simply write the current timestamp to a file called <em>fake_data.txt</em> in the <em>data</em> directory. Each write will happen after a random time interval. Run the following code to get a feeling of how it works and then STOP IT before moving to the next section.</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Monkey Writer</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">loguru</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+
+        <span class="c1"># Need to open/close file on every write so that watchdog can see each change</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/fake_data.txt&#39;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+            <span class="c1"># Write current timestamp</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote number </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2"> to file&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Wait a variable amount of time before writing next</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Monkey writer has been stopped via Keyboard Interrupt.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Now that we have a data source let’s deploy a watchdog on the <em>data</em> folder.</p>
+<p>Jumbo let’s you create watchdogs very easily. Here is  jumbo’s implementation of a watchdog:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Initialize the table to hold watched data</span>
+        <span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS data_container (ID FLOAT PRIMARY KEY NOT NULL);&#39;</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Template SQL command to inject table with entries from file</span>
+        <span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO data_container (ID) VALUES (</span><span class="si">%s</span><span class="s2">)&quot;</span>  <span class="c1"># %s will be replaced with .txt line fields</span>
+
+        <span class="c1"># Create watchdog</span>
+        <span class="n">fido</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">FileWatcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="s1">&#39;data/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Deploy watchdog</span>
+        <span class="n">fido</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Let’s have a look at what is going on in the code:</p>
+<p>As we have seen before we start by creating a database object, opening a connection pool, and setting  up a connection to the PostgreSQL database. We then create a table on the database to hold the data we will collecting from the files, and prepare an INSERT statement to dynamically insert the values collected from the files into the table.</p>
+<p>We then create a jumbo handlers.FileWatcher watchdog</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">FileWatcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="s1">&#39;data/&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This watchdog looks for changes in .txt files in the <em>data</em> folder by polling for changes every 0.5s. It then executes the query template of our choice with every new entry added to the files passed dynamically. That is everytime a change is detected the watchdog will implicitely perform a</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">data_container</span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="n">new_value</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Finally we deploy the watchdog via the .bark() method. This activates the watchdog and schedules it’s handler to fire on each ‘file modified event’ detected.</p>
+<p>Don’t hesitate to have a look at the documentation to look at all the customisable parameters. Or have a look at the source code to implement your own tailored watchdogs! You can implement your own watchdogs and event handlers!</p>
+<p>Now run both code scripts above at the same time and see if the behaviour in the logs makes sense!</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Demos</a><ul>
+<li><a class="reference internal" href="#hello-world">Hello World</a><ul>
+<li><a class="reference internal" href="#jumbo-s-database-object">Jumbo’s Database Object</a></li>
+<li><a class="reference internal" href="#connection-pools">Connection Pools</a></li>
+<li><a class="reference internal" href="#connecting-to-the-database">Connecting to the Database</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-interactions">Database Interactions</a><ul>
+<li><a class="reference internal" href="#creating-a-table">Creating a table</a></li>
+<li><a class="reference internal" href="#inserting-data-in-a-table">Inserting Data in a table</a></li>
+<li><a class="reference internal" href="#pulling-data-from-the-database">Pulling Data from the Database</a></li>
+<li><a class="reference internal" href="#more-user-friendly-queries">More user friendly queries</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filesystem-watchdogs">Filesystem Watchdogs</a><ul>
+<li><a class="reference internal" href="#watchdogs">Watchdogs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">First Steps</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="next chapter">jumbo</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/demos.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="jumbo"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="First Steps"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jumbo 0.0.2c documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Alvise Vianello.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+    </div>
+  </body>
+</html>

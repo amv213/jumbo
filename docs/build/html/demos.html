@@ -92,9 +92,9 @@ manage all transactions with it. Creating a Database is extremely simple:</p>
 </pre></div>
 </div>
 </div></blockquote>
-<p>A one-liner we could put at the beginning of any jumbo script is thus:</p>
+<p>It is also possible to build a Database with default configuration parameters. This will load the configuration settings from a jumbo.env file located in the current working directory. In this case, a convenient one-liner we could put at the beginning of any jumbo script is:</p>
 <blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -127,7 +127,7 @@ Config object:</p>
 <p>Let’s try again and notice how our Database object is transformed as we open a pool:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -146,7 +146,7 @@ Config object:</p>
 <p>We are now all set to use a connection from the pool to send queries to the PostgreSQL database. We do this in jumbo via the Database.connect() method, which also supports a context-manager syntax to make sure that connections are properly taken from the pool and correctly put back in the pool at the end of a client’s transactions:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -163,7 +163,7 @@ Config object:</p>
 <p>Once more the following example will let you have a look at how our Database object is transformed as we open pools and actuate connections:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -192,7 +192,7 @@ Config object:</p>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="c1"># Initialize database object</span>
-    <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
     <span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
     <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">minconns</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -236,7 +236,7 @@ Config object:</p>
 <p>And start with our minimal example:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database object</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -274,7 +274,7 @@ Config object:</p>
 
 
 <span class="c1"># Initialize database object</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool.</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -314,7 +314,7 @@ Config object:</p>
                       <span class="s1">&#39;VALUES (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">);&#39;</span>
 
 <span class="c1"># Initialize database object</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -382,7 +382,7 @@ Config object:</p>
 <span class="n">SQL_SELECT</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM data_container&#39;</span>
 
 <span class="c1"># Initialize database object</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -423,7 +423,7 @@ Config object:</p>
 <p>Let’s see one last example in action. In the following example we clean up our database by removing the table we have created above:</p>
 <blockquote>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize database object</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -534,7 +534,7 @@ Config object:</p>
 <div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
 
 <span class="c1"># Initialize database</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">Config</span><span class="p">())</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
 <span class="c1"># Create a connection pool</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
@@ -576,6 +576,161 @@ Config object:</p>
 <p>Now run both code scripts above at the same time and see if the behaviour in the logs makes sense!</p>
 </div>
 </div>
+<div class="section" id="live-database-streaming">
+<h2>Live Database Streaming<a class="headerlink" href="#live-database-streaming" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you will learn how to use jumbo to setup a client listening to a PostgreSQL database.</p>
+<p>First things first:</p>
+<ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
+</ul>
+<p>In jumbo, listeners are clients subscribed to a database notification channel and triggering custom event handlers on receipt of a NOTIFY from the server. This is especially useful if - for example - the PostgreSQL database has been setup to trigger a NOTIFY every time a new entry is added to a given table. In this way the client can keep track of changes to the table without needing to constantly poll the database table for changes.</p>
+<p>A minimal jumbo listener can easily be configured as follows:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+ <span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Create your custom handler: must have a .on_notify(Database) method implemented.</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">NotifyHandler</span><span class="p">()</span>
+        <span class="c1"># Create listener</span>
+        <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>In the code above we have first defined a handler defining the action to take on receipt of a NOTIFY by the listener. I this minimal example we use jumbo’s handlers.NotifyHandler() which does not do anything except from logging out to the user that no actions have been taken. In short, nothing will happen when the listener will receive a NOTIFY. Then we have defined the Listener itself, to which we assign the handler we have defined above. Finally we also need to pass database connection related arguments to the Listener for it to subscribe to the correct notification channel on which the database is streaming NOTIFYs.</p>
+<p>Let’s now see an example using a more useful handler, shipped with jumbo:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+ <span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Create your custom handler: must have a .on_notify(Database) method implemented.</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">LastEntryFetcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">audit_table</span><span class="o">=</span><span class="s1">&#39;audit_table&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Create listener</span>
+        <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Here we have used exactly the same code as in the previous example but swapped handler with jumbo’s LastEntryFetcher. This is a builtin handler relying on the presence of an audit table setup on the PostgreSQL database. An audit table is a table in the database always tracking the last entry of in the table it is auditing. For more information on how to setup such a database infrastructure see the end of this tutorial. With such an audit table in place, jumbo’s LastEntryFetcher will retrieve and log out the (one and only) entry in that table - effectively allowing the Listener to have continuous access to the last entry being added to the database table being audited.</p>
+<p>Obviously it is also possible to create custom handlers, in order to perform any action desired on receipt of a NOTIFY from the Listener. It is good practice to do this in jumbo by creating a handler class inheriting from NotifyHandler() and overriding its on_notify() method. LastEntryFetcher is an example of such strategy, so don’t hesitate to have a look at the documentation for inspiration.</p>
+<p><strong>Note:</strong> LastEntryFetcher is an extremely handy handler. It is especially useful to perform on-the-fly data analysis on data being streamed to the database. By default, LastEntryFetcher only logs to the user the last entry fetched, but the class exposes a convenient overridable method called process(), to which the last entry fetched is passed. Users can therefore easily implement on-the-fly data analysis by creating a class inheriting from LastEntryFetcher and overriting its ‘process’ method. Let’s see a trivial example:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">loguru</span>
+
+<span class="c1"># A custom LastEntryFetcher</span>
+<span class="k">def</span> <span class="nf">CustomLastEntryFetcher</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">LastEntryFetcher</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">,</span> <span class="n">constant</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Inherit</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># Can add custom attributes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">constant</span>
+
+    <span class="c1"># Add data analysis step</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_entry</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called on each last-entry fetch.</span>
+
+<span class="sd">        Overwriting method of parent class&quot;&quot;&quot;</span>
+
+        <span class="c1"># very trivial example</span>
+        <span class="n">loguru</span><span class="o">.</span><span class="n">logger</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Handler fetched </span><span class="si">{</span><span class="n">last_entry</span><span class="si">}</span><span class="s2"> and is also logging out </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># but could do operations here on last_entry and e.g. write results to another database table...</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+ <span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+    <span class="c1"># Create a connection pool</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+        <span class="c1"># Get individual connections from the pool</span>
+        <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+            <span class="c1"># Create your custom handler: must have a .on_notify(Database) method implemented.</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="n">CustomLastEntryFetcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">audit_table</span><span class="o">=</span><span class="s1">&#39;audit_table&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># Create listener</span>
+            <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<div class="section" id="setting-up-an-audit-table">
+<h3>Setting up an audit table<a class="headerlink" href="#setting-up-an-audit-table" title="Permalink to this headline">¶</a></h3>
+<p>Jumbo Listeners are a very handy tool but the PostgreSQL database should be setup to be streaming NOTIFYs on a notification channel. Moreover, in order to expolit jumbo’s LastEntryFetcher, there should be a table on the database being audited, and a NOTIFY being triggered every time new data is inserted into such table. Please find below a SQL template to execute to such a database configuration, but do not hesitate to browse the PostgreSQL documentation to modify it and create your own variants:</p>
+<blockquote>
+<div><div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Create audit table, using the table being audited as template</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">audit_table</span> <span class="k">AS</span>
+    <span class="k">TABLE</span> <span class="k">table</span> <span class="k">LIMIT</span> <span class="mf">1</span><span class="p">;</span>
+
+<span class="c1">-- Define trigger function</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">audit_and_notify</span><span class="p">()</span>
+<span class="k">RETURNS</span> <span class="k">trigger</span> <span class="k">AS</span> <span class="s">$$</span>
+<span class="k">BEGIN</span>
+
+    <span class="c1">-- update all rows in the audit table (there is only one) with NEW values. Here NEW is unpacked with special ().* sintax</span>
+    <span class="k">UPDATE</span> <span class="n">audit_table</span>
+    <span class="k">SET</span>    <span class="p">(</span><span class="n">table_column1</span><span class="p">,</span> <span class="n">table_column2</span><span class="p">,</span> <span class="mf">...</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="k">SELECT</span> <span class="p">(</span><span class="n">NEW</span><span class="p">)</span><span class="mf">.</span><span class="o">*</span><span class="p">);</span>
+
+    <span class="c1">-- send a NOTIFY to clients listening. Jumbo Listeners should then set channel=&#39;channel&#39;</span>
+    <span class="k">NOTIFY</span> <span class="n">channel</span><span class="p">;</span>
+
+    <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span>
+
+<span class="k">END</span><span class="p">;</span>
+<span class="s">$$</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>
+
+<span class="c1">-- Drop TRIGGER just in case one already exists</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">trigger_audit</span> <span class="k">ON</span> <span class="k">table</span><span class="p">;</span>
+
+<span class="c1">-- Create trigger on table</span>
+<span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">trigger_audit</span>
+<span class="k">AFTER</span> <span class="k">INSERT</span>
+<span class="k">ON</span> <span class="k">table</span>
+<span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span>
+<span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="n">audit_and_notify</span><span class="p">();</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
 </div>
 
 
@@ -602,6 +757,10 @@ Config object:</p>
 </li>
 <li><a class="reference internal" href="#filesystem-watchdogs">Filesystem Watchdogs</a><ul>
 <li><a class="reference internal" href="#watchdogs">Watchdogs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#live-database-streaming">Live Database Streaming</a><ul>
+<li><a class="reference internal" href="#setting-up-an-audit-table">Setting up an audit table</a></li>
 </ul>
 </li>
 </ul>

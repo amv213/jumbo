@@ -17,7 +17,7 @@ def convert_to_df(results):
     """
 
     # Take first results row and make column labels out of keys
-    columns = [k for k in results[0].keys()]
+    columns = [k for k in results[0].keys()] if len(results) > 0 else []
     # Generate pandas DataFrame
     df = pd.DataFrame(results, columns=columns)
     logger.debug(f"Successful conversion to DataFrame:\n{df.head()}")

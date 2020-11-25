@@ -412,8 +412,8 @@ class Database:
                 # Quickly create a table with correct number of columns / data types
                 # We will need to quickly build a sqlalchemy engine for this hack to work
                 replacement_method = 'replace' if replace else 'append'
-                engine = create_engine('postgresql+psycopg2://', creator=lambda: self.pool._used[key],
-                                       poolclass=NullPool)  # NullPool so that we don't interfere with our own pool
+                engine = create_engine('postgresql+psycopg2://',
+                                       creator=lambda: self.pool._used[key])
                 df.head(0).to_sql(db_table, engine, if_exists=replacement_method, index=False)
 
                 # But then exploit postgreSQL COPY command instead of slow pandas .to_sql()

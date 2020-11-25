@@ -419,7 +419,8 @@ class Database:
                 # But then exploit postgreSQL COPY command instead of slow pandas .to_sql()
                 # Not that replace is set to false in copy_table as we want to preserve the header table created above
                 sql_copy_expert = sql.SQL("COPY {} FROM STDIN WITH CSV DELIMITER '\t'").format(sql.Identifier(db_table))
-                self.copy_to_table(sql_copy_expert, file=io_file, replace=False, key=key)
+                self.copy_to_table(sql_copy_expert, file=io_file,
+                                   db_table=db_table, replace=False, key=key)
 
                 logger.success(f"DataFrame copied successfully to PostgreSQL table.")
 

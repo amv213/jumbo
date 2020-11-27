@@ -43,7 +43,8 @@ class Database:
                     # Execute SQL query on the database
                     pool.send(SQL_query)
 
-            # context managers ensure connections are properly returned to the pool, and that the pool is properly closed.
+            # context managers ensure connections are properly returned to the pool, and that the pool is properly
+            # closed.
     """
 
     def __init__(self, config=None):
@@ -411,14 +412,15 @@ class Database:
                 # Quickly create a table with correct number of columns / data types
                 # We will need to quickly build a sqlalchemy engine for this hack to work
                 replacement_method = 'replace' if replace else 'append'
-                engine = create_engine('postgresql+psycopg2://', creator=lambda: self.pool._used[key],
-                                       poolclass=NullPool)  # NullPool so that we don't interfere with our own pool
+                engine = create_engine('postgresql+psycopg2://',
+                                       creator=lambda: self.pool._used[key])
                 df.head(0).to_sql(db_table, engine, if_exists=replacement_method, index=False)
 
                 # But then exploit postgreSQL COPY command instead of slow pandas .to_sql()
                 # Not that replace is set to false in copy_table as we want to preserve the header table created above
                 sql_copy_expert = sql.SQL("COPY {} FROM STDIN WITH CSV DELIMITER '\t'").format(sql.Identifier(db_table))
-                self.copy_to_table(sql_copy_expert, file=io_file, replace=False, key=key)
+                self.copy_to_table(sql_copy_expert, file=io_file,
+                                   db_table=db_table, replace=False, key=key)
 
                 logger.success(f"DataFrame copied successfully to PostgreSQL table.")
 

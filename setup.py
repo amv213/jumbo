@@ -5,14 +5,26 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="jumbo",
-    version="0.0.2",
-    author="Alvise Vianello",
-    author_email="alvise.vianello13@gmail.com",
+    version="1.0.0",
     description="A psycopg2 PostgreSQL wrapper for scientists",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    author="Alvise Vianello",
+    author_email="alvise@vianello.ai",
+    url="https://gitlab.com/amv213/jumbo",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "Operating System :: OS Independent",
+        "Topic :: Database",
+        "Topic :: Scientific/Engineering",
+        "Intended Audience :: End Users/Desktop",
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: System Administrators",
+        ],
     packages=setuptools.find_packages(),
+    python_requires='>=3.8',
     install_requires=[
         'eventlet',
         'loguru',
@@ -24,11 +36,4 @@ setuptools.setup(
         'python-dotenv',
         'watchdog',
     ],
-    classifiers=[
-        "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
-        "Operating System :: OS Independent",
-    ],
-    python_requires='>=3.6',
 )

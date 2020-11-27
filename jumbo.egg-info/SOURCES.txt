@@ -4,6 +4,7 @@ jumbo/__init__.py
 jumbo/config.py
 jumbo/database.py
 jumbo/handlers.py
+jumbo/testing.py
 jumbo/utils.py
 jumbo.egg-info/PKG-INFO
 jumbo.egg-info/SOURCES.txt

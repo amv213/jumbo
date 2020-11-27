@@ -12,7 +12,6 @@ from jumbo.config import Config
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 # Add a human-friendly pretty-print representation of psycopg2 'Pool' objects.
 AbstractConnectionPool.__str__ = lambda pool: ("POOL SETTINGS:\n"

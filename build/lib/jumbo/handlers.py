@@ -11,7 +11,6 @@ from watchdog.observers.polling import PollingObserver, PollingEmitter
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # WATCHDOGS

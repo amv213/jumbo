@@ -7,7 +7,6 @@ import pandas as pd
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)
-logger.setLevel("INFO")
 
 
 def convert_to_df(results):

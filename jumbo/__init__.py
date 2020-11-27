@@ -10,6 +10,6 @@ logging.basicConfig(
     datefmt='%D %H:%M:%S'
 )
 
-# Uncomment to prevent the library’s logged events being output to sys.stderr
-# in the absence of logging configuration
+# Uncomment if want to prevent the library’s logged events being output to
+# sys.stderr in the absence of user-side logging configuration
 # logging.getLogger(__name__).addHandler(logging.NullHandler())

@@ -4,7 +4,7 @@ import jumbo.database
 import jumbo.handlers
 import jumbo.utils
 
-# Setup a basic logger
+# Setup a basic logger configuration
 logging.basicConfig(
     format='[%(asctime)s] (%(name)s) %(levelname)s | %(message)s',
     datefmt='%D %H:%M:%S'

@@ -1,13 +1,17 @@
-import eventlet
 import time
+import logging
+import eventlet
 from abc import ABC
-from loguru import logger
 from eventlet.hubs import trampoline
 from pygtail import Pygtail
 from psycopg2 import sql
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers.polling import PollingObserver, PollingEmitter
 
+
+# Spawn module-level logger
+logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 # ----------------------------------------------------------------------------------------------------------------------
 # WATCHDOGS
@@ -247,7 +251,8 @@ class Listener:
                 logger.debug(f"Waiting for a notification...")
                 notify = queue.get()  # blocks until item available in queue. i.e. waiting for spawned function to yield
                 # -------------%------------------%--------------------%-------------------#
-                logger.success(f"Got NOTIFY: {notify.pid} {notify.channel} {notify.payload}")
+                logger.info(f"Got NOTIFY: "
+                            f"{notify.pid} {notify.channel} {notify.payload}")
 
                 # do something with the database once received the NOTIFY (n)
                 self.handler.on_notify()
@@ -257,7 +262,8 @@ class Listener:
 
             except KeyboardInterrupt:
                 eventlet.kill(g)
-                logger.error("Listener has been killed via Keyboard Interrupt. Greenthread garbage collected.")
+                logger.error("Listener has been killed via Keyboard Interrupt. "
+                             "Greenthread garbage collected.")
                 break
 
     def subscribe(self, q):

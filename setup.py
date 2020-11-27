@@ -27,7 +27,6 @@ setuptools.setup(
     python_requires='>=3.8',
     install_requires=[
         'eventlet',
-        'loguru',
         'numpy',
         'sqlalchemy',
         'pandas',

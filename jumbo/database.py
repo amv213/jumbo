@@ -8,7 +8,7 @@ from psycopg2.extras import DictCursor
 from psycopg2.pool import AbstractConnectionPool, ThreadedConnectionPool, PoolError
 from sqlalchemy import create_engine
 
-from .config import Config
+from jumbo.config import Config
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)

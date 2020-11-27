@@ -1,5 +1,4 @@
 python-dotenv
-loguru
 psycopg2
 watchdog
 pygtail

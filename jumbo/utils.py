@@ -2,8 +2,12 @@
 Utility functions for jumbo SQL library.
 """
 
+import logging
 import pandas as pd
-from loguru import logger
+
+# Spawn module-level logger
+logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 
 def convert_to_df(results):
@@ -20,5 +24,5 @@ def convert_to_df(results):
     columns = [k for k in results[0].keys()] if len(results) > 0 else []
     # Generate pandas DataFrame
     df = pd.DataFrame(results, columns=columns)
-    logger.debug(f"Successful conversion to DataFrame:\n{df.head()}")
+    logger.info(f"Successful conversion to DataFrame:\n{df.head()}")
     return df

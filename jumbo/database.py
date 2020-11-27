@@ -1,16 +1,18 @@
 import io
 import sys
+import logging
 
 from contextlib import contextmanager
-from loguru import logger
 from psycopg2 import sql, Error, OperationalError, ProgrammingError, DatabaseError
 from psycopg2.extras import DictCursor
 from psycopg2.pool import AbstractConnectionPool, ThreadedConnectionPool, PoolError
 from sqlalchemy import create_engine
-from sqlalchemy.pool import NullPool
 
 from .config import Config
 
+# Spawn module-level logger
+logger = logging.getLogger(__name__)
+logger.setLevel("INFO")
 
 # Add a human-friendly pretty-print representation of psycopg2 'Pool' objects.
 AbstractConnectionPool.__str__ = lambda pool: ("POOL SETTINGS:\n"
@@ -66,7 +68,7 @@ class Database:
         self.pool.closed = True  # keep it closed on construction
 
         # Log configuration settings
-        logger.debug(f"Jumbo Connection Manager created:\n{self.config}")
+        logger.info(f"Jumbo Connection Manager created:\n{self.config}")
 
     @contextmanager
     def open(self, minconns=1, maxconns=None):
@@ -128,7 +130,8 @@ class Database:
                                                dbname=self.config.DATABASE_NAME,
                                                sslmode='disable')
 
-            logger.success(f"Connection pool created to PostgreSQL database: {maxconns} connections available.")
+            logger.info(f"Connection pool created to PostgreSQL database: "
+                        f"{maxconns} connections available.")
 
     def close_pool(self):
         """Closes all connections in the pool, making it unusable by clients."""
@@ -136,7 +139,8 @@ class Database:
         # If the pool hasn't been closed yet
         if not self.pool.closed:
             self.pool.closeall()
-            logger.success("All connections in the pool have been closed successfully.")
+            logger.info("All connections in the pool have been closed "
+                        "successfully.")
 
     @contextmanager
     def connect(self, key=1):
@@ -167,7 +171,8 @@ class Database:
             yield self
 
         except (Exception, KeyboardInterrupt) as e:
-            logger.error(f"Error raised during connection [{key}] transactions: {e}")
+            logger.error(f"Error raised during connection [{key}] "
+                         f"transactions: {e}")
 
         finally:
             # return the connection to the pool
@@ -191,26 +196,32 @@ class Database:
 
                     # Connect to PostgreSQL database
                     self.pool.getconn(key)
-                    logger.success(f"Connection retrieved successfully: pool connection [{key}] now in use.")
+                    logger.info(f"Connection retrieved successfully: pool "
+                                f"connection [{key}] now in use.")
 
                     # perform handshake
                     self.on_connection(key)
 
                 else:
-                    logger.warning(f"Pool connection [{key}] is already in use by another client. Try a different key.")
+                    logger.warning(f"Pool connection [{key}] is already in use "
+                                   f"by another client. Try a different key.")
 
             except PoolError as error:
-                logger.error(f"Error while retrieving connection from pool:\t{error}")
+                logger.error(f"Error while retrieving connection from "
+                             f"pool:\t{error}")
                 sys.exit()
 
         else:
-            logger.warning(f"No pool to the PostgreSQL database: cannot retrieve a connection. Try to .open() a pool.")
+            logger.warning(f"No pool to the PostgreSQL database: cannot "
+                           f"retrieve a connection. Try to .open() a pool.")
 
     def on_connection(self, key=1):
-        """Client-database handshaking script to perform on retrieval of a PostgreSQL connection from the pool.
+        """Client-database handshaking script to perform on retrieval of a
+        PostgreSQL connection from the pool.
 
         Args:
-            key (int, optional):  key of the pool connection being used in the transaction. Defaults to [1].
+            key (int, optional):    key of the pool connection being used in
+                                    the transaction. Defaults to [1].
         """
 
         # return database information
@@ -232,13 +243,16 @@ class Database:
             # Put back connection in the pool
             self.pool.putconn(self.pool._used[key], key)
 
-            logger.success(f"Connection returned successfully: pool connection [{key}] now available again.")
+            logger.info(f"Connection returned successfully: pool connection "
+                        f"[{key}] now available again.")
 
         else:
-            logger.warning(f"Pool connection [{key}] has never been opened: cannot put it back in the pool.")
+            logger.warning(f"Pool connection [{key}] has never been opened: "
+                           f"cannot put it back in the pool.")
 
     def send(self, query, subs=None, cur_method=0, file=None, fetch_method=2, key=1):
-        """Sends an arbitrary PostgreSQL query to the PostgreSQL database. Transactions are auto-commited on execution.
+        """Sends an arbitrary PostgreSQL query to the PostgreSQL database.
+        Transactions are auto-commited on execution.
 
         Example:
 
@@ -302,7 +316,7 @@ class Database:
                     success_msg = f"Successfully sent: {s_query} "
                     if cur.rowcount >= 0:
                         success_msg += f": {cur.rowcount} rows affected."
-                    logger.success(success_msg)
+                    logger.info(success_msg)
 
                     return records  # dictionaries
 
@@ -311,7 +325,8 @@ class Database:
                 logger.error(f"Error while sending query {query}:{e}. Transaction rolled-back.")
 
         else:
-            logger.warning(f"Pool connection [{key}] has never been opened: not available for transactions.")
+            logger.warning(f"Pool connection [{key}] has never been opened: "
+                           f"not available for transactions.")
 
     def listen_on_channel(self, channel_name, key=1):
         """Subscribes to a PostgreSQL notification channel by listening for NOTIFYs.
@@ -422,7 +437,8 @@ class Database:
                 self.copy_to_table(sql_copy_expert, file=io_file,
                                    db_table=db_table, replace=False, key=key)
 
-                logger.success(f"DataFrame copied successfully to PostgreSQL table.")
+                logger.info(f"DataFrame copied successfully to PostgreSQL "
+                            f"table.")
 
             except (Exception, DatabaseError) as error:
                 logger.error(f"Error while copying DataFrame to PostgreSQL table: {error}")

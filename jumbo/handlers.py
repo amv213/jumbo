@@ -2,101 +2,129 @@ import time
 import logging
 import eventlet
 from abc import ABC
-from eventlet.hubs import trampoline
-from pygtail import Pygtail
 from psycopg2 import sql
-from watchdog.events import PatternMatchingEventHandler
+from pygtail import Pygtail
+from .database import Database
+from eventlet.hubs import trampoline
+from typing import Union, List, Optional
 from watchdog.observers.polling import PollingObserver, PollingEmitter
-
+from watchdog.events import PatternMatchingEventHandler, FileSystemEvent
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)
 
-# ----------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # WATCHDOGS
-# ----------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
-# TODO: Overwrite PollingEmiter(BaseEmitter(BaseThread(thread.Thread))) to behave appropriately when thread stopped
-def mod_on_thread_start(self):
-    """Override this method instead of :meth:`start()`. :meth:`start()` calls this method.
+# TODO: Overwrite PollingEmitter(BaseEmitter(BaseThread(thread.Thread))) to
+#  behave appropriately when thread stopped
+def mod_on_thread_start(self: PollingEmitter) -> None:
+    """Override this method instead of :meth:`start()`.
+    :meth:`start()` actually calls this method.
 
-    This method is called right before this thread is started and this object’s run() method is invoked.
+    This method is called right before this thread is started and this
+    object’s run() method is invoked.
 
     Args:
-        self (BaseThread): 
+        self: PollingEmitter object
     """
 
-    self._snapshot = self._take_snapshot()  # PollingEmitter's on_thread_start
+    # PollingEmitter's on_thread_start
+    self._snapshot = self._take_snapshot()
 
 
-def mod_on_thread_stop(self):
-    """Override this method instead of :meth:`stop()`. :meth:`stop()` calls this method.
+def mod_on_thread_stop(self: PollingEmitter) -> None:
+    """Override this method instead of :meth:`stop()`.
+    :meth:`stop()` actually calls this method.
 
     This method is called immediately after the thread is signaled to stop.
+
+    Args:
+        self: PollingEmitter object
     """
 
     pass
 
-
+# Mod behaviour with changes above
 PollingEmitter.on_thread_start = mod_on_thread_start
 PollingEmitter.on_thread_stop = mod_on_thread_stop
 
 
 class FileWatcher:
-    """Watchdog periodically polling a directory for file changes and streaming updates to PostgreSQL database.
+    """Watchdog periodically polling a directory for file changes and
+    streaming updates to PostgreSQL database.
 
     Example:
 
         .. code-block:: python
 
             # Template SQL command to execute on trigger
-            query = "INSERT INTO table_name (column_name, another_column_name) VALUES (%s, %s)"
+            query = 'INSERT INTO table_name ' \
+                    '(column_name, another_column_name) VALUES (%s, %s)'
 
             # Create watchdog
-            fido = FileWatcher(jumbo.database.Database, SQL_INSERT_IN_TABLE, 'data/', patterns = ["*.txt"], timeout=0.5)
+            fido = FileWatcher(jumbo.database.Database(),
+                               SQL_INSERT_IN_TABLE, 'data/',
+                               patterns = ["*.txt"], timeout=0.5)
 
             # Deploy watchdog
             fido.bark()
     """
 
-    def __init__(self, database, query, src_path, recursive=True, timeout=1.0, patterns=None, ignore_directories=False,
-                 key=1):
-        """Initializes polling watchdog with event handler streaming filesystem changes to PostgreSQL database.
+    def __init__(self, database: Database, query: Union[str, sql.Composed],
+                 src_path: str, recursive: bool = True, timeout: float = 1.0,
+                 patterns: Optional[List[str]] = None,
+                 ignore_directories: bool = False, key: int = 1) -> None:
+        """Initializes polling watchdog with event handler streaming
+        filesystem changes to PostgreSQL database.
 
         Args:
-            database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open
-                                                    connection pool with at least an active connection.
-            query (string or Composed):             SQL query to execute on watchdog trigger when passed new file
-                                                    contents.
-            src_path (string):                      directory to poll and monitor for changes
-            recursive (bool):                       True if watchdog should poll recursively into src_path.
-            timeout (float):                        interval in seconds between polling the file system
-            patterns (list of strings or None):     list of file-name patterns to monitor for changes in the directory
-            ignore_directories (bool):              True if directory names matching *patterns* should be
-                                                    ignored. False otherwise.
-            key (int):                              key of the pool connection being used in the transaction. Defaults
-                                                    to [1].
+            database:                       jumbo's PostgreSQL database
+                                            connection manager. Needs an
+                                            open connection pool with at
+                                            least an active connection.
+            query:                          SQL query to execute on watchdog
+                                            trigger when passed new file
+                                            contents.
+            src_path:                       directory to poll and monitor for
+                                            changes
+            recursive (optional):           True if watchdog should poll
+                                            recursively into src_path.
+            timeout (optional):             interval in seconds between
+                                            polling the file system
+            patterns (optional):            list of file-name patterns to
+                                            monitor for changes in the
+                                            directory
+            ignore_directories (optional):  True if directory names matching
+                                            *patterns* should be ignored.
+                                            False otherwise.
+            key (optional):                 key of the pool connection being
+                                            used in the transaction. Defaults
+                                            to [1].
         """
 
         # TODO: check src_path exists
-
         self.src_path = src_path
         self.recursive = recursive
         self.event_observer = PollingObserver(timeout=timeout)
-        self.event_handler = InsertToSQL(database, query, patterns=patterns, ignore_directories=ignore_directories,
+        self.event_handler = InsertToSQL(database, query, patterns=patterns,
+                                         ignore_directories=ignore_directories,
                                          key=key)
 
-    def bark(self):
+    def bark(self) -> None:
         """Schedules and starts the watchdog.
 
-        The script's main thread is kept alive in an infinite while loop, while the watchdog starts periodically polling
-        the filesystem for changes on a separate thread. A third concurrent thread is released from lock and executes
-        every time a change has been detected.
+        The script's main thread is kept alive in an infinite while loop,
+        while the watchdog starts periodically polling the filesystem for
+        changes on a separate thread. A third concurrent thread is released
+        from lock and executes every time a change has been detected.
         """
 
-        # spawns two new threads, one for the observer polling and one for the event_handler acting
-        # (the handler is locked until triggered. It executes and then relocks.)
+        # spawns two new threads, one for the observer polling and one for
+        # the event_handler acting (the handler is locked until triggered.
+        # It executes and then relocks.)
         self.start()
 
         try:
@@ -108,22 +136,24 @@ class FileWatcher:
                 # Watchdog is polling every TIMEOUT seconds on another thread
                 time.sleep(1)
 
-        # TODO: this seems to never get raised/caught. Implement advanced SIGINT concurrent threads handling
+        # TODO: this seems to never get raised/caught. Implement advanced
+        #  SIGINT concurrent threads handling
         except (Exception, KeyboardInterrupt) as e:
             logger.warning(f"Error raised while running watchdog: {e}")
 
         finally:
             self.stop()
 
-    def start(self):
+    def start(self) -> None:
         """Schedule and starts concurrent watchdog observer threads."""
 
         # Schedule observer
-        self.event_observer.schedule(self.event_handler, self.src_path, recursive=self.recursive)
+        self.event_observer.schedule(self.event_handler, self.src_path,
+                                     recursive=self.recursive)
         # Start watchdog thread; can give it name with observer.set_name()
         self.event_observer.start()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stops watchdog threads."""
 
         self.event_observer.stop()
@@ -131,32 +161,45 @@ class FileWatcher:
 
 
 class InsertToSQL(PatternMatchingEventHandler):
-    """Event handler firing whenever a filesystem modification is detected. Executes arbitrary SQL query on trigger."""
+    """Event handler firing whenever a filesystem modification is detected.
+     Executes arbitrary SQL query on trigger."""
 
-    def __init__(self, database, query, patterns=None, ignore_patterns=None, ignore_directories=True,
-                 case_sensitive=True, key=1):
+    def __init__(self, database: Database, query: Union[str, sql.Composed],
+                 patterns: Optional[List[str]] = None,
+                 ignore_patterns: Optional[List[str]] = None,
+                 ignore_directories: bool = True,
+                 case_sensitive: bool = True, key: int = 1) -> None:
         """Initialize event handler.
 
         Args:
-            database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open
-                                                    connection pool with at least an active connection.
-            query (string or Composed):             SQL query to execute on watchdog trigger when passed new file
-                                                    contents.
-            patterns (list of strings or None):     list of file-name patterns to monitor for changes in the directory
-            ignore_patterns (list of strings or None): patterns to ignore matching event paths
-            ignore_directories (bool):              ``True`` if directory names matching *patterns* should be
-                                                    ignored. ``False`` otherwise.
-            case_sensitive (bool):                  ``True`` if path names should be matched sensitive to case;
-                                                    ``False`` otherwise.
-            key (int):                              key of the pool connection being used in the transaction. Defaults
-                                                    to [1].
+            database:                       jumbo's PostgreSQL database
+                                            connection manager. Needs an open
+                                            connection pool with at least an
+                                            active connection.
+            query:                          SQL query to execute on watchdog
+                                            trigger when passed new file
+                                            contents.
+            patterns (optional):            list of file-name patterns to
+                                            monitor for changes in the
+                                            directory
+            ignore_patterns (optional):     patterns to ignore matching event
+                                            paths
+            ignore_directories (optional):  ``True`` if directory names
+                                            matching *patterns* should be
+                                            ignored. ``False`` otherwise.
+            case_sensitive (optional):      ``True`` if path names should be
+                                            matched sensitive to case;
+                                            ``False`` otherwise.
+            key (optional):                 key of the pool connection being
+                                            used in the transaction. Defaults
+                                            to [1].
         """
         # Look for changes in txt files by default
-        if patterns is None:
-            patterns = ["*.txt"]
+        patterns = ["*.txt"] if patterns is None else patterns
 
         # Call PatternMatchingEventHandler constructor
-        super().__init__(patterns, ignore_patterns, ignore_directories, case_sensitive)
+        super().__init__(patterns, ignore_patterns, ignore_directories,
+                         case_sensitive)
 
         # Add custom methods related to jumbo's Database
         self.pool = database
@@ -167,13 +210,15 @@ class InsertToSQL(PatternMatchingEventHandler):
     # 'moved', 'deleted', 'created', 'modified'
     # Here we handle only the default callback for 'modified' event
     # which will be triggered under the hood only for files matching pattern
-    def on_modified(self, event):
-        """Overwrites default on_modified event trigger fired when filesystem modification detected.
+    def on_modified(self, event: FileSystemEvent) -> None:
+        """Overwrites default on_modified event trigger fired when filesystem
+        modification detected.
 
-        Here we want to ignore taking action if a filesystem directory has been modified (only want to act on files).
+        Here we want to ignore taking action if a filesystem directory has
+        been modified (only want to act on files).
 
         Args:
-            event (watchdog.events.FileSystemEvent):    watchdog event
+            event:    watchdog event
         """
 
         # And decide to only watch for file changes
@@ -182,28 +227,30 @@ class InsertToSQL(PatternMatchingEventHandler):
             # Process event (i.e send SQL)
             self.process_event(event)
 
-    def process_event(self, event):
-        """Function handling what happens to an event raised by the watchdog: here we write any file changes as new
-        entries in a database table.
+    def process_event(self, event: FileSystemEvent) -> None:
+        """Function handling what happens to an event raised by the watchdog:
+        here we write any file changes as new entries in a database table.
 
         Args:
-            event (watchdog.events.FileSystemEvent):    watchdog event
+            event:    watchdog event
         """
 
         logger.debug(f"Event detected: {event.event_type} {event.src_path}")
 
         # Use Pygtail to return unread (i.e.) new lines in modified file
         for line in Pygtail(event.src_path):
-            self.pool.send(self.query, (line, ), key=self.key)  # remember tuple formatting (see psycopg2 docs)
+            # remember tuple formatting   v   (see psycopg2 docs)
+            self.pool.send(self.query, (line, ), key=self.key)
 
-# ----------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # LISTENERS
-# ----------------------------------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 class Listener:
-    """A concurrent thread manager listening for PostgreSQL database NOTIFYs on a given channel. On receipt of a notify
-    a custom event handler takes action.
+    """A concurrent thread manager listening for PostgreSQL database NOTIFYs
+    on a given channel. On receipt of a notify a custom event handler takes
+    action.
 
     Example:
 
@@ -215,18 +262,23 @@ class Listener:
             dumbo = jumbo.handlers.Listener(jumbo_Database, channel='table_changed', handler=handler)
             # Run threads
             dumbo.run()
-
-    Args:
-        database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open
-                                                connection pool with at least an active connection.
-        channel (string):                       name of the channel on which PostgreSQL is sending NOTIFYs
-        handler (jumbo.handlers.NotifyHandler): handler fired on receipt of ech notify. Should have a .on_notify(self)
-                                                method defined.
-        key (int):                              key of the pool connection being used in the subscription transaction.
-                                                Defaults to [1].
     """
     
-    def __init__(self, database, channel, handler, key=1):
+    def __init__(self, database: Database, channel: str,
+                 handler: 'NotifyHandler', key: int = 1):
+        """Initialises listener for PostgreSQL database NOTIFYs on given
+        channel. The given event handler takes action on receipt of
+        notification.
+
+        Args:
+            database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open
+                                                    connection pool with at least an active connection.
+            channel (string):                       name of the channel on which PostgreSQL is sending NOTIFYs
+            handler (jumbo.handlers.NotifyHandler): handler fired on receipt of ech notify. Should have a .on_notify(self)
+                                                    method defined.
+            key (int):                              key of the pool connection being used in the subscription transaction.
+                                                    Defaults to [1].
+        """
 
         self.database = database
         self.channel = channel

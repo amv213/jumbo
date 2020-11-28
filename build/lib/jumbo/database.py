@@ -2,13 +2,19 @@ import io
 import sys
 import logging
 
+import pandas as pd
+
+from .config import Config
 from contextlib import contextmanager
-from psycopg2 import sql, Error, OperationalError, ProgrammingError, DatabaseError
-from psycopg2.extras import DictCursor
-from psycopg2.pool import AbstractConnectionPool, ThreadedConnectionPool, PoolError
+from psycopg2.extras import DictCursor, DictRow
+from typing import Optional, Union, Tuple, IO
+from psycopg2 import sql, Error, OperationalError, ProgrammingError, \
+    DatabaseError
+from psycopg2.pool import AbstractConnectionPool, ThreadedConnectionPool, \
+    PoolError
 from sqlalchemy import create_engine
 
-from jumbo.config import Config
+
 
 # Spawn module-level logger
 logger = logging.getLogger(__name__)
@@ -25,8 +31,8 @@ AbstractConnectionPool.__str__ = lambda pool: ("POOL SETTINGS:\n"
 class Database:
     """Jumbo's abstract PostgreSQL client manager.
 
-    Allows to manage multiple independent connections to a PostgreSQL database and to handle arbitrary transactions
-    between clients and database.
+    Allows to manage multiple independent connections to a PostgreSQL database
+    and to handle arbitrary transactions between clients and database.
 
     Usage:
 
@@ -44,35 +50,40 @@ class Database:
                     # Execute SQL query on the database
                     pool.send(SQL_query)
 
-            # context managers ensure connections are properly returned to the pool, and that the pool is properly
-            # closed.
+            # context managers ensure connections are properly returned to the
+            pool, and that the pool is properly closed.
     """
 
-    def __init__(self, config=None):
-        """Initializes manager to handle connections to a given PostgreSQL database.
+    def __init__(self, config: Optional[Config] = None) -> None:
+        """Initializes manager to handle connections to a given PostgreSQL
+        database.
 
         Args:
-            config (jumbo.config.Config, optional): jumbo's database configuration settings. Defaults to using settings
-                                                    from the .env file located in the working directory of the script
-                                                    invoking this constructor.
+            config: jumbo's database configuration settings. Defaults to
+                    using settings from the jumbo.env file located in the
+                    working directory of the script invoking this constructor.
 
         Attributes:
-            config (jumbo.config.Config):   jumbo's database configuration settings.
-            pool (psycopg2.pool):           connection pool to the PostgreSQL database. Initially closed.
-
+            config (jumbo.config.Config):   jumbo's database configuration
+                                            settings.
+            pool (psycopg2.pool):           connection pool to the PostgreSQL
+                                            database. Initially closed.
         """
 
-        self.config = config if config is not None else Config()  # database connection settings
-        self.pool = ThreadedConnectionPool(0, 0)  # initialize a placeholder connection pool
+        # Database configuration settings
+        self.config = config if config is not None else Config()
+        # initialize a placeholder connection pool
+        self.pool = ThreadedConnectionPool(0, 0)
         self.pool.closed = True  # keep it closed on construction
 
         # Log configuration settings
         logger.info(f"Jumbo Connection Manager created:\n{self.config}")
 
     @contextmanager
-    def open(self, minconns=1, maxconns=None):
-        """Context manager opening a connection pool to the PostgreSQL database. The pool is
-        automatically closed on exit and all connections are properly handled.
+    def open(self, minconns: int = 1, maxconns: Optional[int] = None) -> None:
+        """Context manager opening a connection pool to the PostgreSQL
+        database. The pool is automatically closed on exit and all
+        connections are properly handled.
 
         Example:
 
@@ -85,9 +96,10 @@ class Database:
                 # pool is automatically closed here
 
         Args:
-            minconns (int):             minimum amount of available connections in the pool, created on startup.
-            maxconns (int, optional):    maximum amount of available connections supported by the pool.
-                                        Defaults to minconns.
+            minconns:   minimum amount of available connections in the pool,
+                        created on startup.
+            maxconns:   maximum amount of available connections supported by
+                        the pool. Defaults to minconns.
         """
         try:
 
@@ -103,37 +115,43 @@ class Database:
             # Close all connections in the pool
             self.close_pool()
 
-    def open_pool(self, minconns=1, maxconns=None):
-        """Initializes and opens a connection pool to the PostgreSQL database (psycopg2.pool.ThreadedConnectionPool).
+    def open_pool(self, minconns: int = 1,
+                  maxconns: Optional[int] = None) -> None:
+        """Initialises and opens a connection pool to the PostgreSQL database
+        (psycopg2.pool.ThreadedConnectionPool).
 
-        'minconn' new connections are created  immediately. The connection pool will support a maximum of about
-        'maxconn' connections.
+        'minconn' new connections are created  immediately. The connection pool
+        will support a maximum of about 'maxconn' connections.
 
         Args:
-            minconns (int):             minimum amount of available connections in the pool, created on startup.
-            maxonns (int, optional):    maximum amount of available connections supported by the pool.
-                                        Defaults to minconns.
+            minconns:   minimum amount of available connections in the pool,
+                        created on startup.
+            maxconns:   maximum amount of available connections supported by
+                        the pool. Defaults to 'minconns'.
         """
 
         # If the pool hasn't been opened yet
         if self.pool.closed:
 
-            maxconns = maxconns if maxconns is not None else minconns  # initialize max number of supported connections
+            # initialize max number of supported connections
+            maxconns = maxconns if maxconns is not None else minconns
 
             # create a connection pool based on jumbo's configuration settings
-            self.pool = ThreadedConnectionPool(minconns, maxconns,
-                                               host=self.config.DATABASE_HOST,
-                                               user=self.config.DATABASE_USERNAME,
-                                               password=self.config.DATABASE_PASSWORD,
-                                               port=self.config.DATABASE_PORT,
-                                               dbname=self.config.DATABASE_NAME,
-                                               sslmode='disable')
+            self.pool = ThreadedConnectionPool(
+                minconns, maxconns,
+                host=self.config.DATABASE_HOST,
+                user=self.config.DATABASE_USERNAME,
+                password=self.config.DATABASE_PASSWORD,
+                port=self.config.DATABASE_PORT,
+                dbname=self.config.DATABASE_NAME,
+                sslmode='disable')
 
             logger.info(f"Connection pool created to PostgreSQL database: "
                         f"{maxconns} connections available.")
 
-    def close_pool(self):
-        """Closes all connections in the pool, making it unusable by clients."""
+    def close_pool(self) -> None:
+        """Closes all connections in the pool, making it unusable by clients.
+        """
 
         # If the pool hasn't been closed yet
         if not self.pool.closed:
@@ -142,9 +160,10 @@ class Database:
                         "successfully.")
 
     @contextmanager
-    def connect(self, key=1):
-        """Context manager opening a connection to the PostgreSQL database using a connection [key] from the pool.
-        The connection is automatically closed on exit and all transactions are properly handled.
+    def connect(self, key: int = 1) -> None:
+        """Context manager opening a connection to the PostgreSQL database
+        using a connection [key] from the pool. The connection is
+        automatically closed on exit and all transactions are properly handled.
 
         Example:
 
@@ -159,7 +178,8 @@ class Database:
                 # connection is automatically closed here
 
         Args:
-            key (int):  key to identify the connection being opened. Required for proper book keeping.
+            key (optional): key to identify the connection being opened.
+                            Required for proper book keeping.
         """
 
         # check-out an available connection from the pool
@@ -177,12 +197,13 @@ class Database:
             # return the connection to the pool
             self.put_back_connection(key=key)
 
-    def get_connection(self, key=1):
-        """Connect to a Postgres database using an available connection from pool. The connection is assigned to 'key'
-        on checkout.
+    def get_connection(self, key: int = 1) -> None:
+        """Connect to a Postgres database using an available connection from
+        pool. The connection is assigned to 'key' on checkout.
 
         Args:
-            key (int):  key to assign to the connection being opened. Required for proper book keeping.
+            key (optional): key to assign to the connection being opened.
+                            Required for proper book keeping.
         """
 
         # If a pool has been opened
@@ -202,8 +223,9 @@ class Database:
                     self.on_connection(key)
 
                 else:
-                    logger.warning(f"Pool connection [{key}] is already in use "
-                                   f"by another client. Try a different key.")
+                    logger.warning(f"Pool connection [{key}] is already in "
+                                   f"use by another client. Try a different "
+                                   f"key.")
 
             except PoolError as error:
                 logger.error(f"Error while retrieving connection from "
@@ -214,24 +236,25 @@ class Database:
             logger.warning(f"No pool to the PostgreSQL database: cannot "
                            f"retrieve a connection. Try to .open() a pool.")
 
-    def on_connection(self, key=1):
+    def on_connection(self, key: int = 1) -> None:
         """Client-database handshaking script to perform on retrieval of a
         PostgreSQL connection from the pool.
 
         Args:
-            key (int, optional):    key of the pool connection being used in
-                                    the transaction. Defaults to [1].
+            key (optional): key of the pool connection being used in
+                            the transaction. Defaults to [1].
         """
 
         # return database information
         info = self.connection_info(key=key)
         logger.info(f"You are connected to - {info}")
 
-    def put_back_connection(self, key=1):
+    def put_back_connection(self, key: int = 1) -> None:
         """Puts back a connection in the connection pool.
 
         Args:
-            key (int, optional):  key of the pool connection being used in the transaction. Defaults to [1].
+            key (optional): key of the pool connection being used in the
+                            transaction. Defaults to [1].
         """
 
         # If this specific connection is under use
@@ -249,9 +272,15 @@ class Database:
             logger.warning(f"Pool connection [{key}] has never been opened: "
                            f"cannot put it back in the pool.")
 
-    def send(self, query, subs=None, cur_method=0, file=None, fetch_method=2, key=1):
+    def send(self,
+             query: Union[str, sql.Composed],
+             subs: Optional[Tuple[str, ...]] = None,
+             cur_method: int = 0,
+             file: Optional[IO] = None,
+             fetch_method: int = 2,
+             key: int = 1) -> Union[DictRow, None]:
         """Sends an arbitrary PostgreSQL query to the PostgreSQL database.
-        Transactions are auto-commited on execution.
+        Transactions are auto-committed on execution.
 
         Example:
 
@@ -262,24 +291,33 @@ class Database:
                 results = self.send(query)
 
                 # A more complex query with dynamic substitutions
-                query = 'INSERT INTO table_name (column_name, another_column_name) VALUES (%s, $s);'
+                query = 'INSERT INTO table_name ' \
+                        '(column_name, another_column_name) VALUES (%s, $s);'
                 subs = (value, another_value)
                 results = self.send(query, subs)
 
         Args:
-            query (string or Composed): PostgreSQL command string (can be template with psycopg2 %s fields).
-            subs (tuple or None):       tuple of values to substitute in SQL query template (cf. psycopg2 %s formatting)
-            cur_method (int):           code to select which psycopg2 cursor execution method to use for the SQL query:
-                                        0:  cursor.execute()
-                                        1:  cursor.copy_expert()
-            file (file):                file-like object to read or write to (only relevant if cur_method:1).
-            fetch_method (int):         code to select which psycopg2 result retrieval method to use (fetch*()):
-                                        0: cur.fetchone()
-                                        2: cur.fetchall()
-            key (int):                  key of the pool connection being used in the transaction. Defaults to [1].
+            query:                      PostgreSQL command string (can be
+                                        template with psycopg2 %s fields).
+            subs (optional):            tuple of values to substitute in SQL
+                                        query  template (cf. psycopg2 %s
+                                        formatting)
+            cur_method (optional):      code to select which psycopg2 cursor
+                                        execution method to use for the SQL
+                                        query:
+                                            0:  cursor.execute()
+                                            1:  cursor.copy_expert()
+            file (optional):            file-like object to read or write to
+                                        (only relevant if cur_method:1).
+            fetch_method (optional):    code to select which psycopg2 result
+                                        retrieval method to use (fetch*()):
+                                            0: cur.fetchone()
+                                            2: cur.fetchall()
+            key (optional):             key of the pool connection being used
+                                        in the transaction. Defaults to [1].
 
         Returns:
-            psycopg2.extras.DictRow: list of query results (if any). Can be accessed as dictionaries.
+            list of query results (if any). Can be accessed as dictionaries.
         """
 
         # If this specific connection has already been opened
@@ -287,8 +325,14 @@ class Database:
 
             try:  # try running a transaction
 
-                with self.pool._used[key].cursor(cursor_factory=DictCursor) as cur:
-                    query = cur.mogrify(query, subs) if subs is not None else cur.mogrify(query)
+                with self.pool._used[key].cursor(
+                        cursor_factory=DictCursor) as cur:
+
+                    # Bind arguments to query string (if present)
+                    if subs is not None:
+                        query = cur.mogrify(query, subs)
+                    else:
+                        query = cur.mogrify(query)
 
                     # Execute query
                     if cur_method == 0:
@@ -302,7 +346,8 @@ class Database:
                             records = cur.fetchone()
                         elif fetch_method == 2:
                             records = cur.fetchall()
-                    # Handle SQL queries that don't return any results (INSERT, UPDATE, etc...)
+                    # Handle SQL queries that don't return any results
+                    # (INSERT, UPDATE, etc...)
                     except ProgrammingError:
                         records = []
                         pass
@@ -310,8 +355,10 @@ class Database:
                     # Commit transaction
                     self.pool._used[key].commit()
 
-                    # Display success message
-                    s_query = (str(query[:75]) + '...') if len(query) > 78 else query  # shorten query if too long
+                    # Display success message (and shorten query if too long)
+                    s_query = query
+                    if len(query) > 78:
+                        s_query = (str(query[:75]) + '...')
                     success_msg = f"Successfully sent: {s_query} "
                     if cur.rowcount >= 0:
                         success_msg += f": {cur.rowcount} rows affected."
@@ -320,15 +367,18 @@ class Database:
                     return records  # dictionaries
 
             except (Exception, Error, DatabaseError) as e:
-                self.pool._used[key].rollback()  # Rollback transaction if any problem
-                logger.error(f"Error while sending query {query}:{e}. Transaction rolled-back.")
+                # Rollback transaction if any problem
+                self.pool._used[key].rollback()
+                logger.error(f"Error while sending query {query}:{e}. "
+                             f"Transaction rolled-back.")
 
         else:
             logger.warning(f"Pool connection [{key}] has never been opened: "
                            f"not available for transactions.")
 
-    def listen_on_channel(self, channel_name, key=1):
-        """Subscribes to a PostgreSQL notification channel by listening for NOTIFYs.
+    def listen_on_channel(self, channel_name: str, key: int = 1) -> None:
+        """Subscribes to a PostgreSQL notification channel by listening for
+        NOTIFYs.
 
         .. code-block:: postgresql
 
@@ -336,15 +386,17 @@ class Database:
             LISTEN channel_name;
 
         Args:
-            channel_name (string):  channel on which to LISTEN. PostgreSQL database should be configured to send NOTIFYs
-                                    on this channel.
-            key (int):              key of the pool connection being used in the transaction. Defaults to [1].
+            channel_name:   channel on which to LISTEN. PostgreSQL database
+                            should be configured to send NOTIFYs on this
+                            channel.
+            key (optional): key of the pool connection being used in the
+                            transaction. Defaults to [1].
         """
 
         query = "LISTEN " + channel_name + ";"
         self.send(query, key=key)
 
-    def connection_info(self, key=1):
+    def connection_info(self, key: int = 1) -> DictRow:
         """Fetches PostgreSQL database version.
 
         .. code-block:: postgresql
@@ -353,19 +405,21 @@ class Database:
             SELECT version();
 
         Args:
-            key (int):              key of the pool connection being used in the transaction. Defaults to [1].
+            key (optional): key of the pool connection being used in the
+                            transaction. Defaults to [1].
 
         Returns:
-            psycopg2.extras.DictRow: query result. Contains PostgreSQL database version information.
+            query result. Contains PostgreSQL database version information.
         """
 
         query = "SELECT version();"
         info = self.send(query, fetch_method=0, key=key)  # fetchone()
         return info
 
-    def copy_to_table(self, query, file, db_table, replace=True, key=1):
-        """Utility wrapper to send a SQL query to copy data to database table. Allows to replace table if it already
-        exists in the database.
+    def copy_to_table(self, query: sql.Composed, file: IO, db_table: str,
+                      replace: bool = True, key: int = 1) -> None:
+        """Utility wrapper to send a SQL query to copy data to database table.
+        Allows to replace table if it already exists in the database.
 
         .. code-block:: postgresql
 
@@ -383,36 +437,50 @@ class Database:
 
                 # Copy csv data from file to a table in the database
                 query = "COPY table_name FROM STDIN WITH CSV DELIMITER '\\t'"
-                results = self.copy_to_table(query, file="C:\\data.csv", db_table='table_name')
+                results = self.copy_to_table(query, file="C:\\data.csv",
+                                             db_table='table_name')
 
 
         Args:
-            query (string):             PostgreSQL COPY command string, as expected above.
-            file (file):                absolute path to file-like object to read data from.
-            db_table (string):          the name (optionally schema-qualified) of an existing database table.
-            replace (bool, optional):   replaces table contents if True. Appends data to table contents otherwise.
-            key (int):              key of the pool connection being used in the transaction. Defaults to [1].
+            query:              PostgreSQL COPY command string.
+            file:               absolute path to file-like object to read data
+                                from.
+            db_table:           the name (optionally schema-qualified) of an
+                                existing database table.
+            replace (optional): replaces table contents if True. Appends data
+                                to table contents otherwise.
+            key (optional):     key of the pool connection being used in the
+                                transaction. Defaults to [1].
         """
 
         # Replace the table already existing in the database
         if replace:
-            query_tmp = sql.SQL("TRUNCATE {};").format(sql.Identifier(db_table))  # pass dynamic table name to query
+            # pass table name dynamically to query
+            query_tmp = sql.SQL(
+                "TRUNCATE {};").format(sql.Identifier(db_table))
             self.send(query_tmp, key=key)
 
-        # Copy the table from file
-        self.send(query, cur_method=1, file=file, key=key)  # cur_method:1 = cur.copy_expert
+        # Copy the table from file (cur_method:1 = cur.copy_expert)
+        self.send(query, cur_method=1, file=file, key=key)
 
-    def copy_df(self, df, db_table, replace=True, key=1):
-        """Utility wrapper to efficiently copy a pandas.DataFrame to a PostgreSQL database table.
+    def copy_df(self, df: pd.DataFrame, db_table: str, replace: bool = True,
+                key: int = 1) -> None:
+        """Utility wrapper to efficiently copy a pandas.DataFrame to a
+        PostgreSQL database table.
 
-        This method is faster than panda's native *.to_sql()* method and exploits PostgreSQL COPY TO command. Provides a
-        useful mean of saving results from a pandas-centred data analysis pipeline directly to the database.
+        This method is faster than panda's native *.to_sql()* method and
+        exploits PostgreSQL COPY TO command. Provides a useful mean of saving
+        results from a pandas-centred data analysis pipeline directly to the
+        database.
 
         Args:
-            df (pandas.DataFrame):      dataframe to be copied.
-            db_table (string):          the name (optionally schema-qualified) of the table to write to.
-            replace (bool, optional):   replaces table contents if True. Appends data to table contents otherwise.
-            key (int):                  key of the pool connection being used in the transaction. Defaults to [1].
+            df:                 dataframe to be copied.
+            db_table:           the name (optionally schema-qualified) of the
+                                table to write to.
+            replace (optional): replaces table contents if True. Appends data
+                                to table contents otherwise.
+            key (optional):     key of the pool connection being used in the
+                                transaction. Defaults to [1].
         """
 
         if key in self.pool._used:
@@ -423,16 +491,22 @@ class Database:
                 df.to_csv(io_file, sep='\t', header=False, index=False)
                 io_file.seek(0)
 
-                # Quickly create a table with correct number of columns / data types
-                # We will need to quickly build a sqlalchemy engine for this hack to work
+                # Quickly create a table with correct number of columns / data
+                # types Unfortunately we will need to quickly build a
+                # sqlalchemy engine for this hack to work
                 replacement_method = 'replace' if replace else 'append'
                 engine = create_engine('postgresql+psycopg2://',
                                        creator=lambda: self.pool._used[key])
-                df.head(0).to_sql(db_table, engine, if_exists=replacement_method, index=False)
+                df.head(0).to_sql(db_table, engine,
+                                  if_exists=replacement_method, index=False)
 
-                # But then exploit postgreSQL COPY command instead of slow pandas .to_sql()
-                # Not that replace is set to false in copy_table as we want to preserve the header table created above
-                sql_copy_expert = sql.SQL("COPY {} FROM STDIN WITH CSV DELIMITER '\t'").format(sql.Identifier(db_table))
+                # But then exploit postgreSQL COPY command instead of slow
+                # pandas .to_sql(). Note that replace is set to false in
+                # copy_table as we want to preserve the header table created
+                # above
+                sql_copy_expert = sql.SQL(
+                    "COPY {} FROM STDIN WITH CSV DELIMITER '\t'").format(
+                    sql.Identifier(db_table))
                 self.copy_to_table(sql_copy_expert, file=io_file,
                                    db_table=db_table, replace=False, key=key)
 
@@ -440,8 +514,9 @@ class Database:
                             f"table.")
 
             except (Exception, DatabaseError) as error:
-                logger.error(f"Error while copying DataFrame to PostgreSQL table: {error}")
+                logger.error(f"Error while copying DataFrame to PostgreSQL "
+                             f"table: {error}")
 
         else:
-            logger.warning(f"Pool connection [{key}] has never been opened: cannot use it to copy Dataframe to "
-                           f"database.")
+            logger.warning(f"Pool connection [{key}] has never been opened: "
+                           f"cannot use it to copy Dataframe to database.")

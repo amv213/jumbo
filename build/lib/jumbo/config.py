@@ -1,29 +1,38 @@
+from typing import Optional
 from os import environ, path, getcwd
 from dotenv import load_dotenv
 
 
 class Config:
-    """Configuration class setting global environment variables to connect to a PostgreSQL database via Jumbo.
+    """Configuration class setting global environment variables to connect to
+    a PostgreSQL database via Jumbo.
 
-    Variables are extracted from an existing .env file defining the following variables::
+    Variables are extracted from an existing jumbo.env file defining the
+    following variables::
     
         DATABASE_HOST = the PostgreSQL server host address
-        DATABASE_USERNAME = the PostgreSQL username of the user connecting to the database
-        DATABASE_PASSWORD = the PostgreSQL password of the user connecting to the database
-        DATABASE_PORT = the port on which the PostgreSQL server is running (usually 5432)
+        DATABASE_USERNAME = the PostgreSQL username of the user connecting to
+                            the database
+        DATABASE_PASSWORD = the PostgreSQL password of the user connecting to
+                            the database
+        DATABASE_PORT = the port on which the PostgreSQL server is running
+                        (usually 5432)
         DATABASE_NAME = the name of the database to which to connect
 
-    By default, the .env file should be located in the root working directory of the script invoking the constructor.
+    By default, the jumbo.env file should be located in the root working
+    directory of the script invoking the constructor.
     """
 
-    def __init__(self, env_path=None):
-        """Initializes configuration settings in order to connect to a PostgreSQL database with jumbo.
+    def __init__(self, env_path: Optional[str] = None) -> None:
+        """Initializes configuration settings in order to connect to a
+        PostgreSQL database with jumbo.
 
         Args:
-            env_path (string, optional):    path where to look for the configuration file (.env). Defaults to current
-                                            working directory of script invoking this constructor.
+            env_path:   path where to look for the jumbo.env configuration
+                        file. Defaults to the working directory of the
+                        script invoking this constructor.
         """
-        # Look for .env in provided path. Else in working directory of script invoking constructor
+
         env_path = env_path if env_path is not None else getcwd()
         dotenv_path = path.join(env_path, 'jumbo.env')
 
@@ -37,7 +46,7 @@ class Config:
         self.DATABASE_PORT = environ.get('DATABASE_PORT')
         self.DATABASE_NAME = environ.get('DATABASE_NAME')
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """A debugging-friendly representation of the object.
 
         Returns:
@@ -46,7 +55,7 @@ class Config:
 
         return f"{self.__class__} ({self.__dict__})"
 
-    def __str__(self):
+    def __str__(self) -> str:
         """A human-friendly pretty-print representation of the object.
 
         Returns:

@@ -5,8 +5,9 @@ from abc import ABC
 from psycopg2 import sql
 from pygtail import Pygtail
 from .database import Database
+from psycopg2.extras import DictRow
 from eventlet.hubs import trampoline
-from typing import Union, List, Optional
+from typing import Union, List, Optional, NoReturn
 from watchdog.observers.polling import PollingObserver, PollingEmitter
 from watchdog.events import PatternMatchingEventHandler, FileSystemEvent
 
@@ -113,7 +114,7 @@ class FileWatcher:
                                          ignore_directories=ignore_directories,
                                          key=key)
 
-    def bark(self) -> None:
+    def bark(self) -> NoReturn:
         """Schedules and starts the watchdog.
 
         The script's main thread is kept alive in an infinite while loop,
@@ -257,27 +258,32 @@ class Listener:
         .. code-block:: python
 
             # Choose handler: must have a .on_notify(self) method implemented.
-            handler = jumbo.handlers.LastEntryFetcher(jumbo_Database, audit_table)
+            handler = jumbo.handlers.LastEntryFetcher(jumbo_Database,
+                                                      audit_table)
             # Create listener triggering handler's .on_notify(self) on NOTIFY
-            dumbo = jumbo.handlers.Listener(jumbo_Database, channel='table_changed', handler=handler)
+            dumbo = jumbo.handlers.Listener(jumbo_Database,
+                                            channel='table_changed',
+                                            handler=handler)
             # Run threads
             dumbo.run()
     """
     
     def __init__(self, database: Database, channel: str,
-                 handler: 'NotifyHandler', key: int = 1):
+                 handler: 'NotifyHandler', key: int = 1) -> None:
         """Initialises listener for PostgreSQL database NOTIFYs on given
         channel. The given event handler takes action on receipt of
         notification.
 
         Args:
-            database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open
-                                                    connection pool with at least an active connection.
-            channel (string):                       name of the channel on which PostgreSQL is sending NOTIFYs
-            handler (jumbo.handlers.NotifyHandler): handler fired on receipt of ech notify. Should have a .on_notify(self)
-                                                    method defined.
-            key (int):                              key of the pool connection being used in the subscription transaction.
-                                                    Defaults to [1].
+            database:       jumbo's PostgreSQL database connection manager.
+                            Needs an open connection pool with at least an
+                            active connection.
+            channel:        name of the channel on which PostgreSQL is sending
+                            NOTIFYs
+            handler :       handler fired on receipt of ech notify. Should
+                            have a .on_notify(self) method defined.
+            key (optional): key of the pool connection being used in the
+                            subscription transaction. Defaults to [1].
         """
 
         self.database = database
@@ -285,71 +291,91 @@ class Listener:
         self.handler = handler
         self.key = key
 
-    def run(self):
-        """Spawns a greenthread subscribing to PostgreSQL database notification channel and waits for NOTIFYs. On
-        receipt the thread is blocked and the Listener.handler() is fired. Once the handler has finished processing the
-        thread is finally unblocked and waits for the next NOTIFY.
+    def run(self) -> NoReturn:
+        """Spawns a greenthread subscribing to PostgreSQL database
+        notification channel and waits for NOTIFYs. On receipt the thread is
+        blocked and the Listener.handler() is fired. Once the handler has
+        finished processing the thread is finally unblocked and waits for
+        the next NOTIFY.
         """
 
         # multi-producer, multi-consumer queue that works across greenlets
-        queue = eventlet.Queue(0)  # size 1 (i.e. not infinite) so that it blocks until entry processed
-        g = eventlet.spawn(self.subscribe, queue)  # spawn async greenthread in parallel
+        # size 1 (i.e. not infinite) so that it blocks until entry processed
+        queue = eventlet.Queue(0)
+        # spawn async greenthread in parallel
+        g = eventlet.spawn(self.subscribe, queue)
 
         while True:
 
             try:
 
                 logger.debug(f"Waiting for a notification...")
-                notify = queue.get()  # blocks until item available in queue. i.e. waiting for spawned function to yield
-                # -------------%------------------%--------------------%-------------------#
+                notify = queue.get()
+                # ^ blocks until item available in queue. i.e. waiting for
+                # spawned function to yield
+                # ----------------%--------------------%----------------------#
+
                 logger.info(f"Got NOTIFY: "
                             f"{notify.pid} {notify.channel} {notify.payload}")
 
                 # do something with the database once received the NOTIFY (n)
                 self.handler.on_notify()
 
-                queue.task_done()  # tell queue that this consumer has finished the task for which it asked q.get()
-                queue.join()  # blocks until all items in the queue have been gotten and processed.
+                # tell queue that this consumer has finished the task for
+                # which it asked q.get()
+                queue.task_done()
+                # block until all items in the queue have been gotten and
+                # processed:
+                queue.join()
 
             except KeyboardInterrupt:
                 eventlet.kill(g)
-                logger.error("Listener has been killed via Keyboard Interrupt. "
-                             "Greenthread garbage collected.")
+                logger.error("Listener has been killed via Keyboard "
+                             "Interrupt. Greenthread garbage collected.")
                 break
 
-    def subscribe(self, q):
-        """Green thread process waiting for NOTIFYs on the channel and feeding them to the queue.
+    def subscribe(self, q: eventlet.Queue) -> NoReturn:
+        """Green thread process waiting for NOTIFYs on the channel and feeding
+        them to the queue.
 
         Args:
-            q (eventlet.Queue): event queue through which to pipe NOTIFY events to the main thread.
+            q:  event queue through which to pipe NOTIFY events to the main
+                thread.
         """
 
         # Subscribe to notification channel
         self.database.listen_on_channel(self.channel, self.key)
 
+        # Infinite listening loop
         while True:
 
-            # self.database.pool._used[self.key] is the connection object corresponding to [key] in the conneciton pool
+            # self.database.pool._used[self.key] is the connection object
+            # corresponding to [key] in the conneciton pool
 
-            # spawns a green thread and return control once there is a notification to read
+            # spawns a green thread and return control once there is a
+            # notification to read
             trampoline(self.database.pool._used[self.key], read=True)
 
-            self.database.pool._used[self.key].poll()  # once there is a notification --> poll
+            # once there is a notification --> poll
+            self.database.pool._used[self.key].poll()
 
             while self.database.pool._used[self.key].notifies:
-                notify = self.database.pool._used[self.key].notifies.pop()  # extract notify
-                q.put(notify)  # blocks until slot available in queue to insert Notify
-                # -------------%------------------%--------------------%-------------------#
+                # extract notify:
+                notify = self.database.pool._used[self.key].notifies.pop()
+                # block until slot available in queue to insert Notify:
+                q.put(notify)
+                # ----------------%--------------------%----------------------#
 
 
 class NotifyHandler(ABC):
-    """Abstract Handler managing actions performed on reception of a NOTIFY from the database"""
+    """Abstract Handler managing actions performed on reception of a NOTIFY
+    from the database. Inherit from it to define your own custom handlers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         pass
 
-    def on_notify(self):
+    def on_notify(self) -> None:
         """Procedure to execute once a NOTIFY is received.
 
         Overwrite as needed"""
@@ -358,19 +384,25 @@ class NotifyHandler(ABC):
 
 
 class LastEntryFetcher(NotifyHandler):
-    """Custom handler which fetches las entry in a PostgreSQL audit table on trigger.
-
-    Args:
-        database (jumbo.database.Database):     jumbo's PostgreSQL database connection manager. Needs an open connection
-                                                pool with at least an active connection.
-        audit_table (string):                   name of PostgreSQL database 'audit' table. Should have been configured
-                                                to always contain a single row corresponding to the latest row added to
-                                                the table it is auditing (e.g. configuring a TRIGGER on that table).
-        key (int):                              key of the pool connection being used to fetch last database entry.
-                                                Defaults to [1].
+    """Custom handler which fetches las entry in a PostgreSQL audit table on
+    trigger.
     """
 
-    def __init__(self, database, audit_table, key=1):
+    def __init__(self, database: Database, audit_table: str, key: int = 1):
+        """Initialises custom handler.
+
+        Args:
+            database:       jumbo's PostgreSQL database connection manager.
+                            Needs an open connection pool with at least an
+                            active connection.
+            audit_table:    name of PostgreSQL database 'audit' table. Should
+                            have been configured to always contain a single
+                            row corresponding to the latest row added to the
+                            table it is auditing (e.g. configuring a TRIGGER
+                            on that table).
+            key (optional): key of the pool connection being used to fetch last
+                            database entry. Defaults to [1].
+        """
 
         super().__init__()
 
@@ -379,24 +411,30 @@ class LastEntryFetcher(NotifyHandler):
         self.key = key
 
         # SQL query to fetch last (and only) entry in audit table
-        self.SQL = sql.SQL('SELECT * FROM {};').format(sql.Identifier(self.audit_table))
+        self.SQL = sql.SQL('SELECT * FROM {};').format(
+            sql.Identifier(self.audit_table))
 
-    def on_notify(self):
+    def on_notify(self) -> None:
         """Fetch entry that triggered the notify"""
 
-        # send SQL string to PostgreSQL database
-        iter_results = self.database.send(self.SQL, fetch_method=0, key=self.key)  # fetch method =  fetchone()
+        # send SQL string to PostgreSQL database (fetch method = fetchone())
+        iter_results = self.database.send(
+            self.SQL, fetch_method=0, key=self.key)
 
         # Do additional data processing on the fetched results
         self.process(iter_results)
 
-    def process(self, iter_results):
+    # Don't make it static, so to be easily overwritable to perform more
+    # complex data analysis dependent on self attributes
+    def process(self, iter_results: DictRow) -> None:
         """Logs results to console.
 
-        Overwrite if need more complex data analysis on last entry in audit table.
+        Overwrite if need more complex data analysis on last entry in audit
+        table.
 
         Args:
-            iter_results (psycopg2.extras.DictRow): last entry in table. Can be accessed as dictionary.
+            iter_results: last entry in table. Can be accessed as dictionary.
         """
 
-        logger.debug(f"These are the last results in the audit table:{iter_results}")
+        logger.debug(f"These are the last results in the audit "
+                     f"table:{iter_results}")

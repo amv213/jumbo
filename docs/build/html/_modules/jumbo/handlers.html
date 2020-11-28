@@ -1,138 +1,313 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>jumbo.handlers &#8212; jumbo 0.0.2c documentation</title>
-    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>jumbo.handlers &#8212; Jumbo Documentation</title>
     
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/twemoji.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/language_data.js"></script>
-    
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+    <script src="../../_static/twemoji.js"></script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <link rel="shortcut icon" href="../../_static/favico.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" /> 
-  </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">jumbo 0.0.2c documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+    <link rel="search" title="Search" href="../../search.html" />
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo_single.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Jumbo Documentation</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../index.html">
+   📑 Welcome to Jumbo!
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  MAIN DOCS
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../tutorial.html">
+   First Steps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../database.html">
+   Database Setup
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../modules.html">
+   Documentation
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../jumbo.html">
+     jumbo package
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../demos.html">
+   Demos
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://gitlab.com/amv213/jumbo"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2F_modules/jumbo/handlers.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
   <h1>Source code for jumbo.handlers</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">eventlet</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">eventlet</span>
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">loguru</span> <span class="kn">import</span> <span class="n">logger</span>
-<span class="kn">from</span> <span class="nn">eventlet.hubs</span> <span class="kn">import</span> <span class="n">trampoline</span>
-<span class="kn">from</span> <span class="nn">pygtail</span> <span class="kn">import</span> <span class="n">Pygtail</span>
 <span class="kn">from</span> <span class="nn">psycopg2</span> <span class="kn">import</span> <span class="n">sql</span>
-<span class="kn">from</span> <span class="nn">watchdog.events</span> <span class="kn">import</span> <span class="n">PatternMatchingEventHandler</span>
+<span class="kn">from</span> <span class="nn">pygtail</span> <span class="kn">import</span> <span class="n">Pygtail</span>
+<span class="kn">from</span> <span class="nn">.database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">psycopg2.extras</span> <span class="kn">import</span> <span class="n">DictRow</span>
+<span class="kn">from</span> <span class="nn">eventlet.hubs</span> <span class="kn">import</span> <span class="n">trampoline</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">NoReturn</span>
 <span class="kn">from</span> <span class="nn">watchdog.observers.polling</span> <span class="kn">import</span> <span class="n">PollingObserver</span><span class="p">,</span> <span class="n">PollingEmitter</span>
+<span class="kn">from</span> <span class="nn">watchdog.events</span> <span class="kn">import</span> <span class="n">PatternMatchingEventHandler</span><span class="p">,</span> <span class="n">FileSystemEvent</span>
 
+<span class="c1"># Spawn module-level logger</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-<span class="c1"># ----------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># WATCHDOGS</span>
-<span class="c1"># ----------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
 
 
-<span class="c1"># TODO: Overwrite PollingEmiter(BaseEmitter(BaseThread(thread.Thread))) to behave appropriately when thread stopped</span>
-<div class="viewcode-block" id="mod_on_thread_start"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.mod_on_thread_start">[docs]</a><span class="k">def</span> <span class="nf">mod_on_thread_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Override this method instead of :meth:`start()`. :meth:`start()` calls this method.</span>
+<span class="c1"># TODO: Overwrite PollingEmitter(BaseEmitter(BaseThread(thread.Thread))) to</span>
+<span class="c1">#  behave appropriately when thread stopped</span>
+<div class="viewcode-block" id="mod_on_thread_start"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.mod_on_thread_start">[docs]</a><span class="k">def</span> <span class="nf">mod_on_thread_start</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">PollingEmitter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Override this method instead of :meth:`start()`.</span>
+<span class="sd">    :meth:`start()` actually calls this method.</span>
 
-<span class="sd">    This method is called right before this thread is started and this object’s run() method is invoked.</span>
+<span class="sd">    This method is called right before this thread is started and this</span>
+<span class="sd">    object’s run() method is invoked.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        self (BaseThread): </span>
+<span class="sd">        self: PollingEmitter object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_take_snapshot</span><span class="p">()</span>  <span class="c1"># PollingEmitter&#39;s on_thread_start</span></div>
+    <span class="c1"># PollingEmitter&#39;s on_thread_start</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_snapshot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_take_snapshot</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="mod_on_thread_stop"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.mod_on_thread_stop">[docs]</a><span class="k">def</span> <span class="nf">mod_on_thread_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Override this method instead of :meth:`stop()`. :meth:`stop()` calls this method.</span>
+<div class="viewcode-block" id="mod_on_thread_stop"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.mod_on_thread_stop">[docs]</a><span class="k">def</span> <span class="nf">mod_on_thread_stop</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="n">PollingEmitter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Override this method instead of :meth:`stop()`.</span>
+<span class="sd">    :meth:`stop()` actually calls this method.</span>
 
 <span class="sd">    This method is called immediately after the thread is signaled to stop.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        self: PollingEmitter object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">pass</span></div>
 
-
+<span class="c1"># Mod behaviour with changes above</span>
 <span class="n">PollingEmitter</span><span class="o">.</span><span class="n">on_thread_start</span> <span class="o">=</span> <span class="n">mod_on_thread_start</span>
 <span class="n">PollingEmitter</span><span class="o">.</span><span class="n">on_thread_stop</span> <span class="o">=</span> <span class="n">mod_on_thread_stop</span>
 
 
 <div class="viewcode-block" id="FileWatcher"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher">[docs]</a><span class="k">class</span> <span class="nc">FileWatcher</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Watchdog periodically polling a directory for file changes and streaming updates to PostgreSQL database.</span>
+    <span class="sd">&quot;&quot;&quot;Watchdog periodically polling a directory for file changes and</span>
+<span class="sd">    streaming updates to PostgreSQL database.</span>
 
 <span class="sd">    Example:</span>
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            # Template SQL command to execute on trigger</span>
-<span class="sd">            query = &quot;INSERT INTO table_name (column_name, another_column_name) VALUES (%s, %s)&quot;</span>
+<span class="sd">            query = &#39;INSERT INTO table_name &#39; \</span>
+<span class="sd">                    &#39;(column_name, another_column_name) VALUES (%s, %s)&#39;</span>
 
 <span class="sd">            # Create watchdog</span>
-<span class="sd">            fido = FileWatcher(jumbo.database.Database, SQL_INSERT_IN_TABLE, &#39;data/&#39;, patterns = [&quot;*.txt&quot;], timeout=0.5)</span>
+<span class="sd">            fido = FileWatcher(jumbo.database.Database(),</span>
+<span class="sd">                               SQL_INSERT_IN_TABLE, &#39;data/&#39;,</span>
+<span class="sd">                               patterns = [&quot;*.txt&quot;], timeout=0.5)</span>
 
 <span class="sd">            # Deploy watchdog</span>
 <span class="sd">            fido.bark()</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">src_path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_directories</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                 <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initializes polling watchdog with event handler streaming filesystem changes to PostgreSQL database.</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">sql</span><span class="o">.</span><span class="n">Composed</span><span class="p">],</span>
+                 <span class="n">src_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">recursive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ignore_directories</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initializes polling watchdog with event handler streaming</span>
+<span class="sd">        filesystem changes to PostgreSQL database.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            database (jumbo.database.Database):     jumbo&#39;s PostgreSQL database connection manager. Needs an open</span>
-<span class="sd">                                                    connection pool with at least an active connection.</span>
-<span class="sd">            query (string or Composed):             SQL query to execute on watchdog trigger when passed new file</span>
-<span class="sd">                                                    contents.</span>
-<span class="sd">            src_path (string):                      directory to poll and monitor for changes</span>
-<span class="sd">            recursive (bool):                       True if watchdog should poll recursively into src_path.</span>
-<span class="sd">            timeout (float):                        interval in seconds between polling the file system</span>
-<span class="sd">            patterns (list of strings or None):     list of file-name patterns to monitor for changes in the directory</span>
-<span class="sd">            ignore_directories (bool):              True if directory names matching *patterns* should be</span>
-<span class="sd">                                                    ignored. False otherwise.</span>
-<span class="sd">            key (int):                              key of the pool connection being used in the transaction. Defaults</span>
-<span class="sd">                                                    to [1].</span>
+<span class="sd">            database:                       jumbo&#39;s PostgreSQL database</span>
+<span class="sd">                                            connection manager. Needs an</span>
+<span class="sd">                                            open connection pool with at</span>
+<span class="sd">                                            least an active connection.</span>
+<span class="sd">            query:                          SQL query to execute on watchdog</span>
+<span class="sd">                                            trigger when passed new file</span>
+<span class="sd">                                            contents.</span>
+<span class="sd">            src_path:                       directory to poll and monitor for</span>
+<span class="sd">                                            changes</span>
+<span class="sd">            recursive (optional):           True if watchdog should poll</span>
+<span class="sd">                                            recursively into src_path.</span>
+<span class="sd">            timeout (optional):             interval in seconds between</span>
+<span class="sd">                                            polling the file system</span>
+<span class="sd">            patterns (optional):            list of file-name patterns to</span>
+<span class="sd">                                            monitor for changes in the</span>
+<span class="sd">                                            directory</span>
+<span class="sd">            ignore_directories (optional):  True if directory names matching</span>
+<span class="sd">                                            *patterns* should be ignored.</span>
+<span class="sd">                                            False otherwise.</span>
+<span class="sd">            key (optional):                 key of the pool connection being</span>
+<span class="sd">                                            used in the transaction. Defaults</span>
+<span class="sd">                                            to [1].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># TODO: check src_path exists</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">src_path</span> <span class="o">=</span> <span class="n">src_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">recursive</span> <span class="o">=</span> <span class="n">recursive</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_observer</span> <span class="o">=</span> <span class="n">PollingObserver</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_handler</span> <span class="o">=</span> <span class="n">InsertToSQL</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="n">patterns</span><span class="p">,</span> <span class="n">ignore_directories</span><span class="o">=</span><span class="n">ignore_directories</span><span class="p">,</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_handler</span> <span class="o">=</span> <span class="n">InsertToSQL</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="n">patterns</span><span class="p">,</span>
+                                         <span class="n">ignore_directories</span><span class="o">=</span><span class="n">ignore_directories</span><span class="p">,</span>
                                          <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FileWatcher.bark"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.bark">[docs]</a>    <span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileWatcher.bark"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.bark">[docs]</a>    <span class="k">def</span> <span class="nf">bark</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Schedules and starts the watchdog.</span>
 
-<span class="sd">        The script&#39;s main thread is kept alive in an infinite while loop, while the watchdog starts periodically polling</span>
-<span class="sd">        the filesystem for changes on a separate thread. A third concurrent thread is released from lock and executes</span>
-<span class="sd">        every time a change has been detected.</span>
+<span class="sd">        The script&#39;s main thread is kept alive in an infinite while loop,</span>
+<span class="sd">        while the watchdog starts periodically polling the filesystem for</span>
+<span class="sd">        changes on a separate thread. A third concurrent thread is released</span>
+<span class="sd">        from lock and executes every time a change has been detected.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># spawns two new threads, one for the observer polling and one for the event_handler acting</span>
-        <span class="c1"># (the handler is locked until triggered. It executes and then relocks.)</span>
+        <span class="c1"># spawns two new threads, one for the observer polling and one for</span>
+        <span class="c1"># the event_handler acting (the handler is locked until triggered.</span>
+        <span class="c1"># It executes and then relocks.)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -144,22 +319,24 @@
                 <span class="c1"># Watchdog is polling every TIMEOUT seconds on another thread</span>
                 <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-        <span class="c1"># TODO: this seems to never get raised/caught. Implement advanced SIGINT concurrent threads handling</span>
+        <span class="c1"># TODO: this seems to never get raised/caught. Implement advanced</span>
+        <span class="c1">#  SIGINT concurrent threads handling</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error raised while running watchdog: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">finally</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FileWatcher.start"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileWatcher.start"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Schedule and starts concurrent watchdog observer threads.&quot;&quot;&quot;</span>
 
         <span class="c1"># Schedule observer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">event_observer</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_handler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_path</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">recursive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">event_observer</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">event_handler</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_path</span><span class="p">,</span>
+                                     <span class="n">recursive</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">recursive</span><span class="p">)</span>
         <span class="c1"># Start watchdog thread; can give it name with observer.set_name()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">event_observer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="FileWatcher.stop"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FileWatcher.stop"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.FileWatcher.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Stops watchdog threads.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">event_observer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
@@ -167,32 +344,45 @@
 
 
 <div class="viewcode-block" id="InsertToSQL"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.InsertToSQL">[docs]</a><span class="k">class</span> <span class="nc">InsertToSQL</span><span class="p">(</span><span class="n">PatternMatchingEventHandler</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Event handler firing whenever a filesystem modification is detected. Executes arbitrary SQL query on trigger.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Event handler firing whenever a filesystem modification is detected.</span>
+<span class="sd">     Executes arbitrary SQL query on trigger.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_patterns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ignore_directories</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                 <span class="n">case_sensitive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">sql</span><span class="o">.</span><span class="n">Composed</span><span class="p">],</span>
+                 <span class="n">patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ignore_patterns</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ignore_directories</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">case_sensitive</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Initialize event handler.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            database (jumbo.database.Database):     jumbo&#39;s PostgreSQL database connection manager. Needs an open</span>
-<span class="sd">                                                    connection pool with at least an active connection.</span>
-<span class="sd">            query (string or Composed):             SQL query to execute on watchdog trigger when passed new file</span>
-<span class="sd">                                                    contents.</span>
-<span class="sd">            patterns (list of strings or None):     list of file-name patterns to monitor for changes in the directory</span>
-<span class="sd">            ignore_patterns (list of strings or None): patterns to ignore matching event paths</span>
-<span class="sd">            ignore_directories (bool):              ``True`` if directory names matching *patterns* should be</span>
-<span class="sd">                                                    ignored. ``False`` otherwise.</span>
-<span class="sd">            case_sensitive (bool):                  ``True`` if path names should be matched sensitive to case;</span>
-<span class="sd">                                                    ``False`` otherwise.</span>
-<span class="sd">            key (int):                              key of the pool connection being used in the transaction. Defaults</span>
-<span class="sd">                                                    to [1].</span>
+<span class="sd">            database:                       jumbo&#39;s PostgreSQL database</span>
+<span class="sd">                                            connection manager. Needs an open</span>
+<span class="sd">                                            connection pool with at least an</span>
+<span class="sd">                                            active connection.</span>
+<span class="sd">            query:                          SQL query to execute on watchdog</span>
+<span class="sd">                                            trigger when passed new file</span>
+<span class="sd">                                            contents.</span>
+<span class="sd">            patterns (optional):            list of file-name patterns to</span>
+<span class="sd">                                            monitor for changes in the</span>
+<span class="sd">                                            directory</span>
+<span class="sd">            ignore_patterns (optional):     patterns to ignore matching event</span>
+<span class="sd">                                            paths</span>
+<span class="sd">            ignore_directories (optional):  ``True`` if directory names</span>
+<span class="sd">                                            matching *patterns* should be</span>
+<span class="sd">                                            ignored. ``False`` otherwise.</span>
+<span class="sd">            case_sensitive (optional):      ``True`` if path names should be</span>
+<span class="sd">                                            matched sensitive to case;</span>
+<span class="sd">                                            ``False`` otherwise.</span>
+<span class="sd">            key (optional):                 key of the pool connection being</span>
+<span class="sd">                                            used in the transaction. Defaults</span>
+<span class="sd">                                            to [1].</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Look for changes in txt files by default</span>
-        <span class="k">if</span> <span class="n">patterns</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*.txt&quot;</span><span class="p">]</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;*.txt&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">patterns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">patterns</span>
 
         <span class="c1"># Call PatternMatchingEventHandler constructor</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">ignore_patterns</span><span class="p">,</span> <span class="n">ignore_directories</span><span class="p">,</span> <span class="n">case_sensitive</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">patterns</span><span class="p">,</span> <span class="n">ignore_patterns</span><span class="p">,</span> <span class="n">ignore_directories</span><span class="p">,</span>
+                         <span class="n">case_sensitive</span><span class="p">)</span>
 
         <span class="c1"># Add custom methods related to jumbo&#39;s Database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pool</span> <span class="o">=</span> <span class="n">database</span>
@@ -203,13 +393,15 @@
     <span class="c1"># &#39;moved&#39;, &#39;deleted&#39;, &#39;created&#39;, &#39;modified&#39;</span>
     <span class="c1"># Here we handle only the default callback for &#39;modified&#39; event</span>
     <span class="c1"># which will be triggered under the hood only for files matching pattern</span>
-<div class="viewcode-block" id="InsertToSQL.on_modified"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.InsertToSQL.on_modified">[docs]</a>    <span class="k">def</span> <span class="nf">on_modified</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Overwrites default on_modified event trigger fired when filesystem modification detected.</span>
+<div class="viewcode-block" id="InsertToSQL.on_modified"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.InsertToSQL.on_modified">[docs]</a>    <span class="k">def</span> <span class="nf">on_modified</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">FileSystemEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Overwrites default on_modified event trigger fired when filesystem</span>
+<span class="sd">        modification detected.</span>
 
-<span class="sd">        Here we want to ignore taking action if a filesystem directory has been modified (only want to act on files).</span>
+<span class="sd">        Here we want to ignore taking action if a filesystem directory has</span>
+<span class="sd">        been modified (only want to act on files).</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            event (watchdog.events.FileSystemEvent):    watchdog event</span>
+<span class="sd">            event:    watchdog event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># And decide to only watch for file changes</span>
@@ -218,120 +410,154 @@
             <span class="c1"># Process event (i.e send SQL)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="InsertToSQL.process_event"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.InsertToSQL.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function handling what happens to an event raised by the watchdog: here we write any file changes as new</span>
-<span class="sd">        entries in a database table.</span>
+<div class="viewcode-block" id="InsertToSQL.process_event"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.InsertToSQL.process_event">[docs]</a>    <span class="k">def</span> <span class="nf">process_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">FileSystemEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Function handling what happens to an event raised by the watchdog:</span>
+<span class="sd">        here we write any file changes as new entries in a database table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            event (watchdog.events.FileSystemEvent):    watchdog event</span>
+<span class="sd">            event:    watchdog event</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Event detected: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">src_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Use Pygtail to return unread (i.e.) new lines in modified file</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">Pygtail</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">src_path</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># remember tuple formatting (see psycopg2 docs)</span></div></div>
+            <span class="c1"># remember tuple formatting   v   (see psycopg2 docs)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">,</span> <span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span></div></div>
 
-<span class="c1"># ----------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
 <span class="c1"># LISTENERS</span>
-<span class="c1"># ----------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1"># -----------------------------------------------------------------------------</span>
 
 
 <div class="viewcode-block" id="Listener"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.Listener">[docs]</a><span class="k">class</span> <span class="nc">Listener</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A concurrent thread manager listening for PostgreSQL database NOTIFYs on a given channel. On receipt of a notify</span>
-<span class="sd">    a custom event handler takes action.</span>
+    <span class="sd">&quot;&quot;&quot;A concurrent thread manager listening for PostgreSQL database NOTIFYs</span>
+<span class="sd">    on a given channel. On receipt of a notify a custom event handler takes</span>
+<span class="sd">    action.</span>
 
 <span class="sd">    Example:</span>
 
 <span class="sd">        .. code-block:: python</span>
 
 <span class="sd">            # Choose handler: must have a .on_notify(self) method implemented.</span>
-<span class="sd">            handler = jumbo.handlers.LastEntryFetcher(jumbo_Database, audit_table)</span>
+<span class="sd">            handler = jumbo.handlers.LastEntryFetcher(jumbo_Database,</span>
+<span class="sd">                                                      audit_table)</span>
 <span class="sd">            # Create listener triggering handler&#39;s .on_notify(self) on NOTIFY</span>
-<span class="sd">            dumbo = jumbo.handlers.Listener(jumbo_Database, channel=&#39;table_changed&#39;, handler=handler)</span>
+<span class="sd">            dumbo = jumbo.handlers.Listener(jumbo_Database,</span>
+<span class="sd">                                            channel=&#39;table_changed&#39;,</span>
+<span class="sd">                                            handler=handler)</span>
 <span class="sd">            # Run threads</span>
 <span class="sd">            dumbo.run()</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        database (jumbo.database.Database):     jumbo&#39;s PostgreSQL database connection manager. Needs an open</span>
-<span class="sd">                                                connection pool with at least an active connection.</span>
-<span class="sd">        channel (string):                       name of the channel on which PostgreSQL is sending NOTIFYs</span>
-<span class="sd">        handler (jumbo.handlers.NotifyHandler): handler fired on receipt of ech notify. Should have a .on_notify(self)</span>
-<span class="sd">                                                method defined.</span>
-<span class="sd">        key (int):                              key of the pool connection being used in the subscription transaction.</span>
-<span class="sd">                                                Defaults to [1].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">channel</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">handler</span><span class="p">:</span> <span class="s1">&#39;NotifyHandler&#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Initialises listener for PostgreSQL database NOTIFYs on given</span>
+<span class="sd">        channel. The given event handler takes action on receipt of</span>
+<span class="sd">        notification.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            database:       jumbo&#39;s PostgreSQL database connection manager.</span>
+<span class="sd">                            Needs an open connection pool with at least an</span>
+<span class="sd">                            active connection.</span>
+<span class="sd">            channel:        name of the channel on which PostgreSQL is sending</span>
+<span class="sd">                            NOTIFYs</span>
+<span class="sd">            handler :       handler fired on receipt of ech notify. Should</span>
+<span class="sd">                            have a .on_notify(self) method defined.</span>
+<span class="sd">            key (optional): key of the pool connection being used in the</span>
+<span class="sd">                            subscription transaction. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="n">channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
 
-<div class="viewcode-block" id="Listener.run"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.Listener.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Spawns a greenthread subscribing to PostgreSQL database notification channel and waits for NOTIFYs. On</span>
-<span class="sd">        receipt the thread is blocked and the Listener.handler() is fired. Once the handler has finished processing the</span>
-<span class="sd">        thread is finally unblocked and waits for the next NOTIFY.</span>
+<div class="viewcode-block" id="Listener.run"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.Listener.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Spawns a greenthread subscribing to PostgreSQL database</span>
+<span class="sd">        notification channel and waits for NOTIFYs. On receipt the thread is</span>
+<span class="sd">        blocked and the Listener.handler() is fired. Once the handler has</span>
+<span class="sd">        finished processing the thread is finally unblocked and waits for</span>
+<span class="sd">        the next NOTIFY.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># multi-producer, multi-consumer queue that works across greenlets</span>
-        <span class="n">queue</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># size 1 (i.e. not infinite) so that it blocks until entry processed</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">,</span> <span class="n">queue</span><span class="p">)</span>  <span class="c1"># spawn async greenthread in parallel</span>
+        <span class="c1"># size 1 (i.e. not infinite) so that it blocks until entry processed</span>
+        <span class="n">queue</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">Queue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># spawn async greenthread in parallel</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">spawn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">,</span> <span class="n">queue</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 
             <span class="k">try</span><span class="p">:</span>
 
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Waiting for a notification...&quot;</span><span class="p">)</span>
-                <span class="n">notify</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>  <span class="c1"># blocks until item available in queue. i.e. waiting for spawned function to yield</span>
-                <span class="c1"># -------------%------------------%--------------------%-------------------#</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got NOTIFY: </span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">channel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">notify</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+                <span class="c1"># ^ blocks until item available in queue. i.e. waiting for</span>
+                <span class="c1"># spawned function to yield</span>
+                <span class="c1"># ----------------%--------------------%----------------------#</span>
+
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Got NOTIFY: &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">channel</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">notify</span><span class="o">.</span><span class="n">payload</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
                 <span class="c1"># do something with the database once received the NOTIFY (n)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">on_notify</span><span class="p">()</span>
 
-                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>  <span class="c1"># tell queue that this consumer has finished the task for which it asked q.get()</span>
-                <span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>  <span class="c1"># blocks until all items in the queue have been gotten and processed.</span>
+                <span class="c1"># tell queue that this consumer has finished the task for</span>
+                <span class="c1"># which it asked q.get()</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+                <span class="c1"># block until all items in the queue have been gotten and</span>
+                <span class="c1"># processed:</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
 
             <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
                 <span class="n">eventlet</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Listener has been killed via Keyboard Interrupt. Greenthread garbage collected.&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Listener has been killed via Keyboard &quot;</span>
+                             <span class="s2">&quot;Interrupt. Greenthread garbage collected.&quot;</span><span class="p">)</span>
                 <span class="k">break</span></div>
 
-<div class="viewcode-block" id="Listener.subscribe"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.Listener.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Green thread process waiting for NOTIFYs on the channel and feeding them to the queue.</span>
+<div class="viewcode-block" id="Listener.subscribe"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.Listener.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">eventlet</span><span class="o">.</span><span class="n">Queue</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Green thread process waiting for NOTIFYs on the channel and feeding</span>
+<span class="sd">        them to the queue.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            q (eventlet.Queue): event queue through which to pipe NOTIFY events to the main thread.</span>
+<span class="sd">            q:  event queue through which to pipe NOTIFY events to the main</span>
+<span class="sd">                thread.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Subscribe to notification channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">listen_on_channel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 
+        <span class="c1"># Infinite listening loop</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 
-            <span class="c1"># self.database.pool._used[self.key] is the connection object corresponding to [key] in the conneciton pool</span>
+            <span class="c1"># self.database.pool._used[self.key] is the connection object</span>
+            <span class="c1"># corresponding to [key] in the conneciton pool</span>
 
-            <span class="c1"># spawns a green thread and return control once there is a notification to read</span>
+            <span class="c1"># spawns a green thread and return control once there is a</span>
+            <span class="c1"># notification to read</span>
             <span class="n">trampoline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">],</span> <span class="n">read</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>  <span class="c1"># once there is a notification --&gt; poll</span>
+            <span class="c1"># once there is a notification --&gt; poll</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
 
             <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">notifies</span><span class="p">:</span>
-                <span class="n">notify</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">notifies</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>  <span class="c1"># extract notify</span>
-                <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">notify</span><span class="p">)</span>  <span class="c1"># blocks until slot available in queue to insert Notify</span></div></div>
-                <span class="c1"># -------------%------------------%--------------------%-------------------#</span>
+                <span class="c1"># extract notify:</span>
+                <span class="n">notify</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">notifies</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="c1"># block until slot available in queue to insert Notify:</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">notify</span><span class="p">)</span></div></div>
+                <span class="c1"># ----------------%--------------------%----------------------#</span>
 
 
 <div class="viewcode-block" id="NotifyHandler"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.NotifyHandler">[docs]</a><span class="k">class</span> <span class="nc">NotifyHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Abstract Handler managing actions performed on reception of a NOTIFY from the database&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Abstract Handler managing actions performed on reception of a NOTIFY</span>
+<span class="sd">    from the database. Inherit from it to define your own custom handlers.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="NotifyHandler.on_notify"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.NotifyHandler.on_notify">[docs]</a>    <span class="k">def</span> <span class="nf">on_notify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NotifyHandler.on_notify"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.NotifyHandler.on_notify">[docs]</a>    <span class="k">def</span> <span class="nf">on_notify</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Procedure to execute once a NOTIFY is received.</span>
 
 <span class="sd">        Overwrite as needed&quot;&quot;&quot;</span>
@@ -340,19 +566,25 @@
 
 
 <div class="viewcode-block" id="LastEntryFetcher"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.LastEntryFetcher">[docs]</a><span class="k">class</span> <span class="nc">LastEntryFetcher</span><span class="p">(</span><span class="n">NotifyHandler</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Custom handler which fetches las entry in a PostgreSQL audit table on trigger.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        database (jumbo.database.Database):     jumbo&#39;s PostgreSQL database connection manager. Needs an open connection</span>
-<span class="sd">                                                pool with at least an active connection.</span>
-<span class="sd">        audit_table (string):                   name of PostgreSQL database &#39;audit&#39; table. Should have been configured</span>
-<span class="sd">                                                to always contain a single row corresponding to the latest row added to</span>
-<span class="sd">                                                the table it is auditing (e.g. configuring a TRIGGER on that table).</span>
-<span class="sd">        key (int):                              key of the pool connection being used to fetch last database entry.</span>
-<span class="sd">                                                Defaults to [1].</span>
+    <span class="sd">&quot;&quot;&quot;Custom handler which fetches las entry in a PostgreSQL audit table on</span>
+<span class="sd">    trigger.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialises custom handler.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            database:       jumbo&#39;s PostgreSQL database connection manager.</span>
+<span class="sd">                            Needs an open connection pool with at least an</span>
+<span class="sd">                            active connection.</span>
+<span class="sd">            audit_table:    name of PostgreSQL database &#39;audit&#39; table. Should</span>
+<span class="sd">                            have been configured to always contain a single</span>
+<span class="sd">                            row corresponding to the latest row added to the</span>
+<span class="sd">                            table it is auditing (e.g. configuring a TRIGGER</span>
+<span class="sd">                            on that table).</span>
+<span class="sd">            key (optional): key of the pool connection being used to fetch last</span>
+<span class="sd">                            database entry. Defaults to [1].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
@@ -361,64 +593,65 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">key</span>
 
         <span class="c1"># SQL query to fetch last (and only) entry in audit table</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">SQL</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">SQL</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM </span><span class="si">{}</span><span class="s1">;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sql</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audit_table</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SQL</span> <span class="o">=</span> <span class="n">sql</span><span class="o">.</span><span class="n">SQL</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM </span><span class="si">{}</span><span class="s1">;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">sql</span><span class="o">.</span><span class="n">Identifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audit_table</span><span class="p">))</span>
 
-<div class="viewcode-block" id="LastEntryFetcher.on_notify"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.LastEntryFetcher.on_notify">[docs]</a>    <span class="k">def</span> <span class="nf">on_notify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LastEntryFetcher.on_notify"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.LastEntryFetcher.on_notify">[docs]</a>    <span class="k">def</span> <span class="nf">on_notify</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Fetch entry that triggered the notify&quot;&quot;&quot;</span>
 
-        <span class="c1"># send SQL string to PostgreSQL database</span>
-        <span class="n">iter_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SQL</span><span class="p">,</span> <span class="n">fetch_method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>  <span class="c1"># fetch method =  fetchone()</span>
+        <span class="c1"># send SQL string to PostgreSQL database (fetch method = fetchone())</span>
+        <span class="n">iter_results</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SQL</span><span class="p">,</span> <span class="n">fetch_method</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 
         <span class="c1"># Do additional data processing on the fetched results</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">iter_results</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="LastEntryFetcher.process"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.LastEntryFetcher.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_results</span><span class="p">):</span>
+    <span class="c1"># Don&#39;t make it static, so to be easily overwritable to perform more</span>
+    <span class="c1"># complex data analysis dependent on self attributes</span>
+<div class="viewcode-block" id="LastEntryFetcher.process"><a class="viewcode-back" href="../../jumbo.html#jumbo.handlers.LastEntryFetcher.process">[docs]</a>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_results</span><span class="p">:</span> <span class="n">DictRow</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Logs results to console.</span>
 
-<span class="sd">        Overwrite if need more complex data analysis on last entry in audit table.</span>
+<span class="sd">        Overwrite if need more complex data analysis on last entry in audit</span>
+<span class="sd">        table.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            iter_results (psycopg2.extras.DictRow): last entry in table. Can be accessed as dictionary.</span>
+<span class="sd">            iter_results: last entry in table. Can be accessed as dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;These are the last results in the audit table:</span><span class="si">{</span><span class="n">iter_results</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;These are the last results in the audit &quot;</span>
+                     <span class="sa">f</span><span class="s2">&quot;table:</span><span class="si">{</span><span class="n">iter_results</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
-          </div>
+              </div>
+              
         </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Alvise Vianello<br/>
+        
+            &copy; Copyright 2020, Alvise Vianello.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
-      <input type="submit" value="Go" />
-    </form>
     </div>
-</div>
-<script>$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">jumbo 0.0.2c documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
-      </ul>
-    </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Alvise Vianello.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
-    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
   </body>
 </html>

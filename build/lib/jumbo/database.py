@@ -291,8 +291,7 @@ class Database:
                 results = self.send(query)
 
                 # A more complex query with dynamic substitutions
-                query = 'INSERT INTO table_name ' \
-                        '(column_name, another_column_name) VALUES (%s, $s);'
+                query = 'INSERT INTO table_name (column_name, another_column_name) VALUES (%s, $s);'
                 subs = (value, another_value)
                 results = self.send(query, subs)
 
@@ -305,14 +304,14 @@ class Database:
             cur_method (optional):      code to select which psycopg2 cursor
                                         execution method to use for the SQL
                                         query:
-                                            0:  cursor.execute()
-                                            1:  cursor.copy_expert()
+                                        0:  cursor.execute()
+                                        1:  cursor.copy_expert()
             file (optional):            file-like object to read or write to
                                         (only relevant if cur_method:1).
             fetch_method (optional):    code to select which psycopg2 result
                                         retrieval method to use (fetch*()):
-                                            0: cur.fetchone()
-                                            2: cur.fetchall()
+                                        0: cur.fetchone()
+                                        2: cur.fetchall()
             key (optional):             key of the pool connection being used
                                         in the transaction. Defaults to [1].
 

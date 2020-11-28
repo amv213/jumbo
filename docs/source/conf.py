@@ -34,7 +34,12 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
+    'sphinxemoji.sphinxemoji',
+    "myst_parser",
 ]
+
+# Set consistent (and only available) emoji style
+sphinxemoji_style = 'twemoji'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -51,10 +56,30 @@ exclude_patterns = [
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-# html_theme = "sphinx_rtd_theme"
-html_theme = "classic"
+# html_theme = "classic"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
+
+# https://sphinx-book-theme.readthedocs.io/en/latest/index.html
+html_theme = "sphinx_book_theme"
+
+html_theme_options = {
+    "repository_url": "https://gitlab.com/amv213/jumbo",
+    "path_to_docs": "docs/source",
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "use_download_button": True,
+    "home_page_in_toc": True,
+}
+
+html_sidebars = {
+    "**": ["sidebar-search-bs.html", "sbt-sidebar-nav.html"]
+}
+
+html_title = "Jumbo Documentation"
+html_logo = "../imgs/logo_single.png"
+html_favicon = "../imgs/favico.png"

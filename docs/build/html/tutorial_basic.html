@@ -39,6 +39,8 @@
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
     <script src="_static/twemoji.js"></script>
     <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -266,10 +268,22 @@
     <a class="reference internal nav-link" href="#inserting-data-in-a-table">
      Inserting Data in a table
     </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#inserting-data-with-substitutions">
+       Inserting data with substitutions
+      </a>
+     </li>
+    </ul>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#pulling-data-from-the-database">
      Pulling Data from the Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#dropping-data-from-the-database">
+     Dropping data from the database
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -318,6 +332,10 @@ configured:</p>
 <p>Don’t hesitate to refer to <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">First Step</span></a> and
 <a class="reference internal" href="intro_database.html"><span class="doc std std-doc">Database Setup</span></a> for more details!</p>
 </div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To follow along with the tutorials, <a class="reference internal" href="documentation.html"><span class="doc std std-doc">tweak the logger</span></a> shipped with jumbo!</p>
+</div>
 <div class="section" id="hello-world">
 <span id="basic-hello-world"></span><h2>🌈 Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial you will build jumbo’s <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World!</span></code> from the ground up, and
@@ -327,390 +345,658 @@ straight in!</p>
 <p class="admonition-title">Tip</p>
 <p>Make sure your jumbo environment is <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">setup as expected</span></a>!</p>
 </div>
-<p>At this point we can start using the library:</p>
+<p>To start using the library, simply import it as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
 </pre></div>
 </div>
 <div class="section" id="jumbo-s-database-object">
 <h3>Jumbo’s <code class="docutils literal notranslate"><span class="pre">Database</span></code> Object<a class="headerlink" href="#jumbo-s-database-object" title="Permalink to this headline">¶</a></h3>
-<p>Jumbo automatically populates our database connection parameters in a Config object. Let’s have a look:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    config = jumbo.config.Config()
-    print(config)
+<p>One of the most important objects in the jumbo library is the <code class="docutils literal notranslate"><span class="pre">Database</span></code> object
+(<code class="docutils literal notranslate"><span class="pre">jumbo.database.Database</span></code>). This <code class="docutils literal notranslate"><span class="pre">Database</span></code> object is jumbo’s representation
+of the PostgreSQL database we want to connect to. The <code class="docutils literal notranslate"><span class="pre">Database</span></code> allows to
+create connections to the real PostgreSQL server and will automatically
+manage all transactions with it. Creating a <code class="docutils literal notranslate"><span class="pre">Database</span></code> is extremely simple:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Now that we have checked that everything is initialized correctly we can create one of the most important objects in the
-jumbo library: the Database object (database.Database). The database object is jumbo’s representation of the database we
-want to connect to. This object will allow us to create connections to the real PostgreSQL server and will automatically
-manage all transactions with it. Creating a Database is extremely simple:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    database = jumbo.database.Database(config)
+<p>Behind the scenes, jumbo looks for our <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file -
+storing all of the parameters needed to connect to the PostgreSQL database.</p>
+<p>To double check whether the <code class="docutils literal notranslate"><span class="pre">Database</span></code> connection manager has loaded the
+correct configuration settings you can peek into its <code class="docutils literal notranslate"><span class="pre">Config</span></code> container
+(<code class="docutils literal notranslate"><span class="pre">jumbo.config.Config</span></code>). Let’s have a look:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">database</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>It is also possible to build a Database with default configuration parameters. This will load the configuration settings from a jumbo.env file located in the current working directory. In this case, a convenient one-liner we could put at the beginning of any jumbo script is:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    database = jumbo.database.Database()
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+
+<span class="go">DATABASE CONFIGURATION SETTINGS:</span>
+<span class="go">ENV_PATH:	path\to\jumbo.env</span>
+<span class="go">DATABASE_HOST:	host_address</span>
+<span class="go">DATABASE_PORT:	5432</span>
+<span class="go">DATABASE_NAME:	database_name</span>
+<span class="go">DATABASE_PASSWORD:	xxx</span>
+<span class="go">DATABASE_USERNAME:	database_username</span>
 </pre></div>
 </div>
+<p>Conveniently, these configuration settings are also logged out automatically
+by jumbo on creation of the <code class="docutils literal notranslate"><span class="pre">Database</span></code>. To display these logs you just need
+to decrease the threshold of the default <a class="reference internal" href="documentation.html"><span class="doc std std-doc">jumbo loggers</span></a> to
+<code class="docutils literal notranslate"><span class="pre">INFO</span></code> level.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>You can also choose to have your .env file in a single private location, instead of always placing a copy in your
-current working directory. In that case pass the path to the directory containing your .env file on construction of the
-Config object:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>```python
-my_env_path = &quot;D:\\dumbo\\secret&quot;  # jumbo.env is in &#39;secret&#39; directory
-config = jumbo.config.Config(my_env_path)
-database = jumbo.database.Database(config)
-```
+<p>You can also choose to have your <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in a single private location
+, instead of always placing a copy in your
+current working directory. In that case pass the path to the directory
+containing your <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file on construction of the
+<code class="docutils literal notranslate"><span class="pre">Database</span></code> object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">python</span>
+
+<span class="c1"># jumbo.env is in &#39;secret&#39; directory</span>
+<span class="n">my_env_path</span> <span class="o">=</span> <span class="s2">&quot;D:</span><span class="se">\\</span><span class="s2">dumbo</span><span class="se">\\</span><span class="s2">secret&quot;</span>
+
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">(</span><span class="n">my_env_path</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="connection-pools">
 <h3>Connection Pools<a class="headerlink" href="#connection-pools" title="Permalink to this headline">¶</a></h3>
-<p>At this point we would like to connect to the database. In general, opening and closing multiple connections to a database creates a bit of overhead - it’s more efficient to first initialize a so called connection-pool of <em>x</em> connections from which clients can take and put back individual connections as they need them. In jumbo we do this in this way:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Create a connection pool. Context manager ensures pool is closed at the end.
-with database.open() as pool:
+<p>At this point we would like to connect to the database. In general, opening
+and closing multiple connections to a database creates a bit of overhead -
+it’s more efficient to first initialize a so called connection-pool of <span class="math notranslate nohighlight">\(n\)</span>
+connections from which clients can take and put back individual connections
+as they need them. In jumbo we do this in this way:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    loguru.logger.info(&quot;Opened a connection pool.&quot;)
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    loguru.logger.debug(pool.pool)
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>  
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Opened a connection pool.&quot;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The context-manager structure ensures behind the scenes that the connection pool is opened correctly and closed successfully at the end of the script.</p>
-<p>Note that in the above example we opened a connection pool containing a single connection, but we can open pools with a minimum and maximum number of available connections using the <em>minconns</em> and <em>maxconns</em> arguments. The pool will intialize with a minimum amount of connections and open new connections if needed by clients.</p>
-<p>Let’s try again and notice how our Database object is transformed as we open a pool:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # Initialize database
-    database = jumbo.database.Database()
+<p>The context-manager structure ensures behind the scenes that the connection
+pool is opened correctly and closed successfully at the end of the script.</p>
+<p>Note that in the above example we opened a connection pool containing by
+default a single connection, but we can open pools with a minimum and
+maximum number of available connections using the <code class="docutils literal notranslate"><span class="pre">minconns</span></code> and <code class="docutils literal notranslate"><span class="pre">maxconns</span></code>
+arguments. The pool will initialize with a minimum amount of connections and
+make available new connections if needed by clients.</p>
+<p>Let’s try again and notice how our <code class="docutils literal notranslate"><span class="pre">Database</span></code> connection manager gets
+updated as we open a pool:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    loguru.logger.info(f&quot;Before opening the pool the &#39;pool&#39; is:{database.pool}&quot;)
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Create a connection pool with two connections.
-    with database.open(minconns=2, maxconns=4) as pool:
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>  
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-        loguru.logger.info(f&quot;After opening the pool the &#39;pool&#39; is:{pool.pool}&quot;)
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-    loguru.logger.info(f&quot;After closing the pool the &#39;pool&#39; is:{database.pool}&quot;)
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create a connection pool with two connections.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">minconns</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">maxconns</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After opening the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After closing the pool the &#39;pool&#39; is:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>All good so far - but as you can see from the logs generated above - we are
+still simply opening and closing the connection pool. None of the
+connections made available through the pool are actually being used to
+connect to the database. If in doubt, don’t hesitate to double check the
+status of the pool and its connections through the <code class="docutils literal notranslate"><span class="pre">pool</span></code> attribute of the
+<code class="docutils literal notranslate"><span class="pre">Database</span></code> connection manager.</p>
 </div>
 <div class="section" id="connecting-to-the-database">
 <h3>Connecting to the Database<a class="headerlink" href="#connecting-to-the-database" title="Permalink to this headline">¶</a></h3>
-<p>We are now all set to use a connection from the pool to send queries to the PostgreSQL database. We do this in jumbo via the Database.connect() method, which also supports a context-manager syntax to make sure that connections are properly taken from the pool and correctly put back in the pool at the end of a client’s transactions:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+<p>We are now all set to use a connection from the pool to send queries to the
+PostgreSQL database. We do this in jumbo via the <code class="docutils literal notranslate"><span class="pre">connect()</span></code> method of our
+<code class="docutils literal notranslate"><span class="pre">Database</span></code> connection manager, which also supports a context-manager syntax
+to make sure that connections are properly taken from put back in the pool at
+the end of a client’s transactions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    # Initialize database
-    database = jumbo.database.Database()
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Create a connection pool
-    with database.open() as pool:
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-        # Get individual connection from the pool. Context manager ensures connection is returned to the pool.
-        with pool.connect():
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-            pass
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. </span>
+    <span class="c1"># Context manager ensures connection is returned to the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="k">pass</span>
 </pre></div>
 </div>
-<p>Here we have create out Database object, opened a connection pool offering a single connection, and finally connected to the database with that connnection. By default our client sends a ‘SELECT version()’ SQL command to the database, hence why we receive a response back from the server.</p>
-<p>The double context-manager construct used in jumbo may seem a bit cumbersome at first, but it is one of the key strengths of jumbo as it allows to automatically take care of all SQL connection protocols behind the scenes, and ensures proper garbage collection of transactions and connections for all clients.</p>
-<p>Once more the following example will let you have a look at how our Database object is transformed as we open pools and actuate connections:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+<p>Here we have created our <code class="docutils literal notranslate"><span class="pre">Database</span></code> object, opened a connection pool offering a
+single connection, and finally connected to the database with that connnection.
+By default our client sends a handshake <code class="docutils literal notranslate"><span class="pre">SELECT</span> <span class="pre">version()</span></code> SQL
+command to the database, hence why we receive a response back from the server.</p>
+<p>The double context-manager construct used in jumbo may seem a bit cumbersome
+at first, but it is one of the key strengths of jumbo as it allows to
+automatically take care of all SQL connection protocols behind the scenes,
+and ensures proper garbage collection of transactions and connections for all
+clients.</p>
+<p>Once more the following example will let you have a look at how our <code class="docutils literal notranslate"><span class="pre">Database</span></code>
+connection manager transforms as we open pools and actuate connections:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Initialize database
-    database = jumbo.database.Database()
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-    loguru.logger.info(f&quot;Before opening the pool:{database.pool}&quot;)
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-    # Create a connection pool with two connections. Context manager ensures pool
-    with database.open() as pool:
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        loguru.logger.info(f&quot;After opening the pool: {pool.pool}&quot;)
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before opening the pool:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        with pool.connect():
+<span class="c1"># Create a connection pool with two connections. Context manager ensures pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-            loguru.logger.info(f&quot;After connecting:{pool.pool}&quot;)
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After opening the pool: </span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            pass
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
 
-        loguru.logger.info(f&quot;After disconnecting:{pool.pool}&quot;)
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After connecting:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    loguru.logger.info(f&quot;After closing the pool:{database.pool}&quot;)
+        <span class="k">pass</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After disconnecting:</span><span class="si">{</span><span class="n">pool</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After closing the pool:</span><span class="si">{</span><span class="n">database</span><span class="o">.</span><span class="n">pool</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Note:</strong> As a very last point, you should be assigning keys to identify connections taken from the pool. In this way it is easy to keep track of which connection is being used to send queries to the database. In the cells before we took advantage of the implicit key=1 keyword argument used by Database.connect().</p>
-<p>To summarize, a proper jumbo hello-world script looks like the following:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As a very last point, you should be assigning keys to identify connections
+taken from the pool. In this way you can keep track of which connection
+is being used to send which queries to the database. In the cells before we
+took advantage of the implicit <code class="docutils literal notranslate"><span class="pre">key=1</span></code> keyword argument used by <code class="docutils literal notranslate"><span class="pre">connect()</span></code>.</p>
+</div>
+<p>To summarize, here is our final jumbo hello-world script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<span class="kn">import</span> <span class="nn">jumbo</span>
 
-    import jumbo
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-    if __name__ == &quot;__main__&quot;:
+    <span class="c1"># Initialize database object</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-        # Initialize database object
-        database = jumbo.database.Database()
+    <span class="c1"># Create a connection pool. </span>
+    <span class="c1"># Context manager ensures pool is closed at the end.</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">minconns</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-        # Create a connection pool. Context manager ensures pool is closed at the end.
-        with database.open(minconns=1) as pool:
+        <span class="c1"># Get individual connection from the pool. </span>
+        <span class="c1"># Context manager ensures connection [key] is returned to the pool.</span>
+        <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
-            # Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.
-            with pool.connect(key=1):
-
-                pass  # do wahtever you want here!
+            <span class="k">pass</span>  <span class="c1"># do whatever you want here!</span>
 </pre></div>
 </div>
 <p>It’s your turn now! Experiment with what you have learnt so far.</p>
-<p>E.g. try firing several connections, then try firing more connections that your pool can handle!</p>
+<p>E.g. try firing several connections, then try firing more connections that
+your pool can handle!</p>
 </div>
 </div>
 <div class="section" id="database-interactions">
 <h2>📤 Database Interactions<a class="headerlink" href="#database-interactions" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial you will learn how to send SQL queries with jumbo.</p>
-<p>First things first:</p>
-<ul>
-<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
-<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
-<p>.. code-block::</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   DATABASE_HOST = &lt;my_database_host_address&gt;
-   DATABASE_USERNAME = &lt;my_database_user_name&gt;
-   DATABASE_PASSWORD = &lt;my_database_user_password&gt;
-   DATABASE_PORT = &lt;my_database_port&gt;
-   DATABASE_NAME = &lt;my_database_name&gt;
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure your jumbo environment is <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">setup as expected</span></a>!</p>
+</div>
+<p>Let’s start with jumbo’s <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. </span>
+    <span class="c1"># Context manager ensures connection [key] is returned to the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+        <span class="k">pass</span>  <span class="c1"># do whatever you want here!</span>
 </pre></div>
 </div>
-</li>
-<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
-</ul>
-<p>At this point we can start using the library:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    import jumbo
-</pre></div>
+<p>Except for the implicit handshake between our client and the database
+happening behind the scene and retrieving the databases version, we still
+haven’t done anything with the connection we have fished out from the pool…
+Let’s now see how to send our own SQL queries to the database.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You will need some minimal SQL knowledge to follow the following tutorial,
+but you can easily recycle code form here and get help online.</p>
 </div>
-<p>And start with our minimal example:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # Initialize database object
-    database = jumbo.database.Database()
-
-    # Create a connection pool. Context manager ensures pool is closed at the end.
-    with database.open() as pool:
-
-        # Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.
-        with pool.connect():
-
-            pass  # do whatever you want here!
-</pre></div>
-</div>
-<p>Except for the implicit handshake between our client and the database happening behind the scene and retrieving the databases version, we still haven’t done anything with the connection we have fished out from the pool… Let’s now see how to send our own SQL queries to the database.</p>
-<p>You will need some minimal SQL knowledge to follow the following tutorial, but you can easily recycle code and get help online.</p>
 <div class="section" id="creating-a-table">
 <h3>Creating a table<a class="headerlink" href="#creating-a-table" title="Permalink to this headline">¶</a></h3>
-<p>You are now connected to a database but there might not be any tables there to hold data. Let’s now create a table called <em>data_container</em> with the columns of our choice. Here we decide on four columns called <em>unix_timestamp</em>, <em>iso_timestamp</em>, <em>device</em>, and <em>reading</em>. The SQL query to create such a table is the following:</p>
-<p>.. code-block:: postgresql</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    CREATE TABLE IF NOT EXISTS data_container
-    (unix_timestamp FLOAT PRIMARY KEY NOT NULL,
-    iso_timestamp TIMESTAMP,
-    device varchar(255),
-    reading INT);
+<p>You are now connected to a database, which may or may not have tables setup
+to hold data. Let’s create our own table called <code class="docutils literal notranslate"><span class="pre">my_table</span></code> with the columns
+of our choice. Here we decide on four columns called <code class="docutils literal notranslate"><span class="pre">unix_timestamp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">iso_timestamp</span></code>, <code class="docutils literal notranslate"><span class="pre">device</span></code>, and <code class="docutils literal notranslate"><span class="pre">reading</span></code>. The SQL query to create such a
+table is the following:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">my_table</span>
+<span class="p">(</span><span class="n">unix_timestamp</span> <span class="nb">FLOAT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+<span class="n">iso_timestamp</span> <span class="k">TIMESTAMP</span><span class="p">,</span>
+<span class="n">device</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
+<span class="n">reading</span> <span class="nb">INT</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Note that we need to specify the (PostgreSQL) type of values that we will populate the columns with, and optionally which column to use as the PRIMARY KEY. This column should only contain unique and non-null values.</p>
-<p>To create such a table in jumbo we would do it this way:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # SQL query to create a table; remember to specify primary key column
-    SQL_CREATE_TABLE = &#39;CREATE TABLE IF NOT EXISTS data_container \
-                        (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39; \
-                        &#39;iso_timestamp TIMESTAMP,&#39; \
-                        &#39;device varchar(255),&#39; \
-                        &#39;value INT);&#39;
+<p>Note that we need to specify the (PostgreSQL) type of the values that we will
+populate the columns with, and optionally which column to use as the
+<code class="docutils literal notranslate"><span class="pre">PRIMARY</span> <span class="pre">KEY</span></code>. This column should only contain unique and non-null values.</p>
+<p>To create such a table in jumbo we just send our pre-formatted SQL query to
+the database as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Initialize database object
-    database = jumbo.database.Database()
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-    # Create a connection pool.
-    with database.open() as pool:
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-        # Get individual connection from the pool.
-        with pool.connect(key=1):
+<span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table &#39;</span> \
+                   <span class="s1">&#39;(unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                   <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                   <span class="s1">&#39;device varchar(255),&#39;</span> \
+                   <span class="s1">&#39;value INT);&#39;</span>
 
-            # send a &#39;CREATE TABLE&#39; SQL query using connection [1] from the pool
-            pool.send(SQL_CREATE_TABLE, key=1)
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># send a &#39;CREATE TABLE&#39; SQL query using connection [1] from the pool</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If everything went well you should see a ‘Table created successfully’ log. You have just successfully executed your first SQL query with jumbo!</p>
+<p>If everything went well you should get echoed back a log like the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>INFO <span class="p">|</span> Successfully sent: b<span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table (unix_timestamp FLOAT PRIMARY KEY NOT N&#39;</span>... 
+</pre></div>
+</div>
+<p>That’s it! You’ve done it! You have just successfully executed your first SQL
+query with jumbo! 🎉</p>
 </div>
 <div class="section" id="inserting-data-in-a-table">
 <h3>Inserting Data in a table<a class="headerlink" href="#inserting-data-in-a-table" title="Permalink to this headline">¶</a></h3>
-<p>Now that we have a table, it’s time to upload some data. The SQL query to insert a data row in our table is the following:</p>
-<p>.. code-block:: postgresql</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    INSERT INTO data_container (unix_timestamp, iso_timestamp, device, value)
-    VALUES (1000.1, &quot;2020-03-26 10:26:08.450800&quot;, &quot;DataLogger X1&quot;, 23);
+<p>Now that we have a table, it’s time to upload some data. The SQL query to
+insert a new sample row in our table is the following:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">my_table</span> <span class="p">(</span><span class="n">unix_timestamp</span><span class="p">,</span> <span class="n">iso_timestamp</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="k">VALUES</span> <span class="p">(</span><span class="mi">1000</span><span class="p">.</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;2020-03-26 10:26:08.450800&#39;</span><span class="p">,</span> <span class="s1">&#39;DataLogger X1&#39;</span><span class="p">,</span> <span class="mi">23</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>where we have just listed again the table name, and column names of the table we want to write into, and then passed compatible values for each field.</p>
+<p>where we have just listed again the table name, and column names of the table
+we want to write to, and then passed compatible values for each field.</p>
 <p>To execute this command in jumbo we naturally do it as follows:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # SQL query to create a table; remember to specify primary key column
-    SQL_CREATE_TABLE = &#39;CREATE TABLE IF NOT EXISTS data_container \
-                        (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39; \
-                        &#39;iso_timestamp TIMESTAMP,&#39; \
-                        &#39;device varchar(255),&#39; \
-                        &#39;value INT);&#39;
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    # Create a Template SQL command to inject table with entries; %s will be replaced with values later
-    SQL_INSERT_IN_TABLE = &#39;INSERT INTO data_container &#39; \
-                          &#39;(unix_timestamp, iso_timestamp, device, value) &#39; \
-                          &#39;VALUES (%s, %s, %s, %s);&#39;
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Initialize database object
-    database = jumbo.database.Database()
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-    # Create a connection pool. Context manager ensures pool is closed at the end.
-    with database.open() as pool:
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-        # Get individual connection from the pool.
-        with pool.connect(key=1):
+<span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table &#39;</span> \
+                   <span class="s1">&#39;(unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                   <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                   <span class="s1">&#39;device varchar(255),&#39;</span> \
+                   <span class="s1">&#39;value INT);&#39;</span>
 
-            # create table to hold the data
-            pool.create_table(SQL_CREATE_TABLE, key=1)
+<span class="c1"># Create a Template SQL command to inject table with entries;</span>
+<span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO my_table &quot;</span> \
+                      <span class="s2">&quot;(unix_timestamp, iso_timestamp, device, value) &quot;</span> \
+                      <span class="s2">&quot;VALUES (1000.1, &#39;2020-03-26 10:26:08.450800&#39;, &#39;DataLogger X1&#39;, 23);&quot;</span>
 
-            # Now let&#39;s imagine we now suddenly get values to insert in the table
-            timestamp_now = datetime.datetime.timestamp(datetime.now())
-            timestamp_now_iso = datetime.datetime.fromtimestamp(timestamp_now).isoformat()
-            value = 23
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-            # Collect in a tuple
-            substitutions = (timestamp_now, timestamp_now_iso, &quot;DataLogger X1&quot;, value)
-            # Insert data
-            pool.send(SQL_INSERT_IN_TABLE, substitutions, key=1)
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># create table to hold the data (if it doesn&#39;t already exist)</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Insert data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If everything went smoothly you should see a ‘Record inserted successfully’ log. Note that here we have exploited the ability of defining a generic INSERT query, with specific values only substituted in dynamically later on. In this way we can create a single INSERT query for a given table and use it for any kind of data we might be generating later.</p>
-<p><strong>Important:</strong> your ‘substitutions’ should always be a tuple. Hence if your had a template like this:</p>
-<p>.. code-block:: postgresql</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    INSERT INTO table_name (column_name)
-    VALUES (%s);
+<p>If everything went smoothly you should see echoed back the following log:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Successfully sent: b<span class="s1">&#39;INSERT INTO my_table (unix_timestamp, iso_timestamp, device, value) VALUES &#39;</span>...
 </pre></div>
 </div>
-<p>You should then be passing ‘substitutions’ looking like this:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    substitutions = (value,)
+<div class="section" id="inserting-data-with-substitutions">
+<h4>Inserting data with substitutions<a class="headerlink" href="#inserting-data-with-substitutions" title="Permalink to this headline">¶</a></h4>
+<p>If you were to have to prepare a new SQL string everytime you wanted to send
+different data to a database table it would get cumbersome very quickly
+… luckily jumbo allows you to create a template SQL query which gets
+filled dynamically with new data once it’s time to upload it. Let’s see
+how it works:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table &#39;</span> \
+                   <span class="s1">&#39;(unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                   <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                   <span class="s1">&#39;device varchar(255),&#39;</span> \
+                   <span class="s1">&#39;value INT);&#39;</span>
+
+<span class="c1"># Create a Template SQL command to inject table with entries;</span>
+<span class="c1"># %s will be replaced with values later</span>
+<span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO my_table &#39;</span> \
+                      <span class="s1">&#39;(unix_timestamp, iso_timestamp, device, value) &#39;</span> \
+                      <span class="s1">&#39;VALUES (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">);&#39;</span>
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="c1"># Get individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># create table to hold the data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Now let&#39;s imagine we now suddenly get values to insert in the table</span>
+        <span class="n">timestamp_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">timestamp_now_iso</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp_now</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">23</span>
+
+        <span class="c1"># Collect in a tuple</span>
+        <span class="n">substitutions</span> <span class="o">=</span> <span class="p">(</span><span class="n">timestamp_now</span><span class="p">,</span> <span class="n">timestamp_now_iso</span><span class="p">,</span> <span class="s2">&quot;DataLogger X1&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># Insert data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="n">subs</span><span class="o">=</span><span class="n">substitutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Also Important:</strong> this %s formatting is a completely independent thing of python’s %-formatting string substitutions. So don’t confuse the two. This %s construct is proper to psycopg2, the PostgreSQL library on which jumbo is based. For more informmation feel free to visit https://www.psycopg.org/docs/usage.html</p>
-<p>Also, as said by psycopg2: never, never, NEVER use Python string concatenation (+) or string parameters interpolation (%) to pass variables to a SQL query string. Not even at gunpoint.</p>
-<p>Just use the jumbo interface, as explained above and everything is taken care of automatically!</p>
+<p>Here we have exploited the ability of defining a generic <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> query, with
+specific values only substituted in dynamically later on. In this way we can
+create a single <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> query for a given table and use it for any kind of
+data we might be generating later.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Your <code class="docutils literal notranslate"><span class="pre">subs</span></code> should always be formatted as a tuple. Hence if your had to fill a
+SQL template like this:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">table_name</span> <span class="p">(</span><span class="k">column_name</span><span class="p">)</span>
+<span class="k">VALUES</span> <span class="p">(</span><span class="o">%</span><span class="n">s</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>You should still be passing substitutions to <code class="docutils literal notranslate"><span class="pre">send()</span></code> as a tuple, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">subs</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">%s</span></code> formatting we are using in our SQL templates is completely
+independent from python’s <em>old-style</em> string formatting (% operator).
+So don’t confuse the two. This <code class="docutils literal notranslate"><span class="pre">%s</span></code> construct is proper to <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code>,
+the PostgreSQL library on which jumbo is based. For more informmation feel
+free to visit its <a class="reference external" href="https://www.psycopg.org/docs/usage.html">official documentation</a></p>
+<p>Also, as said by <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code></p>
+<blockquote>
+<div><p>never, <strong>never</strong>, <strong>NEVER</strong> use Python string concatenation (+) or string
+parameters interpolation (%) to pass variables to a SQL query string. Not
+even at gunpoint.</p>
+</div></blockquote>
+<p>Just use the jumbo interface as explained above and everything will be taken
+care of automatically!</p>
+</div>
+</div>
 </div>
 <div class="section" id="pulling-data-from-the-database">
 <h3>Pulling Data from the Database<a class="headerlink" href="#pulling-data-from-the-database" title="Permalink to this headline">¶</a></h3>
-<p>We now have a table populated with some data. It’s time to see how to fetch that data back from the database.</p>
+<p>We now have a table populated with some data. It’s time to see how to fetch
+that data back from the database.</p>
 <p>The SQL query to select all data from a table is as follows:</p>
-<p>.. code-block:: postgresql</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    SELECT * from table_name;
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">from</span> <span class="k">table_name</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>Hence in jumbo we would do this:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # SQL query to create a table; remember to specify primary key column
-    SQL_CREATE_TABLE = &#39;CREATE TABLE IF NOT EXISTS data_container \
-                        (unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39; \
-                        &#39;iso_timestamp TIMESTAMP,&#39; \
-                        &#39;device varchar(255),&#39; \
-                        &#39;value INT);&#39;
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
 
-    # Create a Template SQL command to inject table with entries; %s will be replaced with values later
-    SQL_INSERT_IN_TABLE = &#39;INSERT INTO data_container &#39; \
-                          &#39;(unix_timestamp, iso_timestamp, device, value) &#39; \
-                          &#39;VALUES (%s, %s, %s, %s);&#39;
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # SQL query to pull all data from the table
-    SQL_SELECT = &#39;SELECT * FROM data_container&#39;
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-    # Initialize database object
-    database = jumbo.database.Database()
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-    # Create a connection pool
-    with database.open() as pool:
+<span class="c1"># SQL query to create a table; remember to specify primary key column</span>
+<span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table &#39;</span> \
+                   <span class="s1">&#39;(unix_timestamp FLOAT PRIMARY KEY NOT NULL,&#39;</span> \
+                   <span class="s1">&#39;iso_timestamp TIMESTAMP,&#39;</span> \
+                   <span class="s1">&#39;device varchar(255),&#39;</span> \
+                   <span class="s1">&#39;value INT);&#39;</span>
 
-        # Get individual connection from the pool
-        with pool.connect(key=1):
+<span class="c1"># Create a Template SQL command to inject table with entries;</span>
+<span class="c1"># %s will be replaced with values later</span>
+<span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s1">&#39;INSERT INTO my_table &#39;</span> \
+                      <span class="s1">&#39;(unix_timestamp, iso_timestamp, device, value) &#39;</span> \
+                      <span class="s1">&#39;VALUES (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">, </span><span class="si">%s</span><span class="s1">);&#39;</span>
 
-            # create table to hold the data
-            pool.create_table(SQL_CREATE_TABLE, key=1)
+<span class="c1"># SQL query to pull all data from the table</span>
+<span class="n">SQL_SELECT</span> <span class="o">=</span> <span class="s1">&#39;SELECT * FROM my_table&#39;</span>
 
-            # Now let&#39;s imagine we suddenly get values to insert in the table
-            timestamp_now = ddatetime.datetime.timestamp(datetime.now())
-            timestamp_now_iso = datetime.datetime.fromtimestamp(timestamp_now).isoformat()
-            value = 23
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-            # Collect in a tuple
-            substitutions = (timestamp_now, timestamp_now_iso, &quot;DataLogger X1&quot;, value)
-            # Insert data
-            pool.send(SQL_INSERT_IN_TABLE, substitutions, key=1)
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-            # Let&#39;s wait a few seconds ...
-            time.sleep(2)
+    <span class="c1"># Get individual connection from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
-            # Now we want to get back data from our table
-            results = pool.send(SQL_SELECT, key=1)
+        <span class="c1"># create table to hold the data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-            # Results will hold a list of all rows returned by our query
-            loguru.logger.info(results)
+        <span class="c1"># Now let&#39;s imagine we suddenly get values to insert in the table</span>
+        <span class="n">timestamp_now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+        <span class="n">timestamp_now_iso</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp_now</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="mi">23</span>
 
-            # These are dictionary-like object whose values can be accessed by column name
-            for row in results:
-                loguru.logger.info(row[&#39;unix_timestamp&#39;])
+        <span class="c1"># Collect in a tuple</span>
+        <span class="n">substitutions</span> <span class="o">=</span> <span class="p">(</span><span class="n">timestamp_now</span><span class="p">,</span> <span class="n">timestamp_now_iso</span><span class="p">,</span> <span class="s2">&quot;DataLogger X1&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="c1"># Insert data</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> <span class="n">substitutions</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Let&#39;s wait a few seconds ...</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Now we want to get back data from our table</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_SELECT</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Results will hold a list of all rows returned by our query</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+        <span class="c1"># These are dictionary-like object whose values can be accessed by column name</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;unix_timestamp&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">: value </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Perfect we have finished our little tour of basic SQL interactions from the database! You should now know how to create tables, upload, and retrieve data!</p>
-<p>As you have seen, jumbo allows to send arbitrary SQL queries through the Database.send() method. Don’t hesitate to browse the documentation to checkout all keyword parameters that can be used with Database.send()!</p>
-<p>Let’s see one last example in action. In the following example we clean up our database by removing the table we have created above:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # Initialize database object
-    database = jumbo.database.Database()
-
-    # Create a connection pool. Context manager ensures pool is closed at the end.
-    with database.open() as pool:
-
-        # Get individual connection from the pool. Context manager ensures connection [key] is returned to the pool at the end.
-        with pool.connect(key=1):
-
-            # Our generic SQL query
-            SQL_DROP = &#39;DROP TABLE IF EXISTS data_container&#39;
-
-            # Execute query
-            pool.send(SQL_DROP, key=1)
+</div>
+<div class="section" id="dropping-data-from-the-database">
+<h3>Dropping data from the database<a class="headerlink" href="#dropping-data-from-the-database" title="Permalink to this headline">¶</a></h3>
+<p>Let’s see one last example in action. In the following example we clean up our
+database by removing the table we have created above. The SQL command to do
+this is as follows:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">DROP</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">EXISTS</span> <span class="k">table_name</span>
 </pre></div>
 </div>
+<p>So in jumbo we just need to do this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
+
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="c1"># Initialize database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Create a connection pool. Context manager ensures pool is closed at the end.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+    <span class="c1"># Get individual connection from the pool. </span>
+    <span class="c1"># Context manager ensures connection [key] is returned to the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># Our generic SQL query</span>
+        <span class="n">SQL_DROP</span> <span class="o">=</span> <span class="s1">&#39;DROP TABLE IF EXISTS my_table&#39;</span>
+
+        <span class="c1"># Execute query</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_DROP</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Perfect we have finished our little tour of basic SQL interactions from the
+database! You should now know how to create tables, upload, and retrieve data!
+🎉</p>
+<p>As you have seen, jumbo allows to send arbitrary SQL queries through the
+<code class="docutils literal notranslate"><span class="pre">send()</span></code> method. Don’t hesitate to browse the documentation to checkout all
+keyword parameters that can be used with <code class="docutils literal notranslate"><span class="pre">send()</span></code>!</p>
 </div>
 <div class="section" id="more-user-friendly-queries">
 <h3>More user friendly queries<a class="headerlink" href="#more-user-friendly-queries" title="Permalink to this headline">¶</a></h3>
-<p>If you are not an SQL expert it might be a little daunting to handle data through raw SQL queries - don’t worry! Jumbo is here to the rescue with plenty of functionalities to make data processing easier!</p>
+<p>If you are not familiar with SQL, it might be a little daunting to handle data
+through raw SQL queries - don’t worry! Jumbo is here to the rescue with
+plenty of functionalities to make data processing easier!</p>
 <p>For example jumbo offers functions such as</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    jumbo.utils.convert_to_df(query_results)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jumbo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">convert_to_df</span><span class="p">(</span><span class="n">query_results</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>which allows to convert SQL query results directly to a pandas.DataFrame - which you might be much more familiar with to parse/filter/group_by etc…</p>
+<p>which allows to convert SQL query results directly to a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> -
+which you might be much more familiar with to parse/filter/group_by etc…</p>
 <p>In this way you can issue a generic and easy to remember</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    results = Database.send(&#39;SELECT * FROM table_name&#39;)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM table_name&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>and then convert immediately the query results into a dataframe, on which to perform all the data anlysis that you like!</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    df = jumbo.utils.convert_to_df(results)
+<p>and then convert immediately the query results into a dataframe,
+on which to perform all the data anlysis that you like!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">convert_to_df</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Let’s now say you would like to upload the results of your data analysis back in a table on the database. If you followed the notebook above you might be a bit scared of having to write a CREATE TABLE query with correct column names / column types and then having to perform INSERT statements with %s substitutions all over the place…</p>
+<p>Let’s now say you would like to upload the results of your data analysis
+back in a table on the database. If you followed this tutorial all along
+you might be a bit scared of having to write a <code class="docutils literal notranslate"><span class="pre">CREATE</span> <span class="pre">TABLE</span> <span class="pre">...</span></code> query with
+correct column names / column types and then having to perform <code class="docutils literal notranslate"><span class="pre">INSERT</span></code>
+statements with <code class="docutils literal notranslate"><span class="pre">%s</span></code> substitutions all over the place…</p>
 <p>Luckily with jumbo you can just do everything in one line:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    Database.copy_df(df, new_table_name)
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pool</span><span class="o">.</span><span class="n">copy_df</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">new_table_name</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>What a treat!</p>
-<p>Don’t hesitate to look at the other notebooks for more inspiration on how to implement all of this in practice!</p>
+<p>What a treat! 😇 🎉</p>
 </div>
 </div>
 </div>

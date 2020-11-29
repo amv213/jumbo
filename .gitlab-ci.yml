@@ -1,5 +1,5 @@
-pages:
-  stage: deploy
+📜 pages:
+  stage: 🚀 deploy
   script:
     - mkdir .public
     - mv docs/build/html/ public/

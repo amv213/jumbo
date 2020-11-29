@@ -54,14 +54,15 @@ class Database:
             pool, and that the pool is properly closed.
     """
 
-    def __init__(self, config: Optional[Config] = None) -> None:
+    def __init__(self, env_path: Optional[str] = None) -> None:
         """Initializes manager to handle connections to a given PostgreSQL
         database.
 
         Args:
-            config: jumbo's database configuration settings. Defaults to
-                    using settings from the jumbo.env file located in the
-                    working directory of the script invoking this constructor.
+            env_path:   path where to look for the jumbo.env configuration
+                        file. If not provided, looks for configuration file
+                        in the working directory of the script invoking this
+                        constructor.
 
         Attributes:
             config (jumbo.config.Config):   jumbo's database configuration
@@ -71,7 +72,7 @@ class Database:
         """
 
         # Database configuration settings
-        self.config = config if config is not None else Config()
+        self.config = Config(env_path)
         # initialize a placeholder connection pool
         self.pool = ThreadedConnectionPool(0, 0)
         self.pool.closed = True  # keep it closed on construction

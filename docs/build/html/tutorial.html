@@ -236,46 +236,42 @@
 <h2>🐍 Installing jumbo<a class="headerlink" href="#installing-jumbo" title="Permalink to this headline">¶</a></h2>
 <p>You can install jumbo like any other Python package, using <code class="docutils literal notranslate"><span class="pre">pip</span></code> to download it
 from PyPI:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install jumbo
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install jumbo
 </pre></div>
 </div>
-</div></blockquote>
 <p>or by downloading the source package locally and building the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build
 sudo python setup.py install
 </pre></div>
 </div>
-</div></blockquote>
 </div>
 <div class="section" id="the-jumbo-env-configuration-file">
 <h2>🐘 The <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file<a class="headerlink" href="#the-jumbo-env-configuration-file" title="Permalink to this headline">¶</a></h2>
 <p>Jumbo automatically extracts our database connection settings from a
 <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file with the following structure:</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
 <span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
 <span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
 <span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
 <span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>This allows to deploy jumbo on different devices while maintaining sensitive
 information local. By default jumbo looks for this file in the working
-directory of the script
-being run.</p>
-<p>It is therefore good practice to always include such a file in
-the root project directory of any jumbo script you create.</p>
+directory of the script being run.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you are sharing code with others, make sure to add the <code class="docutils literal notranslate"><span class="pre">jumbo.env</span> </code> file to your <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>. Alternatively, you can also hide your
+configuration file in a private folder and point jumbo to it later on.</p>
+</div>
 </div>
 <div class="section" id="testing-your-environment">
 <h2>🔮 Testing your environment<a class="headerlink" href="#testing-your-environment" title="Permalink to this headline">¶</a></h2>
-<p>You should now have everything configured as it should. Remember to create a
-<code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in the root directory of your project and then test your
-installation running the following minimal script:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<p>If you already have a PostgreSQL database <a class="reference internal" href="database.html"><span class="doc std std-doc">up and running</span></a>, you
+are good to go! For now put your <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in the root directory of
+your project and then test your installation running the following minimal
+script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
 
 <span class="c1"># Initialize database connection</span>
 <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
@@ -283,13 +279,12 @@ installation running the following minimal script:</p>
 <span class="c1"># Open a connection pool.</span>
 <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-  <span class="c1"># Get an individual connection from the pool.</span>
-   <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+   <span class="c1"># Get an individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
 
-      <span class="k">pass</span>
+       <span class="k">pass</span>
 </pre></div>
 </div>
-</div></blockquote>
 <p>If everything went well you are now all set-up to use the Jumbo SQL library
 ! Enjoy!</p>
 </div>

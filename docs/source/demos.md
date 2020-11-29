@@ -1,44 +1,40 @@
-.. _demos:
-
-
-************
-Demos
-************
+# 🎈 Basic Usage
 
 You will find here a collection of detailed code examples guiding you through core jumbo features. If it's your first
 time using jumbo, you are strongly suggested to follow the tutorials in order. If you are an experienced jumbo user feel
 free to skip to the section you need a refresher on. These tutorials are an excellent introduction to the library and
 will help build familiarity with its syntax and usage protocols.
 
-============
-Hello World
-============
+{ref}`Hello World <basic/hello-world>`
 
-In this tutorial you will learn how to write jumbo's Hello World!
+(basic/hello-world)=
+## 🌈 Hello World
 
+In this tutorial you will build jumbo's `Hello World!` from the ground up, and
+ learn a few things about how it works behind the scenes. Let's dive
+  straight in!
+ 
 First things first:
 
 - make sure you have a PostgreSQL server available, and a user account to connect to it.
-- make sure you have a properly configured jumbo.env file in the root directory of this notebook
+- make sure you have a properly configured `jumbo.env` file in the working
+ directory of your script
 
-   .. code-block::
-
-         DATABASE_HOST = <my_database_host_address>
-         DATABASE_USERNAME = <my_database_user_name>
-         DATABASE_PASSWORD = <my_database_user_password>
-         DATABASE_PORT = <my_database_port>
-         DATABASE_NAME = <my_database_name>
-
-- make sure your user account has appropriate permissions on the database tables you will access
+ ```
+ DATABASE_HOST = <my_database_host_address>
+ DATABASE_USERNAME = <my_database_user_name>
+ DATABASE_PASSWORD = <my_database_user_password>
+ DATABASE_PORT = <my_database_port>
+ DATABASE_NAME = <my_database_name>
+```
 
 At this point we can start using the library:
 
-   .. code-block:: python
+```python
+import jumbo
+```
 
-        import jumbo
-
-Jumbo's Database Object
----------------------------
+### Jumbo's `Database` Object
 
 Jumbo automatically populates our database connection parameters in a Config object. Let's have a look:
 
@@ -62,18 +58,20 @@ It is also possible to build a Database with default configuration parameters. T
 
         database = jumbo.database.Database()
 
+```{tip}
 You can also choose to have your .env file in a single private location, instead of always placing a copy in your
 current working directory. In that case pass the path to the directory containing your .env file on construction of the
 Config object:
 
-   .. code-block:: python
+    ```python
+    my_env_path = "D:\\dumbo\\secret"  # jumbo.env is in 'secret' directory
+    config = jumbo.config.Config(my_env_path)
+    database = jumbo.database.Database(config)
+    ```
+```
 
-        my_env_path = "D:\\dumbo\\secret"  # jumbo.env is in 'secret' directory
-        config = jumbo.config.Config(my_env_path)
-        database = jumbo.database.Database(config)
+### Connection Pools
 
-Connection Pools
---------------------
 
 At this point we would like to connect to the database. In general, opening and closing multiple connections to a database creates a bit of overhead - it's more efficient to first initialize a so called connection-pool of *x* connections from which clients can take and put back individual connections as they need them. In jumbo we do this in this way:
 
@@ -106,8 +104,8 @@ Let's try again and notice how our Database object is transformed as we open a p
 
         loguru.logger.info(f"After closing the pool the 'pool' is:{database.pool}")
 
-Connecting to the Database
---------------------------
+### Connecting to the Database
+
 
 We are now all set to use a connection from the pool to send queries to the PostgreSQL database. We do this in jumbo via the Database.connect() method, which also supports a context-manager syntax to make sure that connections are properly taken from the pool and correctly put back in the pool at the end of a client's transactions:
 
@@ -174,14 +172,13 @@ To summarize, a proper jumbo hello-world script looks like the following:
 
                     pass  # do wahtever you want here!
 
-It's your turn now! Experiment with what you have lernt so far.
+It's your turn now! Experiment with what you have learnt so far.
 
 E.g. try firing several connections, then try firing more connections that your pool can handle!
 
 
-=====================
-Database Interactions
-=====================
+## Database Interactions
+
 
 In this tutorial you will learn how to send SQL queries with jumbo.
 

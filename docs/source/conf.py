@@ -83,3 +83,9 @@ html_sidebars = {
 html_title = "Jumbo Documentation"
 html_logo = "../imgs/logo_single.png"
 html_favicon = "../imgs/favico.png"
+show_navbar_depth = 2
+
+# To build the documentation run the following:
+# cd docs/
+# sphinx-apidoc -o source/ ../ "../setup.py"
+# sphinx-build -b html source build/html

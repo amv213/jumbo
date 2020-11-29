@@ -69,11 +69,17 @@ to setup your installation environment. If you are already familiar with
 
 
 ```{toctree}
-   :maxdepth: 2
-   :caption: MAIN DOCS
+:caption: MAIN DOCS
+:maxdepth: 2
 
-   First Steps <tutorial>
-   Database Setup <database>
-   Documentation <modules>
-   Demos <demos>
+First Steps <tutorial>
+Database Setup <database>
+Documentation <modules>
+```
+
+```{toctree}
+:caption: TUTORIALS
+:maxdepth: 2
+
+Basic Usage <demos>
 ```

@@ -1,3 +1,9 @@
+stages:
+  - 📦 build
+  - 🤞 test
+  - 🦄 quality
+  - 🚀 deploy
+
 📜 pages:
   stage: 🚀 deploy
   script:

@@ -16,7 +16,7 @@ with the database without worrying about handling transactions under the hood.
 At the same time, experienced PostgreSQL architects can still unleash the full
 power of `psycopg2` and exploit its more advanced functionalities.
 
-If it's your first time using jumbo head over to [First Steps](tutorial) 
+If it's your first time using jumbo head over to [First Steps](intro_package.md) 
 to setup your installation environment. If you are already familiar with
  jumbo simply follow the {ref}`Quick Start <index/quick-start>` guide below.
 
@@ -72,14 +72,16 @@ to setup your installation environment. If you are already familiar with
 :caption: MAIN DOCS
 :maxdepth: 2
 
-First Steps <tutorial>
-Database Setup <database>
-Documentation <modules>
+First Steps <intro_package.md>
+Database Setup <intro_database.md>
+Documentation <documentation.md>
 ```
 
 ```{toctree}
 :caption: TUTORIALS
 :maxdepth: 2
 
-Basic Usage <demos>
+Basic Usage <tutorial_basic.md>
+Watchdogs <tutorial_watchdogs.md>
+Listeners <tutorial_listeners.md>
 ```

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>📑 Welcome to Jumbo! &#8212; Jumbo Documentation</title>
+    <title>🐶 Filesystem Watchdogs &#8212; Jumbo Documentation</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -42,7 +42,8 @@
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="📋 First Steps" href="intro_package.html" />
+    <link rel="next" title="📺 Live Database Streaming" href="tutorial_listeners.html" />
+    <link rel="prev" title="🎈 Basic Usage" href="tutorial_basic.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -59,7 +60,7 @@
 <div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
     
         <div class="navbar-brand-box">
-<a class="navbar-brand text-wrap" href="#">
+<a class="navbar-brand text-wrap" href="index.html">
   
   <img src="_static/logo_single.png" class="logo" alt="logo">
   
@@ -73,8 +74,8 @@
 </form>
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <ul class="nav sidenav_l1">
- <li class="toctree-l1 current active">
-  <a class="reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
    📑 Welcome to Jumbo!
   </a>
  </li>
@@ -124,14 +125,14 @@
   TUTORIALS
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="tutorial_basic.html">
    Basic Usage
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="tutorial_watchdogs.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Watchdogs
   </a>
  </li>
@@ -175,7 +176,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/index.md.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/tutorial_watchdogs.md.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -195,10 +196,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here."><button
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Ftutorial_watchdogs.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/index.md"><button
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/tutorial_watchdogs.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -224,16 +225,9 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#quick-start">
-   🚀 Quick Start
+  <a class="reference internal nav-link" href="#watchdogs">
+   Watchdogs
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#table-of-contents">
-   📚 Table of Contents
-  </a>
-  <ul class="nav section-nav flex-column">
-  </ul>
  </li>
 </ul>
 
@@ -246,113 +240,104 @@
         
               <div>
                 
-  <div class="section" id="welcome-to-jumbo">
-<h1>📑 Welcome to Jumbo!<a class="headerlink" href="#welcome-to-jumbo" title="Permalink to this headline">¶</a></h1>
-<p>Jumbo is a wrapper of the amazing <a class="reference external" href="https://www.psycopg.org/"><code class="docutils literal notranslate"><span class="pre">psycopg2</span></code></a> -
-the most popular <a class="reference external" href="https://www.postgresql.org/">PostgreSQL</a> database adapter
-for the Python programming language.</p>
-<p>Jumbo has been designed specifically for adoption in environments where
-thorough widespread knowledge of SQL protocols might be lacking and a
-streamlined approach to database interactions might be needed. Jumbo offers an
-intuitive and quickly deployable interface to successfully implement a
-database-centred data analysis pipeline at all levels of your team or
-organisation.</p>
-<p>Jumbo is intuitive yet customisable - first-time users can easily interact
-with the database without worrying about handling transactions under the hood.
-At the same time, experienced PostgreSQL architects can still unleash the full
-power of <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code> and exploit its more advanced functionalities.</p>
-<p>If it’s your first time using jumbo head over to <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">First Steps</span></a>
-to setup your installation environment. If you are already familiar with
-jumbo simply follow the <a class="reference internal" href="#index-quick-start"><span class="std std-ref">Quick Start</span></a> guide below.</p>
-<hr class="docutils" />
-<div class="section" id="quick-start">
-<span id="index-quick-start"></span><h2>🚀 Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
-<ol>
-<li><p>📚 Install jumbo like any other Python package, using pip to download it
-from PyPI:</p>
-<blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install jumbo
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>🐘 Make sure you have created a <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in the root directory of
-your project with the following structure:</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
-<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
-<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
-<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
-<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>🐍 Now test your installation running the following minimal script:</p>
-<blockquote>
-<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
-
-<span class="c1"># Initialize database connection</span>
-<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
-
-<span class="c1"># Open a connection pool.</span>
-<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
-
-   <span class="c1"># Get an individual connection from the pool.</span>
-   <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
-
-       <span class="k">pass</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
-<li><p>🎉 If everything went well you are now all set-up to use the Jumbo SQL
-library! Enjoy!</p></li>
-</ol>
-</div>
-<hr class="docutils" />
-<div class="section" id="table-of-contents">
-<h2>📚 Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">MAIN DOCS</span></p>
+  <div class="section" id="filesystem-watchdogs">
+<h1>🐶 Filesystem Watchdogs<a class="headerlink" href="#filesystem-watchdogs" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial you will learn how to use jumbo’s watchdog functionalities. By the end you will have created a simple watchdog looking for any new data being written in a directory and uploading it automatically to a database table.</p>
+<p>First things first:</p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="intro_package.html">First Steps</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="intro_package.html#installing-jumbo">🐍 Installing jumbo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro_package.html#the-jumbo-env-configuration-file">🐘 The <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro_package.html#testing-your-environment">🔮 Testing your environment</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="intro_database.html">Database Setup</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="intro_database.html#installing-a-postgresql-server">🐘 Installing a PostgreSQL server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro_database.html#creating-a-database">📮 Creating a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="intro_database.html#adding-a-user">👷 Adding a user</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="documentation.html">Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#source-jumbo-documentation">📔 Source Jumbo Documentation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html#logging">📃 Logging</a></li>
-</ul>
-</li>
-</ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<p>.. code-block::</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   DATABASE_HOST = &lt;my_database_host_address&gt;
+   DATABASE_USERNAME = &lt;my_database_user_name&gt;
+   DATABASE_PASSWORD = &lt;my_database_user_password&gt;
+   DATABASE_PORT = &lt;my_database_port&gt;
+   DATABASE_NAME = &lt;my_database_name&gt;
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">TUTORIALS</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorial_basic.html">Basic Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_basic.html#hello-world">🌈 Hello World</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_basic.html#database-interactions">📤 Database Interactions</a></li>
-</ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial_watchdogs.html">Watchdogs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_watchdogs.html#watchdogs">Watchdogs</a></li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
 </ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial_listeners.html">Listeners</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorial_listeners.html#setting-up-an-audit-table">Setting up an audit table</a></li>
+<p>If you are deploying jumbo in practical applications, you might be interested in deploying a watchdog to automatically stream new data to a table in your database. Ideally you would interface directly with the data generator and INSERT each new data entry to the table, but this is not always possible. Data acquisition from the data generator might be blocked by proprietary software, or for legacy reasons you cannot interfere directly with the data collection protocol already in place. In this cases the only thing left to do might be to monitor the output files where data is being saved to and upload any change to the database.</p>
+<div class="section" id="watchdogs">
+<h2>Watchdogs<a class="headerlink" href="#watchdogs" title="Permalink to this headline">¶</a></h2>
+<p>Let’s setup everything to simulate our working environment. We need two things:</p>
+<ul class="simple">
+<li><p>A bot script writing data to files, to simulate a real data generator</p></li>
+<li><p>Our watchdog deployed to monitor those files</p></li>
 </ul>
-</li>
-</ul>
+<p>Let’s start by setting-up a very simple monkey-writer. The following code does nothing special, it will simply write the current timestamp to a file called <em>fake_data.txt</em> in the <em>data</em> directory. Each write will happen after a random time interval. Run the following code to get a feeling of how it works and then STOP IT before moving to the next section.</p>
+<p>.. code-block:: python</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # Monkey Writer
+
+    import time
+    import loguru
+    import numpy
+
+    try:
+
+        while True:
+
+            # Need to open/close file on every write so that watchdog can see each change
+            with open(&#39;data/fake_data.txt&#39;, &quot;a&quot;) as f:
+
+                # Write current timestamp
+                number = time.time()
+                f.write(str(number) + &#39;\n&#39;)
+                loguru.logger.debug(f&quot;Wrote number {number} to file&quot;)
+
+            # Wait a variable amount of time before writing next
+            time.sleep(numpy.random.randint(10))
+
+    except KeyboardInterrupt:
+        loguru.logger.error(&quot;Monkey writer has been stopped via Keyboard Interrupt.&quot;)
+</pre></div>
 </div>
+<p>Now that we have a data source let’s deploy a watchdog on the <em>data</em> folder.</p>
+<p>Jumbo let’s you create watchdogs very easily. Here is  jumbo’s implementation of a watchdog:</p>
+<p>.. code-block:: python</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    import jumbo
+
+    # Initialize database
+    database = jumbo.database.Database()
+
+    # Create a connection pool
+    with database.open() as pool:
+
+        # Get individual connections from the pool
+        with pool.connect(key=1):
+
+            # Initialize the table to hold watched data
+            SQL_CREATE_TABLE = &#39;CREATE TABLE IF NOT EXISTS data_container (ID FLOAT PRIMARY KEY NOT NULL);&#39;
+            pool.send(SQL_CREATE_TABLE, key=1)
+
+            # Template SQL command to inject table with entries from file
+            SQL_INSERT_IN_TABLE = &quot;INSERT INTO data_container (ID) VALUES (%s)&quot;  # %s will be replaced with .txt line fields
+
+            # Create watchdog
+            fido = jumbo.handlers.FileWatcher(pool, SQL_INSERT_IN_TABLE, &#39;data/&#39;, timeout=0.5, key=1)
+
+            # Deploy watchdog
+            fido.bark()
+</pre></div>
+</div>
+<p>Let’s have a look at what is going on in the code:</p>
+<p>As we have seen before we start by creating a database object, opening a connection pool, and setting  up a connection to the PostgreSQL database. We then create a table on the database to hold the data we will collecting from the files, and prepare an INSERT statement to dynamically insert the values collected from the files into the table.</p>
+<p>We then create a jumbo handlers.FileWatcher watchdog</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+
+    jumbo.handlers.FileWatcher(pool, SQL_INSERT_IN_TABLE, &#39;data/&#39;, timeout=0.5, key=1)
+</pre></div>
+</div>
+<p>This watchdog looks for changes in .txt files in the <em>data</em> folder by polling for changes every 0.5s. It then executes the query template of our choice with every new entry added to the files passed dynamically. That is everytime a change is detected the watchdog will implicitely perform a</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: postgresql
+
+    INSERT INTO data_container (ID) new_value;
+</pre></div>
+</div>
+<p>Finally we deploy the watchdog via the .bark() method. This activates the watchdog and schedules it’s handler to fire on each ‘file modified event’ detected.</p>
+<p>Don’t hesitate to have a look at the documentation to look at all the customisable parameters. Or have a look at the source code to implement your own tailored watchdogs! You can implement your own watchdogs and event handlers!</p>
+<p>Now run both code scripts above at the same time and see if the behaviour in the logs makes sense!</p>
 </div>
 </div>
 
@@ -365,7 +350,8 @@ library! Enjoy!</p></li>
     
     <div class='prev-next-bottom'>
         
-    <a class='right-next' id="next-link" href="intro_package.html" title="next page">📋 First Steps</a>
+    <a class='left-prev' id="prev-link" href="tutorial_basic.html" title="previous page">🎈 Basic Usage</a>
+    <a class='right-next' id="next-link" href="tutorial_listeners.html" title="next page">📺 Live Database Streaming</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

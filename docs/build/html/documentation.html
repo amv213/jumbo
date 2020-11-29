@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>jumbo &#8212; Jumbo Documentation</title>
+    <title>📚 Documentation &#8212; Jumbo Documentation</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -42,8 +42,8 @@
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="jumbo package" href="jumbo.html" />
-    <link rel="prev" title="💾 Database Setup" href="database.html" />
+    <link rel="next" title="jumbo" href="modules.html" />
+    <link rel="prev" title="💾 Database Setup" href="intro_database.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -87,12 +87,12 @@
 </p>
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
+  <a class="reference internal" href="intro_package.html">
    First Steps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="database.html">
+  <a class="reference internal" href="intro_database.html">
    Database Setup
   </a>
  </li>
@@ -101,10 +101,19 @@
    Documentation
   </a>
   <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="jumbo.html">
-     jumbo package
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="modules.html">
+     Modules
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="jumbo.html">
+       jumbo package
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -118,20 +127,18 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html">
-   🎈 Basic Usage
+  <a class="reference internal" href="tutorial_basic.html">
+   Basic Usage
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#filesystem-watchdogs">
-   ====================
-Filesystem Watchdogs
+  <a class="reference internal" href="tutorial_watchdogs.html">
+   Watchdogs
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#live-database-streaming">
-   =======================
-Live Database Streaming
+  <a class="reference internal" href="tutorial_listeners.html">
+   Listeners
   </a>
  </li>
 </ul>
@@ -169,9 +176,9 @@ Live Database Streaming
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/modules.rst.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/documentation.md.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -189,10 +196,10 @@ Live Database Streaming
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fmodules.html&body=Your%20issue%20content%20here."><button
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fdocumentation.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/modules.rst"><button
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/documentation.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -212,6 +219,25 @@ Live Database Streaming
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#source-jumbo-documentation">
+   📔 Source Jumbo Documentation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#logging">
+   📃 Logging
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -219,20 +245,72 @@ Live Database Streaming
         
               <div>
                 
-  <div class="section" id="jumbo">
-<h1>jumbo<a class="headerlink" href="#jumbo" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="documentation">
+<h1>📚 Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="source-jumbo-documentation">
+<h2>📔 Source Jumbo Documentation<a class="headerlink" href="#source-jumbo-documentation" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="jumbo.html">jumbo package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.config">jumbo.config module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.database">jumbo.database module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.handlers">jumbo.handlers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.utils">jumbo.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo">Module contents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">   Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jumbo.html">jumbo package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#module-jumbo.config">jumbo.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#module-jumbo.database">jumbo.database module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#module-jumbo.handlers">jumbo.handlers module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#module-jumbo.utils">jumbo.utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="jumbo.html#module-jumbo">Module contents</a></li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="logging">
+<h2>📃 Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<p>Jumbo implements logging for many of its functions via the Python standard
+library <code class="docutils literal notranslate"><span class="pre">logging</span></code> package. The loggers which have been implemented are
+named as follows:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">jumbo</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jumbo.config</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jumbo.database</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jumbo.handlers</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">jumbo.utils</span></code></p></li>
+</ul>
+<p>If your using application does not use logging, then only events of severity
+<code class="docutils literal notranslate"><span class="pre">WARNING</span></code> and greater will be printed to <code class="docutils literal notranslate"><span class="pre">sys.stderr</span></code>, thanks to the
+logger’s last resort handler. This is regarded as the best default behaviour.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is strongly recommended to use logging in your applications. The following
+code snippet will set you up with a basic logger:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+ 
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
+ 
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>  
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Amazing!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It is quite useful to lower the severity level for which jumbo logs
+are emitted. It is then easier to track which transactions are being
+executed by jumbo behind the scenes. Just add the following line after
+having configured your own logger:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -245,8 +323,8 @@ Live Database Streaming
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="database.html" title="previous page">💾 Database Setup</a>
-    <a class='right-next' id="next-link" href="jumbo.html" title="next page">jumbo package</a>
+    <a class='left-prev' id="prev-link" href="intro_database.html" title="previous page">💾 Database Setup</a>
+    <a class='right-next' id="next-link" href="modules.html" title="next page">jumbo</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

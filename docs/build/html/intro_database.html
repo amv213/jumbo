@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💾 Database Setup &#8212; Jumbo Documentation</title>
+    
+  <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/twemoji.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+    <script src="_static/twemoji.js"></script>
+    <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <link rel="shortcut icon" href="_static/favico.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="📚 Documentation" href="docdoc.html" />
+    <link rel="prev" title="📋 First Steps" href="intro_package.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/logo_single.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Jumbo Documentation</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   📑 Welcome to Jumbo!
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  MAIN DOCS
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro_package.html">
+   First Steps
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Database Setup
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="docdoc.html">
+   Documentation
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="modules.html">
+     Modules
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="jumbo.html">
+       jumbo package
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  TUTORIALS
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial_basic.html">
+   Basic Usage
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial_watchdogs.html">
+   Watchdogs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial_listeners.html">
+   Listeners
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/intro_database.md.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://gitlab.com/amv213/jumbo"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fintro_database.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/intro_database.md"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installing-a-postgresql-server">
+   🐘 Installing a PostgreSQL server
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-database">
+   📮 Creating a database
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-a-user">
+   👷 Adding a user
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#granting-permissions">
+     🔓 Granting permissions
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="database-setup">
+<h1>💾 Database Setup<a class="headerlink" href="#database-setup" title="Permalink to this headline">¶</a></h1>
+<p>To start using jumbo you need to have a PostgreSQL database to connect to. This can be running on your local machine or
+anywhere on your network. You also need to have setup a PostgreSQL user account with appropriate privileges to access
+that database. If you are unsure about what any of the previous sentence actually means get in touch with your
+PostgreSQL system administrator. If you don’t have a system administrator or if you want to become your own system
+administrator follow the instructions below.</p>
+<div class="section" id="installing-a-postgresql-server">
+<h2>🐘 Installing a PostgreSQL server<a class="headerlink" href="#installing-a-postgresql-server" title="Permalink to this headline">¶</a></h2>
+<p>If you don’t already have a PostgreSQL server running on your local machine (or accessible over the network) follow
+these instructions.</p>
+<p>Go to the computer you want to install the server on. Ideally this would be a dedicated machine able to handle a
+considerable amount of network traffic. For testing purposes or for small-scale deployment infrastructures a normal
+computer should be able to do the job.</p>
+<p>Download and install the PostgreSQL installer following the instructions
+<a class="reference external" href="https://www.postgresql.org/download/">here</a></p>
+<p>During the installation process you might get asked to set a password for the database superuser: all PostgreSQL
+databases have a default superuser called <code class="docutils literal notranslate"><span class="pre">postgres</span></code>, with admin rights. Set
+a password of your choice (e.g. <em>postgres</em>) and remember it. In the rest of
+the tutorials any reference to the <em>PostgreSQL system administrator</em> just
+means whoever has access to this <code class="docutils literal notranslate"><span class="pre">postgres</span></code> account.</p>
+<p>Now lets check that everything is working properly:</p>
+<ul class="simple">
+<li><p>you should now have a PostgreSQL server running on your local machine</p></li>
+<li><p>you should now have a (super)user called postgres allowed to access the
+server</p></li>
+</ul>
+<p>You can now connect to the server by running the following in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql -U postgres -h localhost
+</pre></div>
+</div>
+<p>or more generally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql -U DATABASE_USERNAME -h DATABASE_HOST
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-database">
+<h2>📮 Creating a database<a class="headerlink" href="#creating-a-database" title="Permalink to this headline">¶</a></h2>
+<p>Once you have made a server you need to create databases, on which to save
+data.</p>
+<p>By default, a PostgreSQL server comes with an empty database already
+initialized, and called <code class="docutils literal notranslate"><span class="pre">postgres</span></code>. Let’s ignore it for the moment and
+let’s create our own database on the server. To do this, run the
+following command after having connected to the server with your user account:</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Create the database, let&#39;s call it &#39;jumbo_tutorial&#39;</span>
+<span class="k">CREATE</span> <span class="k">database</span> <span class="n">jumbo_tutorial</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Then list all available databases on the server to check it all worked:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="se">\l</span>
+</pre></div>
+</div>
+<p>In the future, you can now connect directly to your database running the
+following in a terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql -U postgres -h localhost -d jumbo_tutorial
+</pre></div>
+</div>
+<p>or more generally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql -U DATABASE_USERNAME -h DATABASE_HOST -d DATABASE_NAME
+</pre></div>
+</div>
+</div>
+<div class="section" id="adding-a-user">
+<h2>👷 Adding a user<a class="headerlink" href="#adding-a-user" title="Permalink to this headline">¶</a></h2>
+<p>All good up to now, but we have been doing everything using the superuser
+called <code class="docutils literal notranslate"><span class="pre">postgres</span></code>. If other people want to connect to the database to pull
+/upload data they should obviously not be using the <code class="docutils literal notranslate"><span class="pre">postgres</span></code> superuser
+account but have their own. Let’s see how to do that.</p>
+<p>Let’s say we have a user called <code class="docutils literal notranslate"><span class="pre">wilma</span></code> who read this tutorial and when
+asked to contact the PostgreSQL system administrator came to you - as they
+should! Here is what to do:</p>
+<p>Connect to the server as admin from terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>psql -U postgres -h DATABASE_HOST
+</pre></div>
+</div>
+<p>Now create the user an account (e.g. <code class="docutils literal notranslate"><span class="pre">wilma</span></code>) and assign them a password (e
+.g. <code class="docutils literal notranslate"><span class="pre">wilma_superstar</span></code>) by running:</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span> <span class="k">ROLE</span> <span class="n">wilma</span> <span class="k">WITH</span> <span class="k">PASSWORD</span> <span class="s1">&#39;wilma_superstar&#39;</span> <span class="n">LOGIN</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="section" id="granting-permissions">
+<h3>🔓 Granting permissions<a class="headerlink" href="#granting-permissions" title="Permalink to this headline">¶</a></h3>
+<p>The user account we have just created can log in the server, but wouldn’t be
+able to access our database (and tables within the database). Run
+the following to set them up:</p>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="k">DATABASE</span> <span class="n">jumbo_tutorial</span> <span class="k">TO</span> <span class="n">wilma</span><span class="p">;</span>
+<span class="k">GRANT</span> <span class="k">ALL</span> <span class="k">PRIVILEGES</span> <span class="k">ON</span> <span class="k">ALL</span> <span class="k">TABLES</span> <span class="k">IN</span> <span class="k">SCHEMA</span> <span class="n">public</span> <span class="k">TO</span> <span class="n">wilma</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here we grant the user all possible kind of privileges because we trust him -
+but you might want to be more restrictive.</p>
+</div>
+<p>It’s more than likely that the user is not going to connect to the database
+from the same computer that is running the server. In that case they might
+still have trouble connecting to the server: ask them to tell you their ip
+address (IPv4 and IPv6) and add them to the server’s <code class="docutils literal notranslate"><span class="pre">pg_hba.conf</span></code>
+file (on the machine running the server). The file should be in the
+PostgreSQL installation folder, in the data subfolder e.g. <code class="docutils literal notranslate"><span class="pre">C:\\PostgreSQL</span> <span class="pre">\\10\\data\\</span></code>. Modify the file as follows:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>...
+
+-- Go to this section of pg_hba.conf and add the relevant lines
+
+# TYPE DATABASE USER ADDRESS METHOD
+
+# IPv4 local connections:
+...
+host   all   all   xxx.xxx.xx.xxx/32   md5
+...
+
+# IPv6 local connections:
+...
+host   all  all   yyyy:yyyy:yyyy::yyyy:yyyy/128   md5
+...
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Again here we are being very loose with permissions - allowing connections
+from all users using those IP adresses, and allowing them to connect to all
+databases. You might want to be more restrictive.</p>
+</div>
+<p>Your user should now be able to use the jumbo library storing on their
+computer the following <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">server_network_address</span> <span class="ow">or</span> <span class="n">localhost</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="n">wilma</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="n">wilma_superstar</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="mi">5432</span> <span class="p">(</span><span class="n">this</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">default</span> <span class="n">PostgreSQL</span> <span class="n">server</span> <span class="n">port</span><span class="p">)</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="n">jumbo_tutorial</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="intro_package.html" title="previous page">📋 First Steps</a>
+    <a class='right-next' id="next-link" href="docdoc.html" title="next page">📚 Documentation</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Alvise Vianello<br/>
+        
+            &copy; Copyright 2020, Alvise Vianello.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

@@ -42,7 +42,7 @@
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Filesystem Watchdogs" href="tutorial_watchdogs.html" />
+    <link rel="next" title="🐶 Filesystem Watchdogs" href="tutorial_watchdogs.html" />
     <link rel="prev" title="jumbo package" href="jumbo.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -87,17 +87,17 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
+  <a class="reference internal" href="intro_package.html">
    First Steps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="database.html">
+  <a class="reference internal" href="intro_database.html">
    Database Setup
   </a>
  </li>
  <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="docdoc.html">
+  <a class="reference internal" href="documentation.html">
    Documentation
   </a>
   <ul class="collapse-ul">
@@ -176,7 +176,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/demos.md.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/tutorial_basic.md.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -196,10 +196,10 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fdemos.html&body=Your%20issue%20content%20here."><button
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Ftutorial_basic.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/demos.md"><button
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/tutorial_basic.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -254,28 +254,30 @@
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#database-interactions">
-   Database Interactions
+   📤 Database Interactions
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#creating-a-table">
-   Creating a table
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#inserting-data-in-a-table">
-   Inserting Data in a table
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#pulling-data-from-the-database">
-   Pulling Data from the Database
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#more-user-friendly-queries">
-   More user friendly queries
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#creating-a-table">
+     Creating a table
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#inserting-data-in-a-table">
+     Inserting Data in a table
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pulling-data-from-the-database">
+     Pulling Data from the Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#more-user-friendly-queries">
+     More user friendly queries
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -294,24 +296,36 @@
 time using jumbo, you are strongly suggested to follow the tutorials in order. If you are an experienced jumbo user feel
 free to skip to the section you need a refresher on. These tutorials are an excellent introduction to the library and
 will help build familiarity with its syntax and usage protocols.</p>
-<p><a class="reference internal" href="#basic-hello-world"><span class="std std-ref">Hello World</span></a></p>
-<div class="section" id="hello-world">
-<span id="basic-hello-world"></span><h2>🌈 Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
-<p>In this tutorial you will build jumbo’s <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World!</span></code> from the ground up, and
-learn a few things about how it works behind the scenes. Let’s dive
-straight in!</p>
-<p>First things first:</p>
-<ul class="simple">
-<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
-<li><p>make sure you have a properly configured <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in the working
-directory of your script</p></li>
-</ul>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<div class="admonition note" id="basic-setup">
+<p class="admonition-title">Note</p>
+<p>Before running any jumbo script always make sure you have the following
+configured:</p>
+<ol>
+<li><p>A PostgreSQL server up and running</p></li>
+<li><p>A user account enabled on the server, with appropriate permissions</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file on your local machine:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
 <span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
 <span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
 <span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
 <span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
 </pre></div>
+</div>
+</div></blockquote>
+</li>
+</ol>
+<p>Don’t hesitate to refer to <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">First Step</span></a> and
+<a class="reference internal" href="intro_database.html"><span class="doc std std-doc">Database Setup</span></a> for more details!</p>
+</div>
+<div class="section" id="hello-world">
+<span id="basic-hello-world"></span><h2>🌈 Hello World<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<p>In this tutorial you will build jumbo’s <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World!</span></code> from the ground up, and
+learn a few things about how it works behind the scenes. Let’s dive
+straight in!</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure your jumbo environment is <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">setup as expected</span></a>!</p>
 </div>
 <p>At this point we can start using the library:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
@@ -451,7 +465,7 @@ with database.open() as pool:
 </div>
 </div>
 <div class="section" id="database-interactions">
-<h2>Database Interactions<a class="headerlink" href="#database-interactions" title="Permalink to this headline">¶</a></h2>
+<h2>📤 Database Interactions<a class="headerlink" href="#database-interactions" title="Permalink to this headline">¶</a></h2>
 <p>In this tutorial you will learn how to send SQL queries with jumbo.</p>
 <p>First things first:</p>
 <ul>
@@ -489,9 +503,8 @@ with database.open() as pool:
 </div>
 <p>Except for the implicit handshake between our client and the database happening behind the scene and retrieving the databases version, we still haven’t done anything with the connection we have fished out from the pool… Let’s now see how to send our own SQL queries to the database.</p>
 <p>You will need some minimal SQL knowledge to follow the following tutorial, but you can easily recycle code and get help online.</p>
-</div>
 <div class="section" id="creating-a-table">
-<h2>Creating a table<a class="headerlink" href="#creating-a-table" title="Permalink to this headline">¶</a></h2>
+<h3>Creating a table<a class="headerlink" href="#creating-a-table" title="Permalink to this headline">¶</a></h3>
 <p>You are now connected to a database but there might not be any tables there to hold data. Let’s now create a table called <em>data_container</em> with the columns of our choice. Here we decide on four columns called <em>unix_timestamp</em>, <em>iso_timestamp</em>, <em>device</em>, and <em>reading</em>. The SQL query to create such a table is the following:</p>
 <p>.. code-block:: postgresql</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    CREATE TABLE IF NOT EXISTS data_container
@@ -528,7 +541,7 @@ with database.open() as pool:
 <p>If everything went well you should see a ‘Table created successfully’ log. You have just successfully executed your first SQL query with jumbo!</p>
 </div>
 <div class="section" id="inserting-data-in-a-table">
-<h2>Inserting Data in a table<a class="headerlink" href="#inserting-data-in-a-table" title="Permalink to this headline">¶</a></h2>
+<h3>Inserting Data in a table<a class="headerlink" href="#inserting-data-in-a-table" title="Permalink to this headline">¶</a></h3>
 <p>Now that we have a table, it’s time to upload some data. The SQL query to insert a data row in our table is the following:</p>
 <p>.. code-block:: postgresql</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    INSERT INTO data_container (unix_timestamp, iso_timestamp, device, value)
@@ -590,7 +603,7 @@ with database.open() as pool:
 <p>Just use the jumbo interface, as explained above and everything is taken care of automatically!</p>
 </div>
 <div class="section" id="pulling-data-from-the-database">
-<h2>Pulling Data from the Database<a class="headerlink" href="#pulling-data-from-the-database" title="Permalink to this headline">¶</a></h2>
+<h3>Pulling Data from the Database<a class="headerlink" href="#pulling-data-from-the-database" title="Permalink to this headline">¶</a></h3>
 <p>We now have a table populated with some data. It’s time to see how to fetch that data back from the database.</p>
 <p>The SQL query to select all data from a table is as follows:</p>
 <p>.. code-block:: postgresql</p>
@@ -672,7 +685,7 @@ with database.open() as pool:
 </div>
 </div>
 <div class="section" id="more-user-friendly-queries">
-<h2>More user friendly queries<a class="headerlink" href="#more-user-friendly-queries" title="Permalink to this headline">¶</a></h2>
+<h3>More user friendly queries<a class="headerlink" href="#more-user-friendly-queries" title="Permalink to this headline">¶</a></h3>
 <p>If you are not an SQL expert it might be a little daunting to handle data through raw SQL queries - don’t worry! Jumbo is here to the rescue with plenty of functionalities to make data processing easier!</p>
 <p>For example jumbo offers functions such as</p>
 <p>.. code-block:: python</p>
@@ -700,6 +713,7 @@ with database.open() as pool:
 <p>Don’t hesitate to look at the other notebooks for more inspiration on how to implement all of this in practice!</p>
 </div>
 </div>
+</div>
 
 
               </div>
@@ -711,7 +725,7 @@ with database.open() as pool:
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="jumbo.html" title="previous page">jumbo package</a>
-    <a class='right-next' id="next-link" href="tutorial_watchdogs.html" title="next page">Filesystem Watchdogs</a>
+    <a class='right-next' id="next-link" href="tutorial_watchdogs.html" title="next page">🐶 Filesystem Watchdogs</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

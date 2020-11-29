@@ -5,7 +5,28 @@ time using jumbo, you are strongly suggested to follow the tutorials in order. I
 free to skip to the section you need a refresher on. These tutorials are an excellent introduction to the library and
 will help build familiarity with its syntax and usage protocols.
 
-{ref}`Hello World <basic/hello-world>`
+(basic/setup)=
+````{note}
+Before running any jumbo script always make sure you have the following
+ configured:
+
+1. A PostgreSQL server up and running
+
+2. A user account enabled on the server, with appropriate permissions
+
+3. A `jumbo.env` configuration file on your local machine:
+
+   >```
+   >DATABASE_HOST = <my_database_host_address>
+   >DATABASE_USERNAME = <my_database_user_name>
+   >DATABASE_PASSWORD = <my_database_user_password>
+   >DATABASE_PORT = <my_database_port>
+   >DATABASE_NAME = <my_database_name>
+   >```
+
+Don't hesitate to refer to [First Step](intro_package.md) and 
+[Database Setup](intro_database.md) for more details!
+````
 
 (basic/hello-world)=
 ## 🌈 Hello World
@@ -13,19 +34,9 @@ will help build familiarity with its syntax and usage protocols.
 In this tutorial you will build jumbo's `Hello World!` from the ground up, and
  learn a few things about how it works behind the scenes. Let's dive
   straight in!
- 
-First things first:
 
-- make sure you have a PostgreSQL server available, and a user account to connect to it.
-- make sure you have a properly configured `jumbo.env` file in the working
- directory of your script
-
- ```
- DATABASE_HOST = <my_database_host_address>
- DATABASE_USERNAME = <my_database_user_name>
- DATABASE_PASSWORD = <my_database_user_password>
- DATABASE_PORT = <my_database_port>
- DATABASE_NAME = <my_database_name>
+```{tip}
+Make sure your jumbo environment is [setup as expected](intro_package.md)!
 ```
 
 At this point we can start using the library:
@@ -177,7 +188,7 @@ It's your turn now! Experiment with what you have learnt so far.
 E.g. try firing several connections, then try firing more connections that your pool can handle!
 
 
-## Database Interactions
+## 📤 Database Interactions
 
 
 In this tutorial you will learn how to send SQL queries with jumbo.
@@ -222,8 +233,8 @@ Except for the implicit handshake between our client and the database happening 
 
 You will need some minimal SQL knowledge to follow the following tutorial, but you can easily recycle code and get help online.
 
-Creating a table
-----------------
+### Creating a table
+
 
 You are now connected to a database but there might not be any tables there to hold data. Let's now create a table called *data_container* with the columns of our choice. Here we decide on four columns called *unix_timestamp*, *iso_timestamp*, *device*, and *reading*. The SQL query to create such a table is the following:
 
@@ -264,8 +275,8 @@ To create such a table in jumbo we would do it this way:
 
 If everything went well you should see a 'Table created successfully' log. You have just successfully executed your first SQL query with jumbo!
 
-Inserting Data in a table
------------------------------
+### Inserting Data in a table
+
 
 Now that we have a table, it's time to upload some data. The SQL query to insert a data row in our table is the following:
 
@@ -337,8 +348,8 @@ Also, as said by psycopg2: never, never, NEVER use Python string concatenation (
 
 Just use the jumbo interface, as explained above and everything is taken care of automatically!
 
-Pulling Data from the Database
-------------------------------
+### Pulling Data from the Database
+
 
 We now have a table populated with some data. It's time to see how to fetch that data back from the database.
 
@@ -425,8 +436,8 @@ Let's see one last example in action. In the following example we clean up our d
                 # Execute query
                 pool.send(SQL_DROP, key=1)
 
-More user friendly queries
---------------------------
+### More user friendly queries
+
 
 If you are not an SQL expert it might be a little daunting to handle data through raw SQL queries - don't worry! Jumbo is here to the rescue with plenty of functionalities to make data processing easier!
 

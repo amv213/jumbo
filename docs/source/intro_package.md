@@ -43,7 +43,7 @@ information local. By default jumbo looks for this file in the working
 
 ## 🔮 Testing your environment
 
-If you already have a PostgreSQL database [up and running](database.md), you
+If you already have a PostgreSQL database [up and running](intro_database.md), you
  are good to go! For now put your `jumbo.env` file in the root directory of
   your project and then test your installation running the following minimal
    script:

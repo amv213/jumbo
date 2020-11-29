@@ -42,6 +42,7 @@
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="🎈 Basic Usage" href="demos.html" />
     <link rel="prev" title="jumbo" href="modules.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -91,8 +92,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html">
-   Demos
+  <a class="reference internal" href="database.html">
+   Database Setup
   </a>
  </li>
  <li class="toctree-l1 current active collapsible-parent">
@@ -108,6 +109,30 @@
   </ul>
   <i class="fas fa-chevron-down">
   </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  TUTORIALS
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="demos.html">
+   🎈 Basic Usage
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demos.html#filesystem-watchdogs">
+   ====================
+Filesystem Watchdogs
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="demos.html#live-database-streaming">
+   =======================
+Live Database Streaming
+  </a>
  </li>
 </ul>
 
@@ -267,7 +292,7 @@ directory of the script invoking the constructor.</p>
 <span id="jumbo-database-module"></span><h2>jumbo.database module<a class="headerlink" href="#module-jumbo.database" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="jumbo.database.Database">
-<em class="property">class </em><code class="sig-prename descclassname">jumbo.database.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">config</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span><a class="reference internal" href="#jumbo.config.Config" title="jumbo.config.Config">jumbo.config.Config</a><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">jumbo.database.</code><code class="sig-name descname">Database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">env_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jumbo/database.html#Database"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Jumbo’s abstract PostgreSQL client manager.</p>
 <p>Allows to manage multiple independent connections to a PostgreSQL database
@@ -782,6 +807,7 @@ SQL query.</p>
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="modules.html" title="previous page">jumbo</a>
+    <a class='right-next' id="next-link" href="demos.html" title="next page">🎈 Basic Usage</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

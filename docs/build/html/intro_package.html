@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>jumbo &#8212; Jumbo Documentation</title>
+    <title>📋 First Steps &#8212; Jumbo Documentation</title>
     
   <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -42,8 +42,8 @@
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="jumbo package" href="jumbo.html" />
-    <link rel="prev" title="💾 Database Setup" href="database.html" />
+    <link rel="next" title="💾 Database Setup" href="intro_database.html" />
+    <link rel="prev" title="📑 Welcome to Jumbo!" href="index.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -86,25 +86,34 @@
  </span>
 </p>
 <ul class="current nav sidenav_l1">
- <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    First Steps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="database.html">
+  <a class="reference internal" href="intro_database.html">
    Database Setup
   </a>
  </li>
- <li class="toctree-l1 current active collapsible-parent">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="docdoc.html">
    Documentation
   </a>
   <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="jumbo.html">
-     jumbo package
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="modules.html">
+     Modules
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="jumbo.html">
+       jumbo package
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -118,20 +127,18 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html">
-   🎈 Basic Usage
+  <a class="reference internal" href="tutorial_basic.html">
+   Basic Usage
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#filesystem-watchdogs">
-   ====================
-Filesystem Watchdogs
+  <a class="reference internal" href="tutorial_watchdogs.html">
+   Watchdogs
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#live-database-streaming">
-   =======================
-Live Database Streaming
+  <a class="reference internal" href="tutorial_listeners.html">
+   Listeners
   </a>
  </li>
 </ul>
@@ -169,9 +176,9 @@ Live Database Streaming
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/modules.rst.txt"><button type="button"
+        <a class="dropdown-buttons" href="_sources/intro_package.md.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
+                data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -189,10 +196,10 @@ Live Database Streaming
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fmodules.html&body=Your%20issue%20content%20here."><button
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Fintro_package.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/modules.rst"><button
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/intro_package.md"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -212,6 +219,36 @@ Live Database Streaming
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installing-jumbo">
+   🐍 Installing jumbo
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-jumbo-env-configuration-file">
+   🐘 The
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     jumbo.env
+    </span>
+   </code>
+   configuration file
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-your-environment">
+   🔮 Testing your environment
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -219,20 +256,63 @@ Live Database Streaming
         
               <div>
                 
-  <div class="section" id="jumbo">
-<h1>jumbo<a class="headerlink" href="#jumbo" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="jumbo.html">jumbo package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.config">jumbo.config module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.database">jumbo.database module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.handlers">jumbo.handlers module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo.utils">jumbo.utils module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="jumbo.html#module-jumbo">Module contents</a></li>
-</ul>
-</li>
-</ul>
+  <div class="section" id="first-steps">
+<h1>📋 First Steps<a class="headerlink" href="#first-steps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-jumbo">
+<h2>🐍 Installing jumbo<a class="headerlink" href="#installing-jumbo" title="Permalink to this headline">¶</a></h2>
+<p>You can install jumbo like any other Python package, using <code class="docutils literal notranslate"><span class="pre">pip</span></code> to download it
+from PyPI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install jumbo
+</pre></div>
+</div>
+<p>or by downloading the source package locally and building the <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py build
+sudo python setup.py install
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-jumbo-env-configuration-file">
+<h2>🐘 The <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> configuration file<a class="headerlink" href="#the-jumbo-env-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>Jumbo automatically extracts our database connection settings from a
+<code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file with the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_HOST</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_host_address</span><span class="o">&gt;</span>
+<span class="n">DATABASE_USERNAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_name</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PASSWORD</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_user_password</span><span class="o">&gt;</span>
+<span class="n">DATABASE_PORT</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_port</span><span class="o">&gt;</span>
+<span class="n">DATABASE_NAME</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">my_database_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This allows to deploy jumbo on different devices while maintaining sensitive
+information local. By default jumbo looks for this file in the working
+directory of the script being run.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you are sharing code with others, make sure to add the <code class="docutils literal notranslate"><span class="pre">jumbo.env</span> </code> file to your <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>. Alternatively, you can also hide your
+configuration file in a private folder and point jumbo to it later on.</p>
+</div>
+</div>
+<div class="section" id="testing-your-environment">
+<h2>🔮 Testing your environment<a class="headerlink" href="#testing-your-environment" title="Permalink to this headline">¶</a></h2>
+<p>If you already have a PostgreSQL database <a class="reference internal" href="intro_database.html"><span class="doc std std-doc">up and running</span></a>, you
+are good to go! For now put your <code class="docutils literal notranslate"><span class="pre">jumbo.env</span></code> file in the root directory of
+your project and then test your installation running the following minimal
+script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+
+<span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Open a connection pool.</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+
+   <span class="c1"># Get an individual connection from the pool.</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">():</span>
+
+       <span class="k">pass</span>
+</pre></div>
+</div>
+<p>If everything went well you are now all set-up to use the Jumbo SQL library
+! Enjoy!</p>
 </div>
 </div>
 
@@ -245,8 +325,8 @@ Live Database Streaming
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="database.html" title="previous page">💾 Database Setup</a>
-    <a class='right-next' id="next-link" href="jumbo.html" title="next page">jumbo package</a>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">📑 Welcome to Jumbo!</a>
+    <a class='right-next' id="next-link" href="intro_database.html" title="next page">💾 Database Setup</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

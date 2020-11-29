@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📺 Live Database Streaming &#8212; Jumbo Documentation</title>
+    
+  <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/twemoji.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
+    <script src="_static/twemoji.js"></script>
+    <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <link rel="shortcut icon" href="_static/favico.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="🐶 Filesystem Watchdogs" href="tutorial_watchdogs.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/logo_single.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Jumbo Documentation</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="index.html">
+   📑 Welcome to Jumbo!
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  MAIN DOCS
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro_package.html">
+   First Steps
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro_database.html">
+   Database Setup
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="documentation.html">
+   Documentation
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="modules.html">
+     Modules
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="jumbo.html">
+       jumbo package
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  TUTORIALS
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial_basic.html">
+   Basic Usage
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tutorial_watchdogs.html">
+   Watchdogs
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Listeners
+  </a>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/tutorial_listeners.md.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://gitlab.com/amv213/jumbo"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://gitlab.com/amv213/jumbo/issues/new?title=Issue%20on%20page%20%2Ftutorial_listeners.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/amv213/jumbo/edit/master/docs/source/tutorial_listeners.md"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setting-up-an-audit-table">
+   Setting up an audit table
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="live-database-streaming">
+<h1>📺 Live Database Streaming<a class="headerlink" href="#live-database-streaming" title="Permalink to this headline">¶</a></h1>
+<p>In this tutorial you will learn how to use jumbo to setup a client listening to a PostgreSQL database.</p>
+<p>First things first:</p>
+<ul>
+<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
+<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
+<p>.. code-block::</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   DATABASE_HOST = &lt;my_database_host_address&gt;
+   DATABASE_USERNAME = &lt;my_database_user_name&gt;
+   DATABASE_PASSWORD = &lt;my_database_user_password&gt;
+   DATABASE_PORT = &lt;my_database_port&gt;
+   DATABASE_NAME = &lt;my_database_name&gt;
+</pre></div>
+</div>
+</li>
+<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
+</ul>
+<p>In jumbo, listeners are clients subscribed to a database notification channel and triggering custom event handlers on receipt of a NOTIFY from the server. This is especially useful if - for example - the PostgreSQL database has been setup to trigger a NOTIFY every time a new entry is added to a given table. In this way the client can keep track of changes to the table without needing to constantly poll the database table for changes.</p>
+<p>A minimal jumbo listener can easily be configured as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+
+    import jumbo
+
+     # Initialize database connection
+    database = jumbo.database.Database()
+
+    # Create a connection pool
+    with database.open() as pool:
+
+        # Get individual connections from the pool
+        with pool.connect(key=1):
+
+            # Create your custom handler: must have a .on_notify(Database) method implemented.
+            handler = jumbo.handlers.NotifyHandler()
+            # Create listener
+            dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
+
+            dumbo.run()
+</pre></div>
+</div>
+<p>In the code above we have first defined a handler defining the action to take on receipt of a NOTIFY by the listener. I this minimal example we use jumbo’s handlers.NotifyHandler() which does not do anything except from logging out to the user that no actions have been taken. In short, nothing will happen when the listener will receive a NOTIFY. Then we have defined the Listener itself, to which we assign the handler we have defined above. Finally we also need to pass database connection related arguments to the Listener for it to subscribe to the correct notification channel on which the database is streaming NOTIFYs.</p>
+<p>Let’s now see an example using a more useful handler, shipped with jumbo:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+
+    import jumbo
+
+     # Initialize database connection
+    database = jumbo.database.Database()
+
+    # Create a connection pool
+    with database.open() as pool:
+
+        # Get individual connections from the pool
+        with pool.connect(key=1):
+
+            # Create your custom handler: must have a .on_notify(Database) method implemented.
+            handler = jumbo.handlers.LastEntryFetcher(pool, audit_table=&#39;audit_table&#39;, key=1)
+            # Create listener
+            dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
+
+            dumbo.run()
+</pre></div>
+</div>
+<p>Here we have used exactly the same code as in the previous example but swapped handler with jumbo’s LastEntryFetcher. This is a builtin handler relying on the presence of an audit table setup on the PostgreSQL database. An audit table is a table in the database always tracking the last entry of in the table it is auditing. For more information on how to setup such a database infrastructure see the end of this tutorial. With such an audit table in place, jumbo’s LastEntryFetcher will retrieve and log out the (one and only) entry in that table - effectively allowing the Listener to have continuous access to the last entry being added to the database table being audited.</p>
+<p>Obviously it is also possible to create custom handlers, in order to perform any action desired on receipt of a NOTIFY from the Listener. It is good practice to do this in jumbo by creating a handler class inheriting from NotifyHandler() and overriding its on_notify() method. LastEntryFetcher is an example of such strategy, so don’t hesitate to have a look at the documentation for inspiration.</p>
+<p><strong>Note:</strong> LastEntryFetcher is an extremely handy handler. It is especially useful to perform on-the-fly data analysis on data being streamed to the database. By default, LastEntryFetcher only logs to the user the last entry fetched, but the class exposes a convenient overridable method called process(), to which the last entry fetched is passed. Users can therefore easily implement on-the-fly data analysis by creating a class inheriting from LastEntryFetcher and overriting its ‘process’ method. Let’s see a trivial example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+
+    import jumbo
+    import loguru
+
+    # A custom LastEntryFetcher
+    def CustomLastEntryFetcher(jumbo.handlers.LastEntryFetcher):
+
+        def __init__(self, database, audit_table, constant, key=1):
+
+            # Inherit
+            super().__init__(database, audit_table, key)
+
+            # Can add custom attributes
+            self.constant = constant
+
+        # Add data analysis step
+        def process(self, last_entry):
+            &quot;&quot;&quot;Called on each last-entry fetch.
+
+            Overwriting method of parent class&quot;&quot;&quot;
+
+            # very trivial example
+            loguru.logger(f&quot;Handler fetched {last_entry} and is also logging out {self.constant}&quot;)
+
+
+            # but could do operations here on last_entry and e.g. write results to another database table...
+
+
+    if __name__ == &quot;__main__&quot;:
+
+     # Initialize database connection
+    database = jumbo.database.Database()
+
+        # Create a connection pool
+        with database.open() as pool:
+
+            # Get individual connections from the pool
+            with pool.connect(key=1):
+
+                # Create your custom handler: must have a .on_notify(Database) method implemented.
+                handler = CustomLastEntryFetcher(pool, audit_table=&#39;audit_table&#39;, key=1)
+                # Create listener
+                dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
+
+                dumbo.run()
+</pre></div>
+</div>
+<div class="section" id="setting-up-an-audit-table">
+<h2>Setting up an audit table<a class="headerlink" href="#setting-up-an-audit-table" title="Permalink to this headline">¶</a></h2>
+<p>Jumbo Listeners are a very handy tool but the PostgreSQL database should be setup to be streaming NOTIFYs on a notification channel. Moreover, in order to expolit jumbo’s LastEntryFetcher, there should be a table on the database being audited, and a NOTIFY being triggered every time new data is inserted into such table. Please find below a SQL template to execute to such a database configuration, but do not hesitate to browse the PostgreSQL documentation to modify it and create your own variants:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: postgresql
+
+    -- Create audit table, using the table being audited as template
+    CREATE TABLE IF NOT EXISTS audit_table AS
+        TABLE table LIMIT 1;
+
+    -- Define trigger function
+    CREATE OR REPLACE FUNCTION audit_and_notify()
+    RETURNS trigger AS $$
+    BEGIN
+
+        -- update all rows in the audit table (there is only one) with NEW values. Here NEW is unpacked with special ().* sintax
+        UPDATE audit_table
+        SET    (table_column1, table_column2, ...) = (SELECT (NEW).*);
+
+        -- send a NOTIFY to clients listening. Jumbo Listeners should then set channel=&#39;channel&#39;
+        NOTIFY channel;
+
+        RETURN NULL;
+
+    END;
+    $$ LANGUAGE plpgsql;
+
+    -- Drop TRIGGER just in case one already exists
+    DROP TRIGGER trigger_audit ON table;
+
+    -- Create trigger on table
+    CREATE TRIGGER trigger_audit
+    AFTER INSERT
+    ON table
+    FOR EACH ROW
+    EXECUTE PROCEDURE audit_and_notify();
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="tutorial_watchdogs.html" title="previous page">🐶 Filesystem Watchdogs</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Alvise Vianello<br/>
+        
+            &copy; Copyright 2020, Alvise Vianello.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

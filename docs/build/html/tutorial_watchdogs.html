@@ -25,8 +25,8 @@
     href="_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/twemoji.css" />
     
   <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
@@ -221,20 +221,6 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#watchdogs">
-   Watchdogs
-  </a>
- </li>
-</ul>
-
-        </nav>
-        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -244,103 +230,146 @@
                 
   <div class="section" id="filesystem-watchdogs">
 <h1>🐶 Filesystem Watchdogs<a class="headerlink" href="#filesystem-watchdogs" title="Permalink to this headline">¶</a></h1>
-<p>In this tutorial you will learn how to use jumbo’s watchdog functionalities. By the end you will have created a simple watchdog looking for any new data being written in a directory and uploading it automatically to a database table.</p>
-<p>First things first:</p>
-<ul>
-<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
-<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
-<p>.. code-block::</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   DATABASE_HOST = &lt;my_database_host_address&gt;
-   DATABASE_USERNAME = &lt;my_database_user_name&gt;
-   DATABASE_PASSWORD = &lt;my_database_user_password&gt;
-   DATABASE_PORT = &lt;my_database_port&gt;
-   DATABASE_NAME = &lt;my_database_name&gt;
-</pre></div>
+<p>In this tutorial you will learn how to use jumbo’s watchdog functionalities
+. By the end you will have created a simple watchdog looking for any new
+data being written in a directory and uploading it automatically to a database table.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure your jumbo environment is <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">setup as expected</span></a>!</p>
 </div>
-</li>
-<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
-</ul>
-<p>If you are deploying jumbo in practical applications, you might be interested in deploying a watchdog to automatically stream new data to a table in your database. Ideally you would interface directly with the data generator and INSERT each new data entry to the table, but this is not always possible. Data acquisition from the data generator might be blocked by proprietary software, or for legacy reasons you cannot interfere directly with the data collection protocol already in place. In this cases the only thing left to do might be to monitor the output files where data is being saved to and upload any change to the database.</p>
-<div class="section" id="watchdogs">
-<h2>Watchdogs<a class="headerlink" href="#watchdogs" title="Permalink to this headline">¶</a></h2>
+<p>If you are deploying jumbo in practical applications, you might be
+interested in deploying a watchdog to automatically stream new data to a
+table in your database. Ideally you would interface directly with the data
+generator and <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> each new data entry to the table, but this is not
+always possible. Data acquisition from the data generator might be
+blocked by proprietary software, or for legacy reasons you cannot
+interfere directly with the data collection protocol already in place
+. In this cases the only thing left to do might be to monitor the
+output files where data is being saved to and upload any change to
+the database…. This is where a filesystem watchdog comes to the
+rescue!</p>
 <p>Let’s setup everything to simulate our working environment. We need two things:</p>
 <ul class="simple">
 <li><p>A bot script writing data to files, to simulate a real data generator</p></li>
 <li><p>Our watchdog deployed to monitor those files</p></li>
 </ul>
-<p>Let’s start by setting-up a very simple monkey-writer. The following code does nothing special, it will simply write the current timestamp to a file called <em>fake_data.txt</em> in the <em>data</em> directory. Each write will happen after a random time interval. Run the following code to get a feeling of how it works and then STOP IT before moving to the next section.</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    # Monkey Writer
+<p>Let’s start by setting-up a very simple data generator. The following code does
+nothing special, it will simply write the current timestamp to a file
+called <code class="docutils literal notranslate"><span class="pre">fake_data.txt</span></code> in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> directory. Each write will happen
+after a random time interval. Run the following code to get a feeling of
+how it works and then <em>STOP IT</em> before moving to the next section.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># data_generator.py</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">pathlib</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
 
-    import time
-    import loguru
-    import numpy
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    try:
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 
-        while True:
+<span class="k">try</span><span class="p">:</span>
 
-            # Need to open/close file on every write so that watchdog can see each change
-            with open(&#39;data/fake_data.txt&#39;, &quot;a&quot;) as f:
+    <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;data/&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-                # Write current timestamp
-                number = time.time()
-                f.write(str(number) + &#39;\n&#39;)
-                loguru.logger.debug(f&quot;Wrote number {number} to file&quot;)
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
 
-            # Wait a variable amount of time before writing next
-            time.sleep(numpy.random.randint(10))
+        <span class="c1"># Need to open/close file on every write so that watchdog can see each</span>
+        <span class="c1"># change</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;data/fake_data.txt&#39;</span><span class="p">,</span> <span class="s2">&quot;a&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 
-    except KeyboardInterrupt:
-        loguru.logger.error(&quot;Monkey writer has been stopped via Keyboard Interrupt.&quot;)
+            <span class="c1"># Write current timestamp</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">number</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Wrote number </span><span class="si">{</span><span class="n">number</span><span class="si">}</span><span class="s2"> to file&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Wait a variable amount of time before writing next</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Data generator has been stopped via Keyboard Interrupt.&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now that we have a data source let’s deploy a watchdog on the <em>data</em> folder.</p>
-<p>Jumbo let’s you create watchdogs very easily. Here is  jumbo’s implementation of a watchdog:</p>
-<p>.. code-block:: python</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>    import jumbo
+<p>Now that we have a data source let’s deploy a watchdog on the <code class="docutils literal notranslate"><span class="pre">data</span></code> folder.</p>
+<p>Jumbo let’s you create watchdogs very easily. Here is  jumbo’s
+implementation of a watchdog:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#watchdog.py</span>
+<span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    # Initialize database
-    database = jumbo.database.Database()
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-    # Create a connection pool
-    with database.open() as pool:
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-        # Get individual connections from the pool
-        with pool.connect(key=1):
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-            # Initialize the table to hold watched data
-            SQL_CREATE_TABLE = &#39;CREATE TABLE IF NOT EXISTS data_container (ID FLOAT PRIMARY KEY NOT NULL);&#39;
-            pool.send(SQL_CREATE_TABLE, key=1)
+<span class="c1"># Initialize database</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-            # Template SQL command to inject table with entries from file
-            SQL_INSERT_IN_TABLE = &quot;INSERT INTO data_container (ID) VALUES (%s)&quot;  # %s will be replaced with .txt line fields
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-            # Create watchdog
-            fido = jumbo.handlers.FileWatcher(pool, SQL_INSERT_IN_TABLE, &#39;data/&#39;, timeout=0.5, key=1)
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
-            # Deploy watchdog
-            fido.bark()
+        <span class="c1"># Initialize the table to hold watched data</span>
+        <span class="n">SQL_CREATE_TABLE</span> <span class="o">=</span> <span class="s1">&#39;CREATE TABLE IF NOT EXISTS my_table &#39;</span> \
+                           <span class="s1">&#39;(ID FLOAT PRIMARY KEY NOT NULL);&#39;</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">SQL_CREATE_TABLE</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Template SQL command to inject table with entries from file</span>
+        <span class="c1"># %s will be replaced with .txt line fields</span>
+        <span class="n">SQL_INSERT_IN_TABLE</span> <span class="o">=</span> <span class="s2">&quot;INSERT INTO data_container (ID) VALUES (</span><span class="si">%s</span><span class="s2">)&quot;</span>
+
+        <span class="c1"># Create watchdog</span>
+        <span class="n">fido</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">FileWatcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> 
+                                          <span class="n">src_path</span><span class="o">=</span><span class="s1">&#39;data/&#39;</span><span class="p">,</span> 
+                                          <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Deploy watchdog</span>
+        <span class="n">fido</span><span class="o">.</span><span class="n">bark</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Let’s have a look at what is going on in the code:</p>
-<p>As we have seen before we start by creating a database object, opening a connection pool, and setting  up a connection to the PostgreSQL database. We then create a table on the database to hold the data we will collecting from the files, and prepare an INSERT statement to dynamically insert the values collected from the files into the table.</p>
-<p>We then create a jumbo handlers.FileWatcher watchdog</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
-
-    jumbo.handlers.FileWatcher(pool, SQL_INSERT_IN_TABLE, &#39;data/&#39;, timeout=0.5, key=1)
+<p>Let’s have a look at what is going on in the code…</p>
+<p>As usual, we start by creating a database object, opening a
+connection pool, and setting  up a connection to the PostgreSQL database
+. We then create a table (<code class="docutils literal notranslate"><span class="pre">my_table</span></code>) on the database to hold the data we will
+collecting from the files, and prepare an <code class="docutils literal notranslate"><span class="pre">INSERT</span></code> statement to
+dynamically insert the values collected from the files into the table.</p>
+<p>We then create a <code class="docutils literal notranslate"><span class="pre">jumbo</span> <span class="pre">handlers.FileWatcher()</span></code> watchdog:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">FileWatcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> 
+                           <span class="n">query</span><span class="o">=</span><span class="n">SQL_INSERT_IN_TABLE</span><span class="p">,</span> 
+                           <span class="n">src_path</span><span class="o">=</span><span class="s1">&#39;data/&#39;</span><span class="p">,</span> 
+                           <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This watchdog looks for changes in .txt files in the <em>data</em> folder by polling for changes every 0.5s. It then executes the query template of our choice with every new entry added to the files passed dynamically. That is everytime a change is detected the watchdog will implicitely perform a</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: postgresql
-
-    INSERT INTO data_container (ID) new_value;
+<p>This watchdog looks for changes in <code class="docutils literal notranslate"><span class="pre">.txt</span></code> files in the <code class="docutils literal notranslate"><span class="pre">data/</span></code> folder by
+polling for changes every <code class="docutils literal notranslate"><span class="pre">timeout</span></code> seconds. It then executes the <code class="docutils literal notranslate"><span class="pre">query</span></code> SQL
+template of our choice with every new entry added to the files passed
+dynamically. That is, everytime a change is detected the watchdog will
+implicitly perform a:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span> <span class="k">INTO</span> <span class="n">my_table</span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="n">new_value</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Finally we deploy the watchdog via the .bark() method. This activates the watchdog and schedules it’s handler to fire on each ‘file modified event’ detected.</p>
-<p>Don’t hesitate to have a look at the documentation to look at all the customisable parameters. Or have a look at the source code to implement your own tailored watchdogs! You can implement your own watchdogs and event handlers!</p>
-<p>Now run both code scripts above at the same time and see if the behaviour in the logs makes sense!</p>
-</div>
+<p>Finally we deploy the watchdog via the <code class="docutils literal notranslate"><span class="pre">.bark()</span></code> method. This activates the
+watchdog and schedules it’s handler to fire on each <strong>file modified event</strong> detected.</p>
+<p>Don’t hesitate to have a look at the documentation to look at all the
+customisable parameters. Or have a look at the source code to implement
+your own tailored watchdogs! You can implement your own watchdogs and
+event handlers!</p>
+<p>Now run both code scripts above at the same time and see if the behaviour in
+the logs makes sense!</p>
 </div>
 
 

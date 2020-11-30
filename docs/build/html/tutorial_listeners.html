@@ -25,8 +25,8 @@
     href="_static/vendor/lato_latin-ext/1.44.1/index.css">
 
     
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/twemoji.css" />
     
   <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
@@ -226,6 +226,16 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#jumbo-s-lastentryfetcher">
+   Jumbo’s
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     LastEntryFetcher()
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#setting-up-an-audit-table">
    Setting up an audit table
   </a>
@@ -244,153 +254,241 @@
   <div class="section" id="live-database-streaming">
 <h1>📺 Live Database Streaming<a class="headerlink" href="#live-database-streaming" title="Permalink to this headline">¶</a></h1>
 <p>In this tutorial you will learn how to use jumbo to setup a client listening to a PostgreSQL database.</p>
-<p>First things first:</p>
-<ul>
-<li><p>make sure you have a PostgreSQL server available, and a user account to connect to it.</p></li>
-<li><p>make sure you have a properly configured jumbo.env file in the root directory of this notebook</p>
-<p>.. code-block::</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>   DATABASE_HOST = &lt;my_database_host_address&gt;
-   DATABASE_USERNAME = &lt;my_database_user_name&gt;
-   DATABASE_PASSWORD = &lt;my_database_user_password&gt;
-   DATABASE_PORT = &lt;my_database_port&gt;
-   DATABASE_NAME = &lt;my_database_name&gt;
-</pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Make sure your jumbo environment is <a class="reference internal" href="intro_package.html"><span class="doc std std-doc">setup as expected</span></a>!</p>
 </div>
-</li>
-<li><p>make sure your user account has appropriate permissions on the database tables you will access</p></li>
-</ul>
-<p>In jumbo, listeners are clients subscribed to a database notification channel and triggering custom event handlers on receipt of a NOTIFY from the server. This is especially useful if - for example - the PostgreSQL database has been setup to trigger a NOTIFY every time a new entry is added to a given table. In this way the client can keep track of changes to the table without needing to constantly poll the database table for changes.</p>
+<p>In jumbo, listeners are clients subscribed to a database notification
+channel and triggering custom event handlers on receipt of a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code> from
+the server. This is especially useful if - for example - the PostgreSQL
+database has been setup to trigger a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code> every time a new entry is
+added to a given table. In this way the client can keep track of changes
+to the table without needing to constantly poll the whole database table
+for changes.</p>
 <p>A minimal jumbo listener can easily be configured as follows:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    import jumbo
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-     # Initialize database connection
-    database = jumbo.database.Database()
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-    # Create a connection pool
-    with database.open() as pool:
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-        # Get individual connections from the pool
-        with pool.connect(key=1):
+ <span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-            # Create your custom handler: must have a .on_notify(Database) method implemented.
-            handler = jumbo.handlers.NotifyHandler()
-            # Create listener
-            dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-            dumbo.run()
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># You can also create your custom handler: </span>
+        <span class="c1"># must have a .on_notify(Database) method implemented.</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">NotifyHandler</span><span class="p">()</span>
+
+        <span class="c1"># Create listener</span>
+        <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> 
+                                        <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span> 
+                                        <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>In the code above we have first defined a handler defining the action to take on receipt of a NOTIFY by the listener. I this minimal example we use jumbo’s handlers.NotifyHandler() which does not do anything except from logging out to the user that no actions have been taken. In short, nothing will happen when the listener will receive a NOTIFY. Then we have defined the Listener itself, to which we assign the handler we have defined above. Finally we also need to pass database connection related arguments to the Listener for it to subscribe to the correct notification channel on which the database is streaming NOTIFYs.</p>
+<p>In the code above we have first defined a handler defining the action to
+take on receipt of a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code> by the listener. I this minimal example we
+use jumbo’s <code class="docutils literal notranslate"><span class="pre">handlers.NotifyHandler()</span></code> which does not do anything except
+from logging out to the user that no actions have been taken. In short
+, nothing will happen when the listener will receive a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code>. Then we
+have defined the <code class="docutils literal notranslate"><span class="pre">Listener</span></code> itself, to which we assign the handler we
+have defined above. Finally we also need to pass database connection
+related arguments to the <code class="docutils literal notranslate"><span class="pre">Listener</span></code> for it to subscribe to the correct
+notification <code class="docutils literal notranslate"><span class="pre">channel</span></code> on which the database is streaming <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code>s.</p>
+<div class="section" id="jumbo-s-lastentryfetcher">
+<h2>Jumbo’s <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher()</span></code><a class="headerlink" href="#jumbo-s-lastentryfetcher" title="Permalink to this headline">¶</a></h2>
 <p>Let’s now see an example using a more useful handler, shipped with jumbo:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jumbo</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 
-    import jumbo
+<span class="c1"># Setup your basic logger</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+   <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+   <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+<span class="p">)</span>
 
-     # Initialize database connection
-    database = jumbo.database.Database()
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-    # Create a connection pool
-    with database.open() as pool:
+<span class="c1"># lower the severity level of jumbo logs being displayed</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
-        # Get individual connections from the pool
-        with pool.connect(key=1):
+<span class="c1"># Initialize database connection</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
 
-            # Create your custom handler: must have a .on_notify(Database) method implemented.
-            handler = jumbo.handlers.LastEntryFetcher(pool, audit_table=&#39;audit_table&#39;, key=1)
-            # Create listener
-            dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
+<span class="c1"># Create a connection pool</span>
+<span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
 
-            dumbo.run()
+    <span class="c1"># Get individual connections from the pool</span>
+    <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="c1"># You can also create your custom handler: </span>
+        <span class="c1"># must have a .on_notify(Database) method implemented.</span>
+        <span class="n">handler</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">LastEntryFetcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> 
+                                                  <span class="n">audit_table</span><span class="o">=</span><span class="s1">&#39;audit_table&#39;</span><span class="p">,</span> 
+                                                  <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># Create listener</span>
+        <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> 
+                                        <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span> 
+                                        <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Here we have used exactly the same code as in the previous example but swapped handler with jumbo’s LastEntryFetcher. This is a builtin handler relying on the presence of an audit table setup on the PostgreSQL database. An audit table is a table in the database always tracking the last entry of in the table it is auditing. For more information on how to setup such a database infrastructure see the end of this tutorial. With such an audit table in place, jumbo’s LastEntryFetcher will retrieve and log out the (one and only) entry in that table - effectively allowing the Listener to have continuous access to the last entry being added to the database table being audited.</p>
-<p>Obviously it is also possible to create custom handlers, in order to perform any action desired on receipt of a NOTIFY from the Listener. It is good practice to do this in jumbo by creating a handler class inheriting from NotifyHandler() and overriding its on_notify() method. LastEntryFetcher is an example of such strategy, so don’t hesitate to have a look at the documentation for inspiration.</p>
-<p><strong>Note:</strong> LastEntryFetcher is an extremely handy handler. It is especially useful to perform on-the-fly data analysis on data being streamed to the database. By default, LastEntryFetcher only logs to the user the last entry fetched, but the class exposes a convenient overridable method called process(), to which the last entry fetched is passed. Users can therefore easily implement on-the-fly data analysis by creating a class inheriting from LastEntryFetcher and overriting its ‘process’ method. Let’s see a trivial example:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: python
-
-    import jumbo
-    import loguru
-
-    # A custom LastEntryFetcher
-    def CustomLastEntryFetcher(jumbo.handlers.LastEntryFetcher):
-
-        def __init__(self, database, audit_table, constant, key=1):
-
-            # Inherit
-            super().__init__(database, audit_table, key)
-
-            # Can add custom attributes
-            self.constant = constant
-
-        # Add data analysis step
-        def process(self, last_entry):
-            &quot;&quot;&quot;Called on each last-entry fetch.
-
-            Overwriting method of parent class&quot;&quot;&quot;
-
-            # very trivial example
-            loguru.logger(f&quot;Handler fetched {last_entry} and is also logging out {self.constant}&quot;)
-
-
-            # but could do operations here on last_entry and e.g. write results to another database table...
-
-
-    if __name__ == &quot;__main__&quot;:
-
-     # Initialize database connection
-    database = jumbo.database.Database()
-
-        # Create a connection pool
-        with database.open() as pool:
-
-            # Get individual connections from the pool
-            with pool.connect(key=1):
-
-                # Create your custom handler: must have a .on_notify(Database) method implemented.
-                handler = CustomLastEntryFetcher(pool, audit_table=&#39;audit_table&#39;, key=1)
-                # Create listener
-                dumbo = jumbo.handlers.Listener(pool, channel=&#39;my_notification_channel&#39;, handler=handler, key=1)
-
-                dumbo.run()
+<p>Here we have used exactly the same code as in the previous example but
+swapped handler with jumbo’s <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher</span></code>. This is a builtin handler
+relying on the presence of an <em>audit table</em> setup on the PostgreSQL database
+. An audit table is a table in the database always tracking the last entry
+of in the table it is auditing. For more information on how to setup such
+a database infrastructure see the end of this tutorial. With such an
+audit table in place, jumbo’s <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher</span></code> will retrieve and log
+out the (one and only) entry in that table - effectively allowing the
+<code class="docutils literal notranslate"><span class="pre">Listener</span></code> to have continuous access to the last entry being added to
+the database table being audited.</p>
+<p>Obviously it is also possible to create custom handlers, in order to perform
+any action desired on receipt of a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code> from the <code class="docutils literal notranslate"><span class="pre">Listener</span></code>. It is good
+practice to do this in jumbo by creating a handler class inheriting from
+<code class="docutils literal notranslate"><span class="pre">NotifyHandler()</span></code> and overriding its <code class="docutils literal notranslate"><span class="pre">on_notify()</span></code> method
+. <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher()</span></code> is an example of such strategy, so don’t hesitate to
+have a look at the documentation for inspiration.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="docutils literal notranslate"><span class="pre">LastEntryFetcher()</span></code> is an extremely handy handler. It is especially useful
+to perform on-the-fly data analysis on data being streamed to the database
+. By default, <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher()</span></code> only logs to the user the last entry
+fetched, but the class exposes a convenient overridable method called
+<code class="docutils literal notranslate"><span class="pre">process()</span></code>, to which the last entry fetched is passed. Users can therefore
+easily implement on-the-fly data analysis by creating a class inheriting
+from <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher()</span></code> and overriting its <code class="docutils literal notranslate"><span class="pre">process()</span></code> method. Let’s see a
+trivial example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+ <span class="kn">import</span> <span class="nn">jumbo</span>
+ <span class="kn">import</span> <span class="nn">logging</span>
+ 
+ <span class="c1"># Setup your basic logger</span>
+ <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+     <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;[</span><span class="si">%(asctime)s</span><span class="s1">] </span><span class="si">%(levelname)s</span><span class="s1"> | </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+     <span class="n">datefmt</span><span class="o">=</span><span class="s1">&#39;%D %H:%M:%S&#39;</span>
+ <span class="p">)</span>
+ 
+ <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+ <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+ 
+ <span class="c1"># lower the severity level of jumbo logs being displayed</span>
+ <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;jumbo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+ 
+ 
+ <span class="c1"># A custom LastEntryFetcher</span>
+ <span class="k">class</span> <span class="nc">CustomLastEntryFetcher</span><span class="p">(</span><span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">LastEntryFetcher</span><span class="p">):</span>
+ 
+     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">,</span> <span class="n">constant</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+ 
+         <span class="c1"># Inherit</span>
+         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">database</span><span class="p">,</span> <span class="n">audit_table</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+ 
+         <span class="c1"># Can add custom attributes</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">constant</span> <span class="o">=</span> <span class="n">constant</span>
+ 
+         <span class="c1"># Add data analysis step</span>
+         <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_entry</span><span class="p">):</span>
+             <span class="sd">&quot;&quot;&quot;Called on each last-entry fetch.</span>
+<span class="sd"> </span>
+<span class="sd">             Overwriting method of parent class&quot;&quot;&quot;</span>
+ 
+             <span class="c1"># very trivial example</span>
+             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Handler fetched </span><span class="si">{</span><span class="n">last_entry</span><span class="si">}</span><span class="s2"> and is also logging &quot;</span>
+                         <span class="sa">f</span><span class="s2">&quot;out </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">constant</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+ 
+             <span class="c1"># but could do operations here on last_entry and e.g. write</span>
+             <span class="c1"># results to another database table...</span>
+ 
+ 
+ <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+ 
+     <span class="c1"># Initialize database connection</span>
+     <span class="n">database</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">Database</span><span class="p">()</span>
+ 
+     <span class="c1"># Create a connection pool</span>
+     <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">open</span><span class="p">()</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+ 
+         <span class="c1"># Get individual connections from the pool</span>
+         <span class="k">with</span> <span class="n">pool</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+ 
+             <span class="c1"># Create your custom handler:</span>
+             <span class="c1"># must have a .on_notify(Database) method implemented.</span>
+             <span class="n">handler</span> <span class="o">=</span> <span class="n">CustomLastEntryFetcher</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span>
+                                              <span class="n">audit_table</span><span class="o">=</span><span class="s1">&#39;audit_table&#39;</span><span class="p">,</span>
+                                              <span class="n">constant</span><span class="o">=</span><span class="mf">3.14</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ 
+             <span class="c1"># Create listener</span>
+             <span class="n">dumbo</span> <span class="o">=</span> <span class="n">jumbo</span><span class="o">.</span><span class="n">handlers</span><span class="o">.</span><span class="n">Listener</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span>
+                                             <span class="n">channel</span><span class="o">=</span><span class="s1">&#39;my_notification_channel&#39;</span><span class="p">,</span>
+                                             <span class="n">handler</span><span class="o">=</span><span class="n">handler</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ 
+             <span class="n">dumbo</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="setting-up-an-audit-table">
 <h2>Setting up an audit table<a class="headerlink" href="#setting-up-an-audit-table" title="Permalink to this headline">¶</a></h2>
-<p>Jumbo Listeners are a very handy tool but the PostgreSQL database should be setup to be streaming NOTIFYs on a notification channel. Moreover, in order to expolit jumbo’s LastEntryFetcher, there should be a table on the database being audited, and a NOTIFY being triggered every time new data is inserted into such table. Please find below a SQL template to execute to such a database configuration, but do not hesitate to browse the PostgreSQL documentation to modify it and create your own variants:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>.. code-block:: postgresql
+<p>Jumbo <code class="docutils literal notranslate"><span class="pre">Listener</span></code>s are a very handy tool but the PostgreSQL database should
+be setup to be streaming <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code>s on a notification channel. Moreover, in
+order to expolit jumbo’s <code class="docutils literal notranslate"><span class="pre">LastEntryFetcher</span></code>, there should be a table on
+the database being audited, and a <code class="docutils literal notranslate"><span class="pre">NOTIFY</span></code> being triggered every time new
+data is inserted into such table. Please find below a SQL template to
+execute to such a database configuration, but do not hesitate to browse
+the PostgreSQL documentation to modify it and create your own variants:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Create audit table, using the table being audited as template</span>
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">IF</span> <span class="k">NOT</span> <span class="k">EXISTS</span> <span class="n">audit_table</span> <span class="k">AS</span>
+<span class="k">TABLE</span> <span class="n">main_table</span> <span class="k">LIMIT</span> <span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Define trigger function</span>
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">audit_and_notify</span><span class="p">()</span>
+<span class="k">RETURNS</span> <span class="k">trigger</span> <span class="k">AS</span> <span class="s">$$</span>
+<span class="k">BEGIN</span>
 
-    -- Create audit table, using the table being audited as template
-    CREATE TABLE IF NOT EXISTS audit_table AS
-        TABLE table LIMIT 1;
+    <span class="c1">-- update all rows in the audit table (there is only one) with NEW values. </span>
+    <span class="c1">-- Here NEW is unpacked with special ().* sintax</span>
+    <span class="k">UPDATE</span> <span class="n">audit_table</span>
+    <span class="k">SET</span>    <span class="p">(</span><span class="n">table_column1</span><span class="p">,</span> <span class="n">table_column2</span><span class="p">,</span> <span class="mf">...</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="k">SELECT</span> <span class="p">(</span><span class="n">NEW</span><span class="p">)</span><span class="mf">.</span><span class="o">*</span><span class="p">);</span>
 
-    -- Define trigger function
-    CREATE OR REPLACE FUNCTION audit_and_notify()
-    RETURNS trigger AS $$
-    BEGIN
+    <span class="c1">-- send a NOTIFY to clients listening. Jumbo Listeners should then set channel=&#39;channel_name&#39;</span>
+    <span class="k">NOTIFY</span> <span class="n">channel_name</span><span class="p">;</span>
 
-        -- update all rows in the audit table (there is only one) with NEW values. Here NEW is unpacked with special ().* sintax
-        UPDATE audit_table
-        SET    (table_column1, table_column2, ...) = (SELECT (NEW).*);
+    <span class="k">RETURN</span> <span class="k">NULL</span><span class="p">;</span>
 
-        -- send a NOTIFY to clients listening. Jumbo Listeners should then set channel=&#39;channel&#39;
-        NOTIFY channel;
+<span class="k">END</span><span class="p">;</span>
+<span class="s">$$</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Drop TRIGGER just in case one already exists</span>
+<span class="k">DROP</span> <span class="k">TRIGGER</span> <span class="n">trigger_audit</span> <span class="k">ON</span> <span class="k">table</span><span class="p">;</span>
 
-        RETURN NULL;
-
-    END;
-    $$ LANGUAGE plpgsql;
-
-    -- Drop TRIGGER just in case one already exists
-    DROP TRIGGER trigger_audit ON table;
-
-    -- Create trigger on table
-    CREATE TRIGGER trigger_audit
-    AFTER INSERT
-    ON table
-    FOR EACH ROW
-    EXECUTE PROCEDURE audit_and_notify();
+<span class="c1">-- Create trigger called `trigger_audit` on table</span>
+<span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">trigger_audit</span>
+<span class="k">AFTER</span> <span class="k">INSERT</span>
+<span class="k">ON</span> <span class="n">main_table</span>
+<span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span>
+<span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="n">audit_and_notify</span><span class="p">();</span>
 </pre></div>
 </div>
 </div>

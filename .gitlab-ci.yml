@@ -4,7 +4,7 @@ stages:
   - 🦄 quality
   - 🚀 deploy
 
-📜 pages:
+pages:
   stage: 🚀 deploy
   script:
     - mkdir .public

@@ -39,11 +39,13 @@
     <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"></script>
     <script src="_static/twemoji.js"></script>
     <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="shortcut icon" href="_static/favico.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="jumbo package" href="jumbo.html" />
-    <link rel="prev" title="💾 Database Setup" href="database.html" />
+    <link rel="prev" title="📚 Documentation" href="documentation.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -87,24 +89,33 @@
 </p>
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="tutorial.html">
+  <a class="reference internal" href="intro_package.html">
    First Steps
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="database.html">
+  <a class="reference internal" href="intro_database.html">
    Database Setup
   </a>
  </li>
  <li class="toctree-l1 current active collapsible-parent">
-  <a class="current reference internal" href="#">
+  <a class="reference internal" href="documentation.html">
    Documentation
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="jumbo.html">
-     jumbo package
+  <ul class="current collapse-ul">
+   <li class="toctree-l2 current active collapsible-parent">
+    <a class="current reference internal" href="#">
+     Modules
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="jumbo.html">
+       jumbo package
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -118,20 +129,18 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html">
-   🎈 Basic Usage
+  <a class="reference internal" href="tutorial_basic.html">
+   Basic Usage
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#filesystem-watchdogs">
-   ====================
-Filesystem Watchdogs
+  <a class="reference internal" href="tutorial_watchdogs.html">
+   Watchdogs
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="demos.html#live-database-streaming">
-   =======================
-Live Database Streaming
+  <a class="reference internal" href="tutorial_listeners.html">
+   Listeners
   </a>
  </li>
 </ul>
@@ -245,7 +254,7 @@ Live Database Streaming
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="database.html" title="previous page">💾 Database Setup</a>
+    <a class='left-prev' id="prev-link" href="documentation.html" title="previous page">📚 Documentation</a>
     <a class='right-next' id="next-link" href="jumbo.html" title="next page">jumbo package</a>
 
     </div>

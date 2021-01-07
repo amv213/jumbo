@@ -36,6 +36,16 @@ setuptools.setup(
         'sqlalchemy',
         'watchdog',
     ],
+    extras_require={
+            "doc": [
+                'myst-parser',
+                'sphinx',
+                'sphinx-book-theme',
+                'sphinx-copybutton',
+                'sphinx-togglebutton',
+                'sphinx-panels',
+            ],
+        },
 )
 
 # to build the package run the following:

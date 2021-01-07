@@ -34,12 +34,12 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    'sphinxemoji.sphinxemoji',
-    "myst_parser",
+    'myst_parser',
+    'sphinx_copybutton',
+    'sphinx_togglebutton',
+    'sphinx_panels',
 ]
 
-# Set consistent (and only available) emoji style
-sphinxemoji_style = 'twemoji'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']

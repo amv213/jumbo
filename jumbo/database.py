@@ -463,8 +463,8 @@ class Database:
         # Copy the table from file (cur_method:1 = cur.copy_expert)
         self.send(query, cur_method=1, file=file, key=key)
 
-    def copy_df(self, df: pd.DataFrame, db_table: str, replace: bool = True,
-                key: int = 1) -> None:
+    def copy_df(self, df: pd.DataFrame, db_table: str, schema: str = None,
+                replace: bool = False, key: int = 1) -> None:
         """Utility wrapper to efficiently copy a pandas.DataFrame to a
         PostgreSQL database table.
 
@@ -475,8 +475,10 @@ class Database:
 
         Args:
             df:                 dataframe to be copied.
-            db_table:           the name (optionally schema-qualified) of the
+            db_table:           the name (not schema-qualified) of the
                                 table to write to.
+            schema (optional):  schema to which ``db_table`` belongs. If
+                                ``None``, use default schema.
             replace (optional): replaces table contents if True. Appends data
                                 to table contents otherwise.
             key (optional):     key of the pool connection being used in the
@@ -497,8 +499,12 @@ class Database:
                 replacement_method = 'replace' if replace else 'append'
                 engine = create_engine('postgresql+psycopg2://',
                                        creator=lambda: self.pool._used[key])
-                df.head(0).to_sql(db_table, engine,
+                df.head(0).to_sql(name=db_table, con=engine, schema=schema,
                                   if_exists=replacement_method, index=False)
+
+                # Now that to_sql is out of the way, can schema-qualify table
+                if schema is not None:
+                    db_table = '.'.join([schema, db_table])
 
                 # But then exploit postgreSQL COPY command instead of slow
                 # pandas .to_sql(). Note that replace is set to false in

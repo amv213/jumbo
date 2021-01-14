@@ -39,6 +39,7 @@
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/togglebutton.js"></script>
@@ -678,8 +679,8 @@
         <span class="c1"># Copy the table from file (cur_method:1 = cur.copy_expert)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">cur_method</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">file</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Database.copy_df"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.copy_df">[docs]</a>    <span class="k">def</span> <span class="nf">copy_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">db_table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-                <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="Database.copy_df"><a class="viewcode-back" href="../../jumbo.html#jumbo.database.Database.copy_df">[docs]</a>    <span class="k">def</span> <span class="nf">copy_df</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">db_table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="n">replace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Utility wrapper to efficiently copy a pandas.DataFrame to a</span>
 <span class="sd">        PostgreSQL database table.</span>
 
@@ -690,8 +691,10 @@
 
 <span class="sd">        Args:</span>
 <span class="sd">            df:                 dataframe to be copied.</span>
-<span class="sd">            db_table:           the name (optionally schema-qualified) of the</span>
+<span class="sd">            db_table:           the name (not schema-qualified) of the</span>
 <span class="sd">                                table to write to.</span>
+<span class="sd">            schema (optional):  schema to which ``db_table`` belongs. If</span>
+<span class="sd">                                ``None``, use default schema.</span>
 <span class="sd">            replace (optional): replaces table contents if True. Appends data</span>
 <span class="sd">                                to table contents otherwise.</span>
 <span class="sd">            key (optional):     key of the pool connection being used in the</span>
@@ -712,8 +715,12 @@
                 <span class="n">replacement_method</span> <span class="o">=</span> <span class="s1">&#39;replace&#39;</span> <span class="k">if</span> <span class="n">replace</span> <span class="k">else</span> <span class="s1">&#39;append&#39;</span>
                 <span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="s1">&#39;postgresql+psycopg2://&#39;</span><span class="p">,</span>
                                        <span class="n">creator</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pool</span><span class="o">.</span><span class="n">_used</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
-                <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">db_table</span><span class="p">,</span> <span class="n">engine</span><span class="p">,</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">to_sql</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">db_table</span><span class="p">,</span> <span class="n">con</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema</span><span class="p">,</span>
                                   <span class="n">if_exists</span><span class="o">=</span><span class="n">replacement_method</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+                <span class="c1"># Now that to_sql is out of the way, can schema-qualify table</span>
+                <span class="k">if</span> <span class="n">schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">db_table</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">schema</span><span class="p">,</span> <span class="n">db_table</span><span class="p">])</span>
 
                 <span class="c1"># But then exploit postgreSQL COPY command instead of slow</span>
                 <span class="c1"># pandas .to_sql(). Note that replace is set to false in</span>

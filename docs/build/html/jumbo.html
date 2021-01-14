@@ -39,6 +39,7 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
     <script src="_static/togglebutton.js"></script>
@@ -381,7 +382,7 @@ transaction. Defaults to [1].</p>
 
 <dl class="py method">
 <dt id="jumbo.database.Database.copy_df">
-<code class="sig-name descname">copy_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">db_table</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">replace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/jumbo/database.html#Database.copy_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_df" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em>, <em class="sig-param"><span class="n">db_table</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">schema</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">replace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/jumbo/database.html#Database.copy_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_df" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utility wrapper to efficiently copy a pandas.DataFrame to a
 PostgreSQL database table.</p>
 <p>This method is faster than panda’s native <em>.to_sql()</em> method and
@@ -392,8 +393,10 @@ database.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df</strong> – dataframe to be copied.</p></li>
-<li><p><strong>db_table</strong> – the name (optionally schema-qualified) of the
+<li><p><strong>db_table</strong> – the name (not schema-qualified) of the
 table to write to.</p></li>
+<li><p><strong>schema</strong> (<em>optional</em>) – schema to which <code class="docutils literal notranslate"><span class="pre">db_table</span></code> belongs. If
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, use default schema.</p></li>
 <li><p><strong>replace</strong> (<em>optional</em>) – replaces table contents if True. Appends data
 to table contents otherwise.</p></li>
 <li><p><strong>key</strong> (<em>optional</em>) – key of the pool connection being used in the

@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="jumbo",
-    version="1.0.0",
+    version="1.0.1",
     description="A psycopg2 PostgreSQL wrapper for data science",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -50,4 +50,4 @@ setuptools.setup(
 
 # to build the package run the following:
 # python setup.py sdist bdist_wheel
-# twine check dist/*
+# python -m twine check dist/*

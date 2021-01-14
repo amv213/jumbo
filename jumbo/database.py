@@ -417,7 +417,8 @@ class Database:
         return info
 
     def copy_to_table(self, query: sql.Composed, file: IO, db_table: str,
-                      replace: bool = True, key: int = 1) -> None:
+                      schema: str = None, replace: bool = True,
+                      key: int = 1) -> None:
         """Utility wrapper to send a SQL query to copy data to database table.
         Allows to replace table if it already exists in the database.
 
@@ -445,8 +446,10 @@ class Database:
             query:              PostgreSQL COPY command string.
             file:               absolute path to file-like object to read data
                                 from.
-            db_table:           the name (optionally schema-qualified) of an
+            db_table:           the name (not schema-qualified) of an
                                 existing database table.
+            schema (optional):  schema to which ``db_table`` belongs. If
+                                ``None``, use default schema.
             replace (optional): replaces table contents if True. Appends data
                                 to table contents otherwise.
             key (optional):     key of the pool connection being used in the
@@ -455,9 +458,10 @@ class Database:
 
         # Replace the table already existing in the database
         if replace:
+            # schema-qualify table name if needed
+            identifier = sql.Identifier(schema, db_table) if schema is not None else sql.Identifier(db_table)
             # pass table name dynamically to query
-            query_tmp = sql.SQL(
-                "TRUNCATE {};").format(sql.Identifier(db_table))
+            query_tmp = sql.SQL("TRUNCATE {};").format(identifier)
             self.send(query_tmp, key=key)
 
         # Copy the table from file (cur_method:1 = cur.copy_expert)
@@ -502,19 +506,20 @@ class Database:
                 df.head(0).to_sql(name=db_table, con=engine, schema=schema,
                                   if_exists=replacement_method, index=False)
 
-                # Now that to_sql is out of the way, can schema-qualify table
-                if schema is not None:
-                    db_table = '.'.join([schema, db_table])
-
                 # But then exploit postgreSQL COPY command instead of slow
                 # pandas .to_sql(). Note that replace is set to false in
                 # copy_table as we want to preserve the header table created
                 # above
+
+                # schema-qualify table name if needed
+                identifier = sql.Identifier(schema, db_table) if schema is not None else sql.Identifier(db_table)
+
                 sql_copy_expert = sql.SQL(
                     "COPY {} FROM STDIN WITH CSV DELIMITER '\t'").format(
-                    sql.Identifier(db_table))
+                    identifier)
                 self.copy_to_table(sql_copy_expert, file=io_file,
-                                   db_table=db_table, replace=False, key=key)
+                                   db_table=db_table, schema=schema,
+                                   replace=False, key=key)
 
                 logger.info(f"DataFrame copied successfully to PostgreSQL "
                             f"table.")

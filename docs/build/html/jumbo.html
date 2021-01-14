@@ -408,7 +408,7 @@ transaction. Defaults to [1].</p></li>
 
 <dl class="py method">
 <dt id="jumbo.database.Database.copy_to_table">
-<code class="sig-name descname">copy_to_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">psycopg2.sql.Composed</span></em>, <em class="sig-param"><span class="n">file</span><span class="p">:</span> <span class="n">IO</span></em>, <em class="sig-param"><span class="n">db_table</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">replace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/jumbo/database.html#Database.copy_to_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_to_table" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy_to_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">psycopg2.sql.Composed</span></em>, <em class="sig-param"><span class="n">file</span><span class="p">:</span> <span class="n">IO</span></em>, <em class="sig-param"><span class="n">db_table</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">schema</span><span class="p">:</span> <span class="n">str</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">replace</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">key</span><span class="p">:</span> <span class="n">int</span> <span class="o">=</span> <span class="default_value">1</span></em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/jumbo/database.html#Database.copy_to_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jumbo.database.Database.copy_to_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utility wrapper to send a SQL query to copy data to database table.
 Allows to replace table if it already exists in the database.</p>
 <div class="highlight-postgresql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Command type expected:</span>
@@ -433,8 +433,10 @@ Allows to replace table if it already exists in the database.</p>
 <li><p><strong>query</strong> – PostgreSQL COPY command string.</p></li>
 <li><p><strong>file</strong> – absolute path to file-like object to read data
 from.</p></li>
-<li><p><strong>db_table</strong> – the name (optionally schema-qualified) of an
+<li><p><strong>db_table</strong> – the name (not schema-qualified) of an
 existing database table.</p></li>
+<li><p><strong>schema</strong> (<em>optional</em>) – schema to which <code class="docutils literal notranslate"><span class="pre">db_table</span></code> belongs. If
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, use default schema.</p></li>
 <li><p><strong>replace</strong> (<em>optional</em>) – replaces table contents if True. Appends data
 to table contents otherwise.</p></li>
 <li><p><strong>key</strong> (<em>optional</em>) – key of the pool connection being used in the
